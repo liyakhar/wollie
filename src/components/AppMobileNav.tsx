@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import type { CSSProperties } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import {
   CalendarDays,
   ChartNoAxesCombined,
@@ -39,10 +39,21 @@ export function AppMobileNav({
   demo?: boolean;
 }) {
   const pathname = useLocation({ select: (location) => location.pathname });
-  if (locked) return null;
-
   const tabs = demo ? demoTabs : appTabs;
   const active = activeTabIndex(pathname, tabs);
+
+  // The glass lens stretches while it travels to the new tab.
+  const [moving, setMoving] = useState(false);
+  const previous = useRef(active);
+  useEffect(() => {
+    if (previous.current === active) return;
+    previous.current = active;
+    setMoving(true);
+    const timer = window.setTimeout(() => setMoving(false), 260);
+    return () => window.clearTimeout(timer);
+  }, [active]);
+
+  if (locked) return null;
 
   return (
     <nav
@@ -50,6 +61,7 @@ export function AppMobileNav({
       aria-label={demo ? "Demo pages" : "Mobile primary"}
       style={{ "--tab-index": Math.max(active, 0) } as CSSProperties}
       data-has-active={active !== -1}
+      data-moving={moving || undefined}
     >
       <span className="app-mobile-nav__indicator" aria-hidden="true" />
       {tabs.map(({ to, label, icon: Icon }, index) => (
