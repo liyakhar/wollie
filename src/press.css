@@ -8764,3 +8764,20 @@ body {
     height: 1rem;
   }
 }
+
+/* Phones: size app pages to their content, not to 100vh.
+ * In the iOS app, 100vh is taller than the visible area (the status bar
+ * and home bar are inset), so short pages could scroll into empty space. */
+@media (max-width: 63.99rem) {
+  html:has(.app-shell),
+  body:has(.app-shell) {
+    min-height: 0 !important;
+    background: var(--color-brand-cream);
+    overscroll-behavior-y: none;
+  }
+
+  .app-shell,
+  .app-shell .app-shell__main {
+    min-height: 0 !important;
+  }
+}
