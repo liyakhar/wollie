@@ -8852,3 +8852,28 @@ body {
     scale: 1 1;
   }
 }
+
+/* Phones: glass pill fixes (2026-09-24). No outer shadow. The lens
+ * glides without overshoot and never leaves the pill. */
+@media (max-width: 63.99rem) {
+  .app-shell .app-mobile-nav {
+    overflow: hidden;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.85),
+      inset 0 0 0 0.5px rgb(20 30 60 / 0.08);
+  }
+
+  .app-shell .app-mobile-nav__indicator {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 1),
+      inset 0 0 0 0.5px rgb(20 30 60 / 0.07);
+    transition:
+      transform 420ms cubic-bezier(0.25, 1, 0.5, 1),
+      scale 420ms cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 200ms ease;
+  }
+
+  .app-shell .app-mobile-nav[data-moving] .app-mobile-nav__indicator {
+    scale: 1.04 0.94;
+  }
+}

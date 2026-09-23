@@ -49,7 +49,7 @@ export function AppMobileNav({
     if (previous.current === active) return;
     previous.current = active;
     setMoving(true);
-    const timer = window.setTimeout(() => setMoving(false), 260);
+    const timer = window.setTimeout(() => setMoving(false), 200);
     return () => window.clearTimeout(timer);
   }, [active]);
 
