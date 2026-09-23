@@ -150,3 +150,33 @@ Use the existing 4-point named scale in `tokens.css`. App pages use compact `--s
   --radius: var(--radius-brand-sm);
 }
 ```
+
+## Phone app (below 64rem)
+
+The phone app is calm and flat. Source: the "Phone shape system" and "Minimal phone layout" blocks at the end of `src/press.css`.
+
+### Shapes
+
+| Element | Shape |
+| --- | --- |
+| Buttons, inputs, selects, chips, badges, segmented controls, progress bars | Full pill (`--shape-pill`) |
+| Setup panels, notes, forms that keep a surface | Soft sheet, 20px (`--shape-sheet`), paper fill, no border |
+| Pop-up menus | 20px, rows 12px (`--shape-row`) |
+| Dialogs | 24px |
+| Bottom menu | Floating glass pill |
+
+No square corners on phones. Fields use a soft ink fill (`--fill-soft`), not a border.
+
+### Layout
+
+- No top bar. The page title is the first thing on screen.
+- Four tabs: Home, Activity, Plan, Bills. The profile button on Home opens settings, bank accounts, household, and sign out.
+- Lists and summaries sit on the canvas without card frames or divider lines.
+- Helper paragraphs, legends, and explainers are hidden on phones.
+- Pages are as tall as their content, so short pages do not scroll.
+
+### Motion
+
+- Tab change: the glass lens glides (420ms, ease-out, no overshoot) and stretches slightly.
+- Page change: a 320ms fade and 6px rise.
+- Reduced motion turns both off.

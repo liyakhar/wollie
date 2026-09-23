@@ -219,7 +219,7 @@ function EmptyEnvelopePlan({
   return (
     <section
       aria-labelledby="envelope-setup-heading"
-      className="grid gap-5 border border-zinc-200 bg-zinc-50 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end sm:p-7"
+      className="wollie-sheet grid gap-5 border border-zinc-200 bg-zinc-50 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end sm:p-7"
     >
       <div>
         <span className="grid size-11 place-items-center rounded-full border border-zinc-200 bg-white text-zinc-950">
@@ -913,7 +913,7 @@ function EnvelopeNotices({ plan }: { plan: IncomeEnvelopePlan }) {
   if (notices.length === 0) return null;
 
   return (
-    <div className="grid gap-px border-t border-zinc-200 bg-zinc-200">
+    <div className="wollie-notes grid gap-px border-t border-zinc-200 bg-zinc-200">
       {notices.map((notice) => (
         <p
           className={`bg-zinc-50 px-4 py-3 text-sm leading-6 text-zinc-700 sm:px-5 ${notice.tone === "attention" ? "font-medium" : ""}`}

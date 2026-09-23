@@ -8877,3 +8877,198 @@ body {
     scale: 1.04 0.94;
   }
 }
+
+/* ------------------------------------------------------------------
+ * Phone shape system (2026-09-24)
+ * One rule for every shape on phones:
+ *   - Anything you tap or type in is a full pill.
+ *   - Panels that stay (setup, notes, forms) are soft sheets, 20px.
+ *   - Menus and pop-ups are 20px, their rows 12px.
+ *   - Progress bars and badges are fully round.
+ * Colours and fonts stay the Wollie brand tokens.
+ * ------------------------------------------------------------------ */
+@media (max-width: 63.99rem) {
+  .app-shell,
+  [data-radix-popper-content-wrapper],
+  [data-slot="dialog-content"] {
+    --shape-pill: 9999px;
+    --shape-sheet: 1.25rem;
+    --shape-row: 0.75rem;
+    --fill-soft: color-mix(in oklch, var(--color-brand-ink) 5%, transparent);
+    --fill-soft-strong: color-mix(in oklch, var(--color-brand-ink) 9%, transparent);
+  }
+
+  /* Tailwind radius utilities: never square on phones. */
+  .app-shell .wollie-workspace-page .rounded,
+  .app-shell .wollie-workspace-page .rounded-sm,
+  .app-shell .wollie-workspace-page .rounded-md {
+    border-radius: var(--shape-row) !important;
+  }
+
+  /* Buttons: pills with a comfortable tap size. */
+  .app-shell .wollie-workspace-page [data-slot="button"],
+  .app-shell .wollie-workspace-page .wollie-primary-action {
+    min-height: 2.75rem;
+    border-radius: var(--shape-pill) !important;
+    padding-inline: 1.25rem;
+    font-weight: 600;
+    box-shadow: none !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="button"][data-variant="outline"] {
+    border-color: transparent !important;
+    background: var(--fill-soft) !important;
+    color: var(--color-brand-ink) !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="button"][data-variant="ghost"] {
+    padding-inline: 0.75rem;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="button"]:active {
+    transform: scale(0.97);
+  }
+
+  /* Fields: soft-filled pills, no borders. */
+  .app-shell .wollie-workspace-page [data-slot="input"],
+  .app-shell .wollie-workspace-page [data-slot="select-trigger"],
+  .app-shell .wollie-workspace-page select,
+  .app-shell .wollie-workspace-page input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]) {
+    min-height: 2.75rem;
+    border-color: transparent !important;
+    border-radius: var(--shape-pill) !important;
+    background: var(--fill-soft) !important;
+    box-shadow: none !important;
+    padding-inline: 1rem;
+    font-size: 1rem;
+  }
+
+  .app-shell .wollie-workspace-page textarea {
+    border-color: transparent !important;
+    border-radius: 1rem !important;
+    background: var(--fill-soft) !important;
+    box-shadow: none !important;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="input"]:focus-visible,
+  .app-shell .wollie-workspace-page [data-slot="select-trigger"]:focus-visible,
+  .app-shell .wollie-workspace-page input:focus-visible,
+  .app-shell .wollie-workspace-page select:focus-visible,
+  .app-shell .wollie-workspace-page textarea:focus-visible {
+    outline: 2px solid var(--color-brand-focus) !important;
+    outline-offset: 1px;
+  }
+
+  /* Badges and chips. */
+  .app-shell .wollie-workspace-page [data-slot="badge"] {
+    border-color: transparent !important;
+    border-radius: var(--shape-pill) !important;
+    background: var(--fill-soft) !important;
+    padding-inline: 0.5rem;
+    font-weight: 500;
+  }
+
+  /* Progress bars. */
+  .app-shell .wollie-workspace-page .rounded-full {
+    border-radius: var(--shape-pill) !important;
+  }
+
+  .app-shell .wollie-transaction-filters__toggle {
+    border-radius: var(--shape-pill);
+  }
+
+  .app-shell .wollie-workspace-page .h-2\.5.rounded-full {
+    height: 0.5rem;
+    background: var(--fill-soft-strong) !important;
+  }
+
+  /* Sheets: the few panels that keep a surface. */
+  .app-shell .wollie-workspace-page .wollie-sheet,
+  .app-shell .wollie-workspace-page .rounded-lg.border.bg-zinc-50,
+  .app-shell .wollie-workspace-page .rounded-md.border.bg-zinc-50,
+  .app-shell .wollie-workspace-page section.bg-zinc-50 {
+    border: 0 !important;
+    border-radius: var(--shape-sheet) !important;
+    background: var(--color-brand-paper) !important;
+    padding: 1.25rem !important;
+    box-shadow: 0 1px 2px color-mix(in oklch, var(--color-brand-ink) 5%, transparent) !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-sheet > div > span.rounded-full {
+    border: 0 !important;
+    background: var(--fill-soft) !important;
+  }
+
+  /* Plan notes: one soft sheet, no dividers. */
+  .app-shell .wollie-workspace-page .wollie-notes {
+    gap: 0 !important;
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: var(--shape-sheet) !important;
+    background: var(--color-brand-paper) !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-notes > * {
+    background: transparent !important;
+    padding: 0.875rem 1.25rem !important;
+    color: var(--color-brand-ink-soft) !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-notes > * + * {
+    padding-top: 0 !important;
+  }
+
+  /* Segmented control: pill track, pill thumb. */
+  .app-shell .money-plan-view-switch {
+    padding: 0.25rem !important;
+    border: 0 !important;
+    border-radius: var(--shape-pill) !important;
+    background: var(--fill-soft) !important;
+  }
+
+  .app-shell .money-plan-view-switch button {
+    min-height: 2.5rem;
+    border-radius: var(--shape-pill) !important;
+    color: var(--color-brand-ink-soft);
+    font-weight: 600;
+    transition:
+      background-color 240ms ease,
+      color 240ms ease,
+      box-shadow 240ms ease;
+  }
+
+  .app-shell .money-plan-view-switch button[aria-pressed="true"] {
+    background: var(--color-brand-paper) !important;
+    color: var(--color-brand-ink);
+    box-shadow: 0 1px 3px color-mix(in oklch, var(--color-brand-ink) 12%, transparent) !important;
+  }
+
+  /* Pop-up menus, selects, and dialogs. */
+  [data-slot="select-content"],
+  [data-slot="dropdown-menu-content"],
+  [data-slot="popover-content"],
+  .wollie-transaction-filters__content {
+    border-radius: var(--shape-sheet) !important;
+    padding: 0.375rem !important;
+  }
+
+  [data-slot="select-item"],
+  [data-slot="dropdown-menu-item"] {
+    min-height: 2.75rem;
+    border-radius: var(--shape-row) !important;
+  }
+
+  [data-slot="dialog-content"],
+  [data-slot="alert-dialog-content"],
+  [data-slot="sheet-content"] {
+    border-radius: 1.5rem !important;
+  }
+
+  /* Section icons beside list titles add noise on phones. */
+  .app-shell .wollie-workspace-page h2 + span.text-sm,
+  .app-shell .wollie-workspace-page .flex.items-center.gap-2 > svg:first-child {
+    display: none;
+  }
+}
