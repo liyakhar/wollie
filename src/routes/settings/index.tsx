@@ -2,10 +2,14 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import {
   ArrowLeft,
   ArrowRight,
+  ChevronRight,
   Download,
   FileSpreadsheet,
   FileText,
+  Landmark,
+  LogOut,
   Upload,
+  Users,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Category } from "#/generated/prisma/client";
@@ -290,6 +294,30 @@ function SettingsPage() {
           </Link>
         </Button>
       </header>
+
+      <nav className="wollie-profile-links" aria-label="Your workspace">
+        <Link to="/app/accounts">
+          <Landmark aria-hidden="true" />
+          <span>Bank accounts</span>
+          <ChevronRight aria-hidden="true" />
+        </Link>
+        <Link to="/app/household">
+          <Users aria-hidden="true" />
+          <span>Household</span>
+          <ChevronRight aria-hidden="true" />
+        </Link>
+        <button
+          type="button"
+          onClick={() =>
+            void authClient
+              .signOut()
+              .then(() => router.navigate({ to: "/login" }))
+          }
+        >
+          <LogOut aria-hidden="true" />
+          <span>Sign out</span>
+        </button>
+      </nav>
 
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
         <Card className="rounded-lg border-zinc-200 bg-white shadow-none">

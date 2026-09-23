@@ -1,5 +1,6 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { type FormEvent, useMemo, useState } from "react";
+import { SlidersHorizontal } from "lucide-react";
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import { Input } from "#/components/ui/input";
@@ -65,6 +66,9 @@ export function TransactionsContent({
     "all",
   );
   const [month, setMonth] = useState("all");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const activeFilterCount =
+    Number(status !== "all") + Number(category !== "all") + Number(month !== "all");
   const [manualMerchant, setManualMerchant] = useState("");
   const [manualAmount, setManualAmount] = useState("");
   const [manualCategory, setManualCategory] =
@@ -332,14 +336,34 @@ export function TransactionsContent({
         </section>
       )}
 
-      <section aria-label="Transaction filters" className="wollie-transaction-filters">
-        <Input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search merchant or account…"
-          aria-label="Search transactions"
-          className="wollie-transaction-filters__search min-h-11 border-zinc-200 bg-white"
-        />
+      <section
+        aria-label="Transaction filters"
+        className="wollie-transaction-filters"
+        data-open={filtersOpen || undefined}
+      >
+        <div className="wollie-transaction-filters__search-row">
+          <Input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search"
+            aria-label="Search transactions"
+            className="wollie-transaction-filters__search min-h-11 border-zinc-200 bg-white"
+          />
+          <button
+            type="button"
+            className="wollie-transaction-filters__toggle"
+            aria-expanded={filtersOpen}
+            aria-label={
+              activeFilterCount
+                ? `Filters, ${activeFilterCount} on`
+                : "Filters"
+            }
+            onClick={() => setFiltersOpen((open) => !open)}
+          >
+            <SlidersHorizontal aria-hidden="true" />
+            {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
+          </button>
+        </div>
         <div className="wollie-transaction-filters__controls">
           <Select
             value={status}

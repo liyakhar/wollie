@@ -1,16 +1,35 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import {
   CalendarDays,
   ChartNoAxesCombined,
-  Landmark,
   LayoutDashboard,
   ListFilter,
-  Menu,
-  Settings,
-  Users,
-  X,
 } from "lucide-react";
+
+const appTabs = [
+  { to: "/app", label: "Home", icon: LayoutDashboard },
+  { to: "/app/transactions", label: "Activity", icon: ListFilter },
+  { to: "/app/budgets", label: "Plan", icon: ChartNoAxesCombined },
+  { to: "/app/recurring", label: "Bills", icon: CalendarDays },
+] as const;
+
+const demoTabs = [
+  { to: "/demo", label: "Home", icon: LayoutDashboard },
+  { to: "/demo/transactions", label: "Activity", icon: ListFilter },
+  { to: "/demo/budgets", label: "Plan", icon: ChartNoAxesCombined },
+  { to: "/demo/upcoming", label: "Bills", icon: CalendarDays },
+] as const;
+
+function activeTabIndex(pathname: string, tabs: ReadonlyArray<{ to: string }>) {
+  const path = pathname.replace(/\/+$/, "") || "/";
+  const [home, ...rest] = tabs;
+  if (path === home.to) return 0;
+  const index = rest.findIndex(
+    (tab) => path === tab.to || path.startsWith(`${tab.to}/`),
+  );
+  return index === -1 ? -1 : index + 1;
+}
 
 export function AppMobileNav({
   locked = false,
@@ -19,158 +38,35 @@ export function AppMobileNav({
   locked?: boolean;
   demo?: boolean;
 }) {
-  const [moreOpen, setMoreOpen] = useState(false);
   const pathname = useLocation({ select: (location) => location.pathname });
-  const isMoreRoute = pathname.startsWith("/app/accounts") ||
-    pathname.startsWith("/app/household") ||
-    pathname.startsWith("/settings");
-
-  useEffect(() => {
-    if (!moreOpen) return;
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMoreOpen(false);
-    };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [moreOpen]);
-
   if (locked) return null;
-  if (demo) {
-    return (
-      <nav className="app-mobile-nav" aria-label="Demo pages">
-        <Link
-          to="/demo"
-          activeOptions={{ exact: true }}
-          className="app-mobile-nav__item"
-          activeProps={{ className: "app-mobile-nav__item is-active" }}
-        >
-          <LayoutDashboard aria-hidden="true" />
-          <span>Home</span>
-        </Link>
-        <Link
-          to="/demo/transactions"
-          className="app-mobile-nav__item"
-          activeProps={{ className: "app-mobile-nav__item is-active" }}
-        >
-          <ListFilter aria-hidden="true" />
-          <span>Activity</span>
-        </Link>
-        <Link
-          to="/demo/budgets"
-          className="app-mobile-nav__item"
-          activeProps={{ className: "app-mobile-nav__item is-active" }}
-        >
-          <ChartNoAxesCombined aria-hidden="true" />
-          <span>Plan</span>
-        </Link>
-        <Link
-          to="/demo/upcoming"
-          className="app-mobile-nav__item"
-          activeProps={{ className: "app-mobile-nav__item is-active" }}
-        >
-          <CalendarDays aria-hidden="true" />
-          <span>Bills</span>
-        </Link>
-        <Link
-          to="/demo/accounts"
-          className="app-mobile-nav__item"
-          activeProps={{ className: "app-mobile-nav__item is-active" }}
-        >
-          <Landmark aria-hidden="true" />
-          <span>Accounts</span>
-        </Link>
-      </nav>
-    );
-  }
-  return (
-    <>
-      {moreOpen ? (
-        <>
-          <button
-            type="button"
-            className="app-mobile-more__scrim"
-            aria-label="Close more pages"
-            onClick={() => setMoreOpen(false)}
-          />
-          <div
-            className="app-mobile-more"
-            role="dialog"
-            aria-label="More workspace pages"
-          >
-            <div className="app-mobile-more__head">
-              <strong>More</strong>
-              <button
-                type="button"
-                onClick={() => setMoreOpen(false)}
-                aria-label="Close more pages"
-              >
-                <X aria-hidden="true" />
-              </button>
-            </div>
-            <nav aria-label="More workspace pages">
-              <Link to="/app/accounts" onClick={() => setMoreOpen(false)}>
-                <Landmark aria-hidden="true" />
-                <span>Bank accounts</span>
-              </Link>
-              <Link to="/app/household" onClick={() => setMoreOpen(false)}>
-                <Users aria-hidden="true" />
-                <span>Household</span>
-              </Link>
-              <Link to="/settings" onClick={() => setMoreOpen(false)}>
-                <Settings aria-hidden="true" />
-                <span>Profile &amp; settings</span>
-              </Link>
-            </nav>
-          </div>
-        </>
-      ) : null}
 
-      <nav className="app-mobile-nav" aria-label="Mobile primary">
+  const tabs = demo ? demoTabs : appTabs;
+  const active = activeTabIndex(pathname, tabs);
+
+  return (
+    <nav
+      className="app-mobile-nav"
+      aria-label={demo ? "Demo pages" : "Mobile primary"}
+      style={{ "--tab-index": Math.max(active, 0) } as CSSProperties}
+      data-has-active={active !== -1}
+    >
+      <span className="app-mobile-nav__indicator" aria-hidden="true" />
+      {tabs.map(({ to, label, icon: Icon }, index) => (
         <Link
-          to="/app"
-          activeOptions={{ exact: true }}
-          className="app-mobile-nav__item"
-          activeProps={{ className: "app-mobile-nav__item is-active" }}
-        >
-          <LayoutDashboard aria-hidden="true" />
-          <span>Home</span>
-        </Link>
-        <Link
-          to="/app/transactions"
-          className="app-mobile-nav__item"
-          activeProps={{ className: "app-mobile-nav__item is-active" }}
-        >
-          <ListFilter aria-hidden="true" />
-          <span>Activity</span>
-        </Link>
-        <Link
-          to="/app/budgets"
-          className="app-mobile-nav__item"
-          activeProps={{ className: "app-mobile-nav__item is-active" }}
-        >
-          <ChartNoAxesCombined aria-hidden="true" />
-          <span>Plan</span>
-        </Link>
-        <Link
-          to="/app/recurring"
-          className="app-mobile-nav__item"
-          activeProps={{ className: "app-mobile-nav__item is-active" }}
-        >
-          <CalendarDays aria-hidden="true" />
-          <span>Bills</span>
-        </Link>
-        <button
-          type="button"
+          key={to}
+          to={to}
           className={
-            moreOpen || isMoreRoute ? "app-mobile-nav__item is-active" : "app-mobile-nav__item"
+            index === active
+              ? "app-mobile-nav__item is-active"
+              : "app-mobile-nav__item"
           }
-          onClick={() => setMoreOpen((open) => !open)}
-          aria-expanded={moreOpen}
+          aria-current={index === active ? "page" : undefined}
         >
-          <Menu aria-hidden="true" />
-          <span>More</span>
-        </button>
-      </nav>
-    </>
+          <Icon aria-hidden="true" strokeWidth={index === active ? 2.1 : 1.7} />
+          <span>{label}</span>
+        </Link>
+      ))}
+    </nav>
   );
 }

@@ -1,4 +1,4 @@
-import { Outlet } from '@tanstack/react-router'
+import { Outlet, useLocation } from '@tanstack/react-router'
 import AppNav from '#/components/AppNav'
 import { AppMobileNav } from '#/components/AppMobileNav'
 
@@ -11,11 +11,16 @@ export function AppShell({
   locked?: boolean;
   demo?: boolean;
 }) {
+  const pathname = useLocation({ select: (location) => location.pathname })
+
   return (
     <div className="app-shell">
       <AppNav demo={demo} locked={locked} />
       <div className="app-shell__main">
-        {children ?? <Outlet />}
+        {/* The key replays the page-enter animation on each tab change. */}
+        <div key={pathname} className="app-shell__page">
+          {children ?? <Outlet />}
+        </div>
       </div>
       <AppMobileNav demo={demo} locked={locked} />
     </div>

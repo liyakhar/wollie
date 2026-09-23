@@ -8332,3 +8332,435 @@ body {
     display: none !important;
   }
 }
+
+/* ------------------------------------------------------------------
+ * Minimal phone layout (2026-09-23)
+ * No top bar. Four calm tabs with a sliding indicator. Flat pages:
+ * no card frames, no divider lines, no helper paragraphs.
+ * ------------------------------------------------------------------ */
+
+.wollie-profile-button,
+.wollie-profile-links,
+.wollie-transaction-filters__toggle {
+  display: none;
+}
+
+.wollie-transaction-filters__search-row {
+  display: flex;
+  flex: 1 1 18rem;
+  max-width: 24rem;
+  gap: var(--space-sm);
+}
+
+.wollie-transaction-filters__search-row .wollie-transaction-filters__search {
+  width: auto;
+  flex: 1 1 auto;
+}
+
+@keyframes wollie-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.375rem);
+  }
+}
+
+@keyframes wollie-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+
+.app-shell__page {
+  min-width: 0;
+  animation: wollie-page-in 320ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell__page,
+  .app-shell .app-mobile-nav__indicator,
+  .app-shell .wollie-transaction-filters[data-open] .wollie-transaction-filters__controls {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 63.99rem) {
+  /* Top bar: removed on phones. */
+  .app-shell > .app-nav {
+    display: none !important;
+  }
+
+  .app-shell .app-shell__main {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Bottom tabs: light, docked, four items, one sliding pill. */
+  .app-shell .app-mobile-nav {
+    position: fixed;
+    z-index: var(--z-sticky-nav, 40);
+    inset: auto 0 0 0;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    padding: 0.375rem 0.75rem calc(0.375rem + env(safe-area-inset-bottom));
+    border: 0;
+    border-top: 0.5px solid color-mix(in oklch, var(--color-brand-ink) 10%, transparent);
+    border-radius: 0;
+    background: color-mix(in oklch, var(--color-brand-cream) 84%, transparent);
+    box-shadow: none;
+    color: var(--color-brand-ink);
+    -webkit-backdrop-filter: saturate(1.6) blur(1.25rem);
+    backdrop-filter: saturate(1.6) blur(1.25rem);
+  }
+
+  .app-shell .app-mobile-nav__indicator {
+    position: absolute;
+    top: 0.375rem;
+    bottom: calc(0.375rem + env(safe-area-inset-bottom));
+    left: 0.75rem;
+    width: calc((100% - 1.5rem) / 4);
+    border-radius: 0.875rem;
+    background: color-mix(in oklch, var(--color-brand-ink) 6%, transparent);
+    transform: translateX(calc(100% * var(--tab-index, 0)));
+    transition:
+      transform 460ms cubic-bezier(0.32, 0.72, 0, 1),
+      opacity 200ms ease;
+    pointer-events: none;
+  }
+
+  .app-shell .app-mobile-nav[data-has-active="false"] .app-mobile-nav__indicator {
+    opacity: 0;
+  }
+
+  .app-shell .app-mobile-nav__item {
+    position: relative;
+    min-width: 0;
+    min-height: 3.25rem;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.1875rem;
+    padding: 0.25rem 0;
+    border: 0;
+    border-radius: 0.875rem;
+    background: transparent !important;
+    color: color-mix(in oklch, var(--color-brand-ink) 40%, transparent);
+    font-family: var(--font-brand-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0;
+    text-decoration: none;
+    transition:
+      color 240ms ease,
+      transform 160ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .app-shell .app-mobile-nav__item svg {
+    width: 1.375rem;
+    height: 1.375rem;
+    color: inherit;
+    transition: transform 460ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .app-shell .app-mobile-nav__item.is-active {
+    background: transparent !important;
+    color: var(--color-brand-ink);
+  }
+
+  .app-shell .app-mobile-nav__item.is-active svg {
+    color: inherit;
+    transform: translateY(-1px);
+  }
+
+  .app-shell .app-mobile-nav__item:active {
+    transform: scale(0.94);
+  }
+
+  .app-shell .app-mobile-nav__item:focus-visible {
+    outline: 2px solid var(--color-brand-focus);
+    outline-offset: -2px;
+  }
+
+  /* Page frame. */
+  .app-shell .wollie-workspace-page {
+    gap: 1.75rem !important;
+    padding: 1.25rem 1.25rem calc(6.5rem + env(safe-area-inset-bottom)) !important;
+  }
+
+  .app-shell .wollie-workspace-page > header {
+    gap: 0.75rem !important;
+    padding-bottom: 0 !important;
+    border: 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page > header h1 {
+    font-size: 1.875rem !important;
+    line-height: 1.1;
+  }
+
+  .app-shell .wollie-workspace-page > header p,
+  .app-shell .wollie-workspace-page > header [data-slot="badge"],
+  .app-shell .wollie-workspace-page > header > a,
+  .app-shell .wollie-workspace-page > header > [data-slot="button"] {
+    display: none !important;
+  }
+
+  .wollie-page-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .app-shell .wollie-profile-button {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin-right: -0.25rem;
+    border-radius: 9999px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .app-shell .wollie-profile-button [data-slot="avatar-fallback"] {
+    background: color-mix(in oklch, var(--color-brand-ink) 7%, transparent);
+    color: var(--color-brand-ink);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  /* Flatten every card: no frame, no fill, no inner lines. */
+  .app-shell .wollie-workspace-page [data-slot="card"],
+  .app-shell .wollie-workspace-page .rounded-lg.border,
+  .app-shell .wollie-workspace-page .money-plan-section__list {
+    border-color: transparent !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding-inline: 0 !important;
+    overflow: visible !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="card"] {
+    gap: 0.75rem !important;
+    padding-block: 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page .rounded-lg.border > div,
+  .app-shell .wollie-workspace-page [data-slot="card-header"],
+  .app-shell .wollie-workspace-page [data-slot="card-content"],
+  .app-shell .wollie-workspace-page [data-slot="card-footer"] {
+    padding-inline: 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page .rounded-lg.border > ul > li,
+  .app-shell .wollie-workspace-page [data-slot="card-content"] > ul > li {
+    padding-inline: 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="card-header"] {
+    padding-bottom: 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="card-content"] {
+    padding-top: 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page .border-b,
+  .app-shell .wollie-workspace-page .border-t,
+  .app-shell .wollie-workspace-page .divide-y > *,
+  .app-shell .wollie-workspace-page .money-plan-envelope {
+    border-color: transparent !important;
+  }
+
+  .app-shell .wollie-workspace-page .money-plan-envelope {
+    padding-inline: 0 !important;
+  }
+
+  /* Section titles: quiet sentence case. */
+  .app-shell .wollie-workspace-page .uppercase {
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+  }
+
+  /* Helper text and explainers: hidden on phones. */
+  .app-shell .wollie-workspace-page details,
+  .app-shell .wollie-workspace-page p.max-w-2xl,
+  .app-shell .wollie-workspace-page p.text-xs.leading-5,
+  .app-shell .wollie-workspace-page [data-slot="card-description"],
+  .app-shell .wollie-workspace-page .money-plan-envelope [data-slot="badge"],
+  .app-shell .wollie-workspace-page section[aria-label="Category totals"] {
+    display: none !important;
+  }
+
+  /* Activity: one search field, filters behind one button. */
+  .app-shell .wollie-transaction-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .app-shell .wollie-transaction-filters__search-row {
+    max-width: none;
+  }
+
+  .app-shell .wollie-transaction-filters__toggle {
+    position: relative;
+    display: grid;
+    flex: 0 0 auto;
+    width: 2.75rem;
+    min-height: 2.75rem;
+    place-items: center;
+    border: 0;
+    border-radius: var(--radius-brand-sm, 0.625rem);
+    background: color-mix(in oklch, var(--color-brand-ink) 5%, transparent);
+    color: var(--color-brand-ink);
+    cursor: pointer;
+    transition: background-color 200ms ease;
+  }
+
+  .app-shell .wollie-transaction-filters__toggle[aria-expanded="true"] {
+    background: color-mix(in oklch, var(--color-brand-ink) 11%, transparent);
+  }
+
+  .app-shell .wollie-transaction-filters__toggle svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .app-shell .wollie-transaction-filters__toggle span {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    min-width: 1rem;
+    height: 1rem;
+    display: grid;
+    place-items: center;
+    border-radius: 9999px;
+    background: var(--color-brand-ink);
+    color: var(--color-brand-cream);
+    font-size: 0.625rem;
+    font-weight: 700;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-transaction-filters__search {
+    border-color: transparent !important;
+    background: color-mix(in oklch, var(--color-brand-ink) 5%, transparent) !important;
+  }
+
+  .app-shell .wollie-transaction-filters__controls {
+    display: none;
+  }
+
+  .app-shell .wollie-transaction-filters[data-open] .wollie-transaction-filters__controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    animation: wollie-fade-in 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .app-shell .wollie-workspace-page [role="combobox"].wollie-transaction-filters__trigger {
+    width: 100%;
+    min-width: 0;
+    border-color: transparent !important;
+    background: color-mix(in oklch, var(--color-brand-ink) 5%, transparent) !important;
+    box-shadow: none !important;
+  }
+
+  .app-shell .wollie-transaction-filters__search-row {
+    width: 100%;
+    flex: none;
+  }
+
+  .app-shell .wollie-transaction-filters__search-row .wollie-transaction-filters__search {
+    width: 0 !important;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  /* Activity rows: no list header, category as a small chip. */
+  .app-shell section[aria-labelledby="transactions-heading"] > div:first-child {
+    display: none !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-transaction-row {
+    gap: 0.375rem 1rem !important;
+    padding: 0.75rem 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-transaction-row > [role="combobox"] {
+    width: auto !important;
+    min-height: 0 !important;
+    height: 1.75rem !important;
+    justify-self: start;
+    gap: 0.25rem;
+    padding: 0 0.625rem !important;
+    border: 0 !important;
+    border-radius: 9999px !important;
+    background: color-mix(in oklch, var(--color-brand-ink) 5%, transparent) !important;
+    box-shadow: none !important;
+    color: color-mix(in oklch, var(--color-brand-ink) 70%, transparent) !important;
+    font-size: 0.75rem !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-transaction-row > [role="combobox"] svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  /* Plan: section titles quiet, no legend or assign notes. */
+  .app-shell .money-plan-section__header,
+  .app-shell .money-plan-section__header * {
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+  }
+
+  .app-shell .money-plan-legend,
+  .app-shell .money-plan-envelope p.text-xs {
+    display: none !important;
+  }
+
+  /* Profile page: workspace links and sign out. */
+  .app-shell .wollie-profile-links {
+    display: grid;
+    gap: 0.125rem;
+  }
+
+  .app-shell .wollie-profile-links > a,
+  .app-shell .wollie-profile-links > button {
+    min-height: 3.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-brand-ink);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .app-shell .wollie-profile-links svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: color-mix(in oklch, var(--color-brand-ink) 45%, transparent);
+  }
+
+  .app-shell .wollie-profile-links svg:last-child:not(:first-child) {
+    margin-left: auto;
+    width: 1rem;
+    height: 1rem;
+  }
+}

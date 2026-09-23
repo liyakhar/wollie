@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { AlertTriangle, ArrowRight, Landmark, RefreshCw } from "lucide-react";
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
+import { ProfileButton } from "#/components/ProfileButton";
 import {
   Card,
   CardAction,
@@ -154,9 +155,12 @@ export function MoneyDashboardContent({
     >
       <header className="flex flex-col gap-4 border-b border-zinc-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
-            Home
-          </h1>
+          <div className="wollie-page-title-row">
+            <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+              Home
+            </h1>
+            <ProfileButton demo={demo} />
+          </div>
           <p className="mt-1 text-sm text-zinc-500">
             {month}
             {hasAccounts ? ` · Updated ${syncStatus.lastSynced}` : ""}

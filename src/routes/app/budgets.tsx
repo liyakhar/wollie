@@ -794,7 +794,7 @@ function StackedPlanMeter({
           />
         )}
       </div>
-      <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm tabular-nums text-zinc-600">
+      <div className="money-plan-legend flex flex-wrap gap-x-5 gap-y-1 text-sm tabular-nums text-zinc-600">
         {actualMinor > 0 && (
           <span className="inline-flex items-center gap-1.5">
             <i aria-hidden="true" className={`size-2 rounded-full ${actualColour}`} />
