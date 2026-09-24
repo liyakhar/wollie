@@ -1467,3 +1467,12 @@ html.m-sheet-open {
 .m-intro__art img {
   mix-blend-mode: multiply;
 }
+
+.m-intro__art img {
+  mix-blend-mode: normal;
+}
+
+html:has(.m-intro),
+html:has(.m-intro) body {
+  background: #ffffff !important;
+}
