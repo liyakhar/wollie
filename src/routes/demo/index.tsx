@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getPublicDemoFinanceDashboard } from "#/lib/public-demo";
-import { MoneyDashboardContent } from "#/routes/app/index";
+import { HomeScreen } from "#/components/money/HomeScreen";
+import { getDemoMoneyOverview } from "#/lib/money-overview";
 
 export const Route = createFileRoute("/demo/")({
-  loader: () => getPublicDemoFinanceDashboard(),
+  loader: () => getDemoMoneyOverview(),
   component: DemoHomePage,
 });
 
 function DemoHomePage() {
-  return <MoneyDashboardContent dashboard={Route.useLoaderData()} demo />;
+  return <HomeScreen overview={Route.useLoaderData()} demo />;
 }

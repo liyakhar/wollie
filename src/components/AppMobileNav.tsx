@@ -1,24 +1,19 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
-import {
-  CalendarDays,
-  ChartNoAxesCombined,
-  LayoutDashboard,
-  ListFilter,
-} from "lucide-react";
+import { ChartNoAxesColumn, CreditCard, House, Target } from "lucide-react";
 
 const appTabs = [
-  { to: "/app", label: "Home", icon: LayoutDashboard },
-  { to: "/app/transactions", label: "Activity", icon: ListFilter },
-  { to: "/app/budgets", label: "Plan", icon: ChartNoAxesCombined },
-  { to: "/app/recurring", label: "Bills", icon: CalendarDays },
+  { to: "/app", label: "Home", icon: House },
+  { to: "/app/transactions", label: "Activity", icon: CreditCard },
+  { to: "/app/budgets", label: "Budgets", icon: ChartNoAxesColumn },
+  { to: "/app/goals", label: "Goals", icon: Target },
 ] as const;
 
 const demoTabs = [
-  { to: "/demo", label: "Home", icon: LayoutDashboard },
-  { to: "/demo/transactions", label: "Activity", icon: ListFilter },
-  { to: "/demo/budgets", label: "Plan", icon: ChartNoAxesCombined },
-  { to: "/demo/upcoming", label: "Bills", icon: CalendarDays },
+  { to: "/demo", label: "Home", icon: House },
+  { to: "/demo/transactions", label: "Activity", icon: CreditCard },
+  { to: "/demo/budgets", label: "Budgets", icon: ChartNoAxesColumn },
+  { to: "/demo/goals", label: "Goals", icon: Target },
 ] as const;
 
 function activeTabIndex(pathname: string, tabs: ReadonlyArray<{ to: string }>) {
@@ -75,7 +70,7 @@ export function AppMobileNav({
           }
           aria-current={index === active ? "page" : undefined}
         >
-          <Icon aria-hidden="true" strokeWidth={index === active ? 2.1 : 1.7} />
+          <Icon aria-hidden="true" strokeWidth={index === active ? 2 : 1.5} />
           <span>{label}</span>
         </Link>
       ))}

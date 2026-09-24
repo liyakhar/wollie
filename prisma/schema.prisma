@@ -182,6 +182,8 @@ model BudgetWorkspace {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name      String   @default("Personal budget")
   currency  String   @default("USD")
+  /// Day of month the pay cycle starts. Null means detect it from income.
+  paydayDay Int?
   demo      Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -191,6 +193,8 @@ model BudgetWorkspace {
   merchants         Merchant[]
   budgetMonths      BudgetMonth[]
   budgetBuckets     BudgetBucket[]
+  categoryBudgets   CategoryBudget[]
+  savingsGoals      SavingsGoal[]
   allocationRules   BudgetAllocationRule[]
   transactions      FinanceTransaction[]
   recurringPayments RecurringPayment[]
@@ -312,6 +316,7 @@ model TransactionCategory {
 
   transactions      FinanceTransaction[]
   allocations       BudgetAllocation[]
+  categoryBudget    CategoryBudget?
   budgetBucketMap   BudgetBucketCategory?
   recurringPayments RecurringPayment[]
   rules             CategoryRule[]
@@ -390,6 +395,54 @@ model BudgetAllocation {
 
   @@unique([budgetMonthId, categoryId])
   @@index([categoryId])
+}
+
+/// A standing spending limit for one category, applied every pay cycle.
+model CategoryBudget {
+  id          String              @id @default(cuid())
+  workspaceId String
+  workspace   BudgetWorkspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  categoryId  String              @unique
+  category    TransactionCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  limitMinor  Int
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([workspaceId])
+}
+
+/// Money the user sets aside each cycle, for a target or open-ended.
+model SavingsGoal {
+  id            String          @id @default(cuid())
+  workspaceId   String
+  workspace     BudgetWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name          String
+  icon          String          @default("target")
+  targetMinor   Int?
+  monthlyMinor  Int             @default(0)
+  targetDate    DateTime?
+  startingMinor Int             @default(0)
+  archivedAt    DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  contributions GoalContribution[]
+
+  @@index([workspaceId])
+}
+
+/// What the user saved for a goal in one pay cycle, or that they skipped it.
+model GoalContribution {
+  id          String      @id @default(cuid())
+  goalId      String
+  goal        SavingsGoal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  cycleStart  DateTime    @db.Date
+  amountMinor Int         @default(0)
+  skipped     Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([goalId, cycleStart])
 }
 
 model BudgetBucket {

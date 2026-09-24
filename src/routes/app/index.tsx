@@ -5,6 +5,8 @@ import { AlertTriangle, ArrowRight, Landmark, RefreshCw } from "lucide-react";
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import { ProfileButton } from "#/components/ProfileButton";
+import { HomeScreen } from "#/components/money/HomeScreen";
+import { getMoneyOverview } from "#/server/money";
 import {
   Card,
   CardAction,
@@ -29,7 +31,6 @@ import {
   SelectValue,
 } from "#/components/ui/select";
 import { buildPageMeta } from "#/lib/seo";
-import { getFinanceDashboard } from "#/server/finance";
 
 const dashboardMeta = buildPageMeta({
   path: "/app",
@@ -39,17 +40,16 @@ const dashboardMeta = buildPageMeta({
 });
 
 export const Route = createFileRoute("/app/")({
-  loader: () => getFinanceDashboard(),
+  loader: () => getMoneyOverview(),
   head: () => ({
     meta: dashboardMeta.meta,
     links: dashboardMeta.links,
   }),
-  component: MoneyDashboardPage,
+  component: MoneyHomePage,
 });
 
-function MoneyDashboardPage() {
-  const dashboard = Route.useLoaderData();
-  return <MoneyDashboardContent dashboard={dashboard} />;
+function MoneyHomePage() {
+  return <HomeScreen overview={Route.useLoaderData()} />;
 }
 
 export function MoneyDashboardContent({

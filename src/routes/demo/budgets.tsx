@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getPublicDemoBudgetData } from "#/lib/public-demo";
-import { BudgetContent } from "#/routes/app/budgets";
+import { BudgetsScreen } from "#/components/money/BudgetsScreen";
+import { getDemoMoneyOverview } from "#/lib/money-overview";
 
 export const Route = createFileRoute("/demo/budgets")({
-  loader: () => getPublicDemoBudgetData(),
-  component: DemoBudgetPage,
+  loader: () => getDemoMoneyOverview(),
+  component: DemoBudgetsPage,
 });
 
-function DemoBudgetPage() {
-  return <BudgetContent data={Route.useLoaderData()} readOnly />;
+function DemoBudgetsPage() {
+  return <BudgetsScreen overview={Route.useLoaderData()} demo />;
 }

@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import {
   CalendarDays,
-  ChartNoAxesCombined,
+  ChartNoAxesColumn,
+  CreditCard,
+  House,
   Landmark,
-  LayoutDashboard,
-  ListFilter,
   Settings,
+  Target,
   Users,
 } from "lucide-react";
 import BetterAuthHeader from "#/integrations/better-auth/header-user";
@@ -38,7 +39,7 @@ export default function AppNav({
               className="app-nav__tab"
               activeProps={{ className: "app-nav__tab is-active" }}
             >
-              <LayoutDashboard aria-hidden="true" />
+              <House aria-hidden="true" />
               <span>Home</span>
             </Link>
             <Link
@@ -46,16 +47,24 @@ export default function AppNav({
               className="app-nav__tab"
               activeProps={{ className: "app-nav__tab is-active" }}
             >
-              <ListFilter aria-hidden="true" />
-              <span>Transactions</span>
+              <CreditCard aria-hidden="true" />
+              <span>Activity</span>
             </Link>
             <Link
               to="/demo/budgets"
               className="app-nav__tab"
               activeProps={{ className: "app-nav__tab is-active" }}
             >
-              <ChartNoAxesCombined aria-hidden="true" />
-              <span>Money plan</span>
+              <ChartNoAxesColumn aria-hidden="true" />
+              <span>Budgets</span>
+            </Link>
+            <Link
+              to="/demo/goals"
+              className="app-nav__tab"
+              activeProps={{ className: "app-nav__tab is-active" }}
+            >
+              <Target aria-hidden="true" />
+              <span>Goals</span>
             </Link>
             <Link
               to="/demo/upcoming"
@@ -63,7 +72,7 @@ export default function AppNav({
               activeProps={{ className: "app-nav__tab is-active" }}
             >
               <CalendarDays aria-hidden="true" />
-              <span>Upcoming</span>
+              <span>Bills</span>
             </Link>
             <Link
               to="/demo/accounts"
@@ -83,7 +92,7 @@ export default function AppNav({
               className="app-nav__tab"
               activeProps={{ className: "app-nav__tab is-active" }}
             >
-              <LayoutDashboard aria-hidden="true" />
+              <House aria-hidden="true" />
               <span>Home</span>
             </Link>
             <Link
@@ -91,16 +100,24 @@ export default function AppNav({
               className="app-nav__tab"
               activeProps={{ className: "app-nav__tab is-active" }}
             >
-              <ListFilter aria-hidden="true" />
-              <span>Transactions</span>
+              <CreditCard aria-hidden="true" />
+              <span>Activity</span>
             </Link>
             <Link
               to="/app/budgets"
               className="app-nav__tab"
               activeProps={{ className: "app-nav__tab is-active" }}
             >
-              <ChartNoAxesCombined aria-hidden="true" />
-              <span>Money plan</span>
+              <ChartNoAxesColumn aria-hidden="true" />
+              <span>Budgets</span>
+            </Link>
+            <Link
+              to="/app/goals"
+              className="app-nav__tab"
+              activeProps={{ className: "app-nav__tab is-active" }}
+            >
+              <Target aria-hidden="true" />
+              <span>Goals</span>
             </Link>
             <Link
               to="/app/recurring"
@@ -108,7 +125,7 @@ export default function AppNav({
               activeProps={{ className: "app-nav__tab is-active" }}
             >
               <CalendarDays aria-hidden="true" />
-              <span>Upcoming</span>
+              <span>Bills</span>
             </Link>
             <Link
               to="/app/accounts"

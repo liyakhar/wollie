@@ -14,6 +14,7 @@
 @import "tw-animate-css";
 @import "./press.css";
 @import "./phone.css";
+@import "./money-ui.css";
 
 @custom-variant dark (&:is(.dark *));
 

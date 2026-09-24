@@ -546,14 +546,6 @@ export type EnumBudgetAllocationRuleTypeFieldUpdateOperationsInput = {
   set?: $Enums.BudgetAllocationRuleType
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type BudgetAllocationRuleCreateWithoutWorkspaceInput = {
   id?: string
   type: $Enums.BudgetAllocationRuleType

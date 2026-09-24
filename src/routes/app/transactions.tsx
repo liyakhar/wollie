@@ -1,6 +1,7 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { type FormEvent, useMemo, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
+import { ActivityScreen } from "#/components/money/ActivityScreen";
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import { Input } from "#/components/ui/input";
@@ -46,7 +47,7 @@ export type TransactionsScreenData = {
 };
 
 function TransactionsPage() {
-  return <TransactionsContent data={Route.useLoaderData()} />;
+  return <ActivityScreen data={Route.useLoaderData()} />;
 }
 
 export function TransactionsContent({

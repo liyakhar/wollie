@@ -20,8 +20,18 @@ export type BudgetWorkspaceModel = runtime.Types.Result.DefaultSelection<Prisma.
 
 export type AggregateBudgetWorkspace = {
   _count: BudgetWorkspaceCountAggregateOutputType | null
+  _avg: BudgetWorkspaceAvgAggregateOutputType | null
+  _sum: BudgetWorkspaceSumAggregateOutputType | null
   _min: BudgetWorkspaceMinAggregateOutputType | null
   _max: BudgetWorkspaceMaxAggregateOutputType | null
+}
+
+export type BudgetWorkspaceAvgAggregateOutputType = {
+  paydayDay: number | null
+}
+
+export type BudgetWorkspaceSumAggregateOutputType = {
+  paydayDay: number | null
 }
 
 export type BudgetWorkspaceMinAggregateOutputType = {
@@ -29,6 +39,7 @@ export type BudgetWorkspaceMinAggregateOutputType = {
   userId: string | null
   name: string | null
   currency: string | null
+  paydayDay: number | null
   demo: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -39,6 +50,7 @@ export type BudgetWorkspaceMaxAggregateOutputType = {
   userId: string | null
   name: string | null
   currency: string | null
+  paydayDay: number | null
   demo: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -49,6 +61,7 @@ export type BudgetWorkspaceCountAggregateOutputType = {
   userId: number
   name: number
   currency: number
+  paydayDay: number
   demo: number
   createdAt: number
   updatedAt: number
@@ -56,11 +69,20 @@ export type BudgetWorkspaceCountAggregateOutputType = {
 }
 
 
+export type BudgetWorkspaceAvgAggregateInputType = {
+  paydayDay?: true
+}
+
+export type BudgetWorkspaceSumAggregateInputType = {
+  paydayDay?: true
+}
+
 export type BudgetWorkspaceMinAggregateInputType = {
   id?: true
   userId?: true
   name?: true
   currency?: true
+  paydayDay?: true
   demo?: true
   createdAt?: true
   updatedAt?: true
@@ -71,6 +93,7 @@ export type BudgetWorkspaceMaxAggregateInputType = {
   userId?: true
   name?: true
   currency?: true
+  paydayDay?: true
   demo?: true
   createdAt?: true
   updatedAt?: true
@@ -81,6 +104,7 @@ export type BudgetWorkspaceCountAggregateInputType = {
   userId?: true
   name?: true
   currency?: true
+  paydayDay?: true
   demo?: true
   createdAt?: true
   updatedAt?: true
@@ -125,6 +149,18 @@ export type BudgetWorkspaceAggregateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: BudgetWorkspaceAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: BudgetWorkspaceSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: BudgetWorkspaceMinAggregateInputType
@@ -155,6 +191,8 @@ export type BudgetWorkspaceGroupByArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   _count?: BudgetWorkspaceCountAggregateInputType | true
+  _avg?: BudgetWorkspaceAvgAggregateInputType
+  _sum?: BudgetWorkspaceSumAggregateInputType
   _min?: BudgetWorkspaceMinAggregateInputType
   _max?: BudgetWorkspaceMaxAggregateInputType
 }
@@ -164,10 +202,13 @@ export type BudgetWorkspaceGroupByOutputType = {
   userId: string
   name: string
   currency: string
+  paydayDay: number | null
   demo: boolean
   createdAt: Date
   updatedAt: Date
   _count: BudgetWorkspaceCountAggregateOutputType | null
+  _avg: BudgetWorkspaceAvgAggregateOutputType | null
+  _sum: BudgetWorkspaceSumAggregateOutputType | null
   _min: BudgetWorkspaceMinAggregateOutputType | null
   _max: BudgetWorkspaceMaxAggregateOutputType | null
 }
@@ -195,6 +236,7 @@ export type BudgetWorkspaceWhereInput = {
   userId?: Prisma.StringFilter<"BudgetWorkspace"> | string
   name?: Prisma.StringFilter<"BudgetWorkspace"> | string
   currency?: Prisma.StringFilter<"BudgetWorkspace"> | string
+  paydayDay?: Prisma.IntNullableFilter<"BudgetWorkspace"> | number | null
   demo?: Prisma.BoolFilter<"BudgetWorkspace"> | boolean
   createdAt?: Prisma.DateTimeFilter<"BudgetWorkspace"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BudgetWorkspace"> | Date | string
@@ -204,6 +246,8 @@ export type BudgetWorkspaceWhereInput = {
   merchants?: Prisma.MerchantListRelationFilter
   budgetMonths?: Prisma.BudgetMonthListRelationFilter
   budgetBuckets?: Prisma.BudgetBucketListRelationFilter
+  categoryBudgets?: Prisma.CategoryBudgetListRelationFilter
+  savingsGoals?: Prisma.SavingsGoalListRelationFilter
   allocationRules?: Prisma.BudgetAllocationRuleListRelationFilter
   transactions?: Prisma.FinanceTransactionListRelationFilter
   recurringPayments?: Prisma.RecurringPaymentListRelationFilter
@@ -220,6 +264,7 @@ export type BudgetWorkspaceOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  paydayDay?: Prisma.SortOrderInput | Prisma.SortOrder
   demo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -229,6 +274,8 @@ export type BudgetWorkspaceOrderByWithRelationInput = {
   merchants?: Prisma.MerchantOrderByRelationAggregateInput
   budgetMonths?: Prisma.BudgetMonthOrderByRelationAggregateInput
   budgetBuckets?: Prisma.BudgetBucketOrderByRelationAggregateInput
+  categoryBudgets?: Prisma.CategoryBudgetOrderByRelationAggregateInput
+  savingsGoals?: Prisma.SavingsGoalOrderByRelationAggregateInput
   allocationRules?: Prisma.BudgetAllocationRuleOrderByRelationAggregateInput
   transactions?: Prisma.FinanceTransactionOrderByRelationAggregateInput
   recurringPayments?: Prisma.RecurringPaymentOrderByRelationAggregateInput
@@ -248,6 +295,7 @@ export type BudgetWorkspaceWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"BudgetWorkspace"> | string
   name?: Prisma.StringFilter<"BudgetWorkspace"> | string
   currency?: Prisma.StringFilter<"BudgetWorkspace"> | string
+  paydayDay?: Prisma.IntNullableFilter<"BudgetWorkspace"> | number | null
   demo?: Prisma.BoolFilter<"BudgetWorkspace"> | boolean
   createdAt?: Prisma.DateTimeFilter<"BudgetWorkspace"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BudgetWorkspace"> | Date | string
@@ -257,6 +305,8 @@ export type BudgetWorkspaceWhereUniqueInput = Prisma.AtLeast<{
   merchants?: Prisma.MerchantListRelationFilter
   budgetMonths?: Prisma.BudgetMonthListRelationFilter
   budgetBuckets?: Prisma.BudgetBucketListRelationFilter
+  categoryBudgets?: Prisma.CategoryBudgetListRelationFilter
+  savingsGoals?: Prisma.SavingsGoalListRelationFilter
   allocationRules?: Prisma.BudgetAllocationRuleListRelationFilter
   transactions?: Prisma.FinanceTransactionListRelationFilter
   recurringPayments?: Prisma.RecurringPaymentListRelationFilter
@@ -273,12 +323,15 @@ export type BudgetWorkspaceOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  paydayDay?: Prisma.SortOrderInput | Prisma.SortOrder
   demo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BudgetWorkspaceCountOrderByAggregateInput
+  _avg?: Prisma.BudgetWorkspaceAvgOrderByAggregateInput
   _max?: Prisma.BudgetWorkspaceMaxOrderByAggregateInput
   _min?: Prisma.BudgetWorkspaceMinOrderByAggregateInput
+  _sum?: Prisma.BudgetWorkspaceSumOrderByAggregateInput
 }
 
 export type BudgetWorkspaceScalarWhereWithAggregatesInput = {
@@ -289,6 +342,7 @@ export type BudgetWorkspaceScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"BudgetWorkspace"> | string
   name?: Prisma.StringWithAggregatesFilter<"BudgetWorkspace"> | string
   currency?: Prisma.StringWithAggregatesFilter<"BudgetWorkspace"> | string
+  paydayDay?: Prisma.IntNullableWithAggregatesFilter<"BudgetWorkspace"> | number | null
   demo?: Prisma.BoolWithAggregatesFilter<"BudgetWorkspace"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BudgetWorkspace"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"BudgetWorkspace"> | Date | string
@@ -298,6 +352,7 @@ export type BudgetWorkspaceCreateInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -307,6 +362,8 @@ export type BudgetWorkspaceCreateInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -323,6 +380,7 @@ export type BudgetWorkspaceUncheckedCreateInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -331,6 +389,8 @@ export type BudgetWorkspaceUncheckedCreateInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -346,6 +406,7 @@ export type BudgetWorkspaceUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -355,6 +416,8 @@ export type BudgetWorkspaceUpdateInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -371,6 +434,7 @@ export type BudgetWorkspaceUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -379,6 +443,8 @@ export type BudgetWorkspaceUncheckedUpdateInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -395,6 +461,7 @@ export type BudgetWorkspaceCreateManyInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -404,6 +471,7 @@ export type BudgetWorkspaceUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -414,6 +482,7 @@ export type BudgetWorkspaceUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -434,9 +503,14 @@ export type BudgetWorkspaceCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  paydayDay?: Prisma.SortOrder
   demo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type BudgetWorkspaceAvgOrderByAggregateInput = {
+  paydayDay?: Prisma.SortOrder
 }
 
 export type BudgetWorkspaceMaxOrderByAggregateInput = {
@@ -444,6 +518,7 @@ export type BudgetWorkspaceMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  paydayDay?: Prisma.SortOrder
   demo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -454,9 +529,14 @@ export type BudgetWorkspaceMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  paydayDay?: Prisma.SortOrder
   demo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type BudgetWorkspaceSumOrderByAggregateInput = {
+  paydayDay?: Prisma.SortOrder
 }
 
 export type BudgetWorkspaceScalarRelationFilter = {
@@ -504,6 +584,14 @@ export type BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput = {
   update?: Prisma.BudgetWorkspaceUpdateWithWhereUniqueWithoutUserInput | Prisma.BudgetWorkspaceUpdateWithWhereUniqueWithoutUserInput[]
   updateMany?: Prisma.BudgetWorkspaceUpdateManyWithWhereWithoutUserInput | Prisma.BudgetWorkspaceUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.BudgetWorkspaceScalarWhereInput | Prisma.BudgetWorkspaceScalarWhereInput[]
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type BudgetWorkspaceCreateNestedOneWithoutBankConnectionsInput = {
@@ -618,6 +706,34 @@ export type BudgetWorkspaceUpdateOneRequiredWithoutBudgetMonthsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutBudgetMonthsInput, Prisma.BudgetWorkspaceUpdateWithoutBudgetMonthsInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutBudgetMonthsInput>
 }
 
+export type BudgetWorkspaceCreateNestedOneWithoutCategoryBudgetsInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutCategoryBudgetsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutCategoryBudgetsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutCategoryBudgetsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+}
+
+export type BudgetWorkspaceUpdateOneRequiredWithoutCategoryBudgetsNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutCategoryBudgetsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutCategoryBudgetsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutCategoryBudgetsInput
+  upsert?: Prisma.BudgetWorkspaceUpsertWithoutCategoryBudgetsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutCategoryBudgetsInput, Prisma.BudgetWorkspaceUpdateWithoutCategoryBudgetsInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutCategoryBudgetsInput>
+}
+
+export type BudgetWorkspaceCreateNestedOneWithoutSavingsGoalsInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutSavingsGoalsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutSavingsGoalsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutSavingsGoalsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+}
+
+export type BudgetWorkspaceUpdateOneRequiredWithoutSavingsGoalsNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutSavingsGoalsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutSavingsGoalsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutSavingsGoalsInput
+  upsert?: Prisma.BudgetWorkspaceUpsertWithoutSavingsGoalsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutSavingsGoalsInput, Prisma.BudgetWorkspaceUpdateWithoutSavingsGoalsInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutSavingsGoalsInput>
+}
+
 export type BudgetWorkspaceCreateNestedOneWithoutBudgetBucketsInput = {
   create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutBudgetBucketsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutBudgetBucketsInput>
   connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutBudgetBucketsInput
@@ -706,6 +822,7 @@ export type BudgetWorkspaceCreateWithoutUserInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -714,6 +831,8 @@ export type BudgetWorkspaceCreateWithoutUserInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -729,6 +848,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutUserInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -737,6 +857,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutUserInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -782,6 +904,7 @@ export type BudgetWorkspaceScalarWhereInput = {
   userId?: Prisma.StringFilter<"BudgetWorkspace"> | string
   name?: Prisma.StringFilter<"BudgetWorkspace"> | string
   currency?: Prisma.StringFilter<"BudgetWorkspace"> | string
+  paydayDay?: Prisma.IntNullableFilter<"BudgetWorkspace"> | number | null
   demo?: Prisma.BoolFilter<"BudgetWorkspace"> | boolean
   createdAt?: Prisma.DateTimeFilter<"BudgetWorkspace"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BudgetWorkspace"> | Date | string
@@ -791,6 +914,7 @@ export type BudgetWorkspaceCreateWithoutBankConnectionsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -800,6 +924,8 @@ export type BudgetWorkspaceCreateWithoutBankConnectionsInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -815,6 +941,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutBankConnectionsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -823,6 +950,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutBankConnectionsInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -853,6 +982,7 @@ export type BudgetWorkspaceUpdateWithoutBankConnectionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -862,6 +992,8 @@ export type BudgetWorkspaceUpdateWithoutBankConnectionsInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -877,6 +1009,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutBankConnectionsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -885,6 +1018,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutBankConnectionsInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -899,6 +1034,7 @@ export type BudgetWorkspaceCreateWithoutAccountsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -907,6 +1043,8 @@ export type BudgetWorkspaceCreateWithoutAccountsInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -923,6 +1061,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutAccountsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -930,6 +1069,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutAccountsInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -961,6 +1102,7 @@ export type BudgetWorkspaceUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -969,6 +1111,8 @@ export type BudgetWorkspaceUpdateWithoutAccountsInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -985,6 +1129,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutAccountsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -992,6 +1137,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutAccountsInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1007,6 +1154,7 @@ export type BudgetWorkspaceCreateWithoutMembersInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1016,6 +1164,8 @@ export type BudgetWorkspaceCreateWithoutMembersInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -1031,6 +1181,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutMembersInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1039,6 +1190,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutMembersInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1069,6 +1222,7 @@ export type BudgetWorkspaceUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1078,6 +1232,8 @@ export type BudgetWorkspaceUpdateWithoutMembersInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -1093,6 +1249,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutMembersInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1101,6 +1258,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutMembersInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1115,6 +1274,7 @@ export type BudgetWorkspaceCreateWithoutInvitationsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1124,6 +1284,8 @@ export type BudgetWorkspaceCreateWithoutInvitationsInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -1139,6 +1301,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutInvitationsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1147,6 +1310,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutInvitationsInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1177,6 +1342,7 @@ export type BudgetWorkspaceUpdateWithoutInvitationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1186,6 +1352,8 @@ export type BudgetWorkspaceUpdateWithoutInvitationsInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -1201,6 +1369,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutInvitationsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1209,6 +1378,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutInvitationsInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1223,6 +1394,7 @@ export type BudgetWorkspaceCreateWithoutCategoriesInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1231,6 +1403,8 @@ export type BudgetWorkspaceCreateWithoutCategoriesInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -1247,6 +1421,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutCategoriesInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1254,6 +1429,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutCategoriesInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1285,6 +1462,7 @@ export type BudgetWorkspaceUpdateWithoutCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1293,6 +1471,8 @@ export type BudgetWorkspaceUpdateWithoutCategoriesInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -1309,6 +1489,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutCategoriesInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1316,6 +1497,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutCategoriesInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1331,6 +1514,7 @@ export type BudgetWorkspaceCreateWithoutMerchantsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1339,6 +1523,8 @@ export type BudgetWorkspaceCreateWithoutMerchantsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -1355,6 +1541,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutMerchantsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1362,6 +1549,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutMerchantsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1393,6 +1582,7 @@ export type BudgetWorkspaceUpdateWithoutMerchantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1401,6 +1591,8 @@ export type BudgetWorkspaceUpdateWithoutMerchantsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -1417,6 +1609,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutMerchantsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1424,6 +1617,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutMerchantsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1439,6 +1634,7 @@ export type BudgetWorkspaceCreateWithoutTransactionsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1448,6 +1644,8 @@ export type BudgetWorkspaceCreateWithoutTransactionsInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -1463,6 +1661,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutTransactionsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1471,6 +1670,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutTransactionsInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1501,6 +1702,7 @@ export type BudgetWorkspaceUpdateWithoutTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1510,6 +1712,8 @@ export type BudgetWorkspaceUpdateWithoutTransactionsInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1525,6 +1729,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutTransactionsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1533,6 +1738,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutTransactionsInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1547,6 +1754,7 @@ export type BudgetWorkspaceCreateWithoutBudgetMonthsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1555,6 +1763,8 @@ export type BudgetWorkspaceCreateWithoutBudgetMonthsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -1571,6 +1781,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutBudgetMonthsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1578,6 +1789,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutBudgetMonthsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1609,6 +1822,7 @@ export type BudgetWorkspaceUpdateWithoutBudgetMonthsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1617,6 +1831,8 @@ export type BudgetWorkspaceUpdateWithoutBudgetMonthsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -1633,6 +1849,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutBudgetMonthsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1640,6 +1857,248 @@ export type BudgetWorkspaceUncheckedUpdateWithoutBudgetMonthsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceCreateWithoutCategoryBudgetsInput = {
+  id?: string
+  name?: string
+  currency?: string
+  paydayDay?: number | null
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFinanceWorkspacesInput
+  accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceUncheckedCreateWithoutCategoryBudgetsInput = {
+  id?: string
+  userId: string
+  name?: string
+  currency?: string
+  paydayDay?: number | null
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceCreateOrConnectWithoutCategoryBudgetsInput = {
+  where: Prisma.BudgetWorkspaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutCategoryBudgetsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutCategoryBudgetsInput>
+}
+
+export type BudgetWorkspaceUpsertWithoutCategoryBudgetsInput = {
+  update: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutCategoryBudgetsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutCategoryBudgetsInput>
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutCategoryBudgetsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutCategoryBudgetsInput>
+  where?: Prisma.BudgetWorkspaceWhereInput
+}
+
+export type BudgetWorkspaceUpdateToOneWithWhereWithoutCategoryBudgetsInput = {
+  where?: Prisma.BudgetWorkspaceWhereInput
+  data: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutCategoryBudgetsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutCategoryBudgetsInput>
+}
+
+export type BudgetWorkspaceUpdateWithoutCategoryBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFinanceWorkspacesNestedInput
+  accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceUncheckedUpdateWithoutCategoryBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceCreateWithoutSavingsGoalsInput = {
+  id?: string
+  name?: string
+  currency?: string
+  paydayDay?: number | null
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFinanceWorkspacesInput
+  accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceUncheckedCreateWithoutSavingsGoalsInput = {
+  id?: string
+  userId: string
+  name?: string
+  currency?: string
+  paydayDay?: number | null
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceCreateOrConnectWithoutSavingsGoalsInput = {
+  where: Prisma.BudgetWorkspaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutSavingsGoalsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutSavingsGoalsInput>
+}
+
+export type BudgetWorkspaceUpsertWithoutSavingsGoalsInput = {
+  update: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutSavingsGoalsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutSavingsGoalsInput>
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutSavingsGoalsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutSavingsGoalsInput>
+  where?: Prisma.BudgetWorkspaceWhereInput
+}
+
+export type BudgetWorkspaceUpdateToOneWithWhereWithoutSavingsGoalsInput = {
+  where?: Prisma.BudgetWorkspaceWhereInput
+  data: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutSavingsGoalsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutSavingsGoalsInput>
+}
+
+export type BudgetWorkspaceUpdateWithoutSavingsGoalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFinanceWorkspacesNestedInput
+  accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceUncheckedUpdateWithoutSavingsGoalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1655,6 +2114,7 @@ export type BudgetWorkspaceCreateWithoutBudgetBucketsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1663,6 +2123,8 @@ export type BudgetWorkspaceCreateWithoutBudgetBucketsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -1679,6 +2141,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutBudgetBucketsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1686,6 +2149,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutBudgetBucketsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1717,6 +2182,7 @@ export type BudgetWorkspaceUpdateWithoutBudgetBucketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1725,6 +2191,8 @@ export type BudgetWorkspaceUpdateWithoutBudgetBucketsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -1741,6 +2209,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutBudgetBucketsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1748,6 +2217,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutBudgetBucketsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1763,6 +2234,7 @@ export type BudgetWorkspaceCreateWithoutAllocationRulesInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1772,6 +2244,8 @@ export type BudgetWorkspaceCreateWithoutAllocationRulesInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -1787,6 +2261,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutAllocationRulesInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1795,6 +2270,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutAllocationRulesInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1825,6 +2302,7 @@ export type BudgetWorkspaceUpdateWithoutAllocationRulesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1834,6 +2312,8 @@ export type BudgetWorkspaceUpdateWithoutAllocationRulesInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1849,6 +2329,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutAllocationRulesInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1857,6 +2338,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutAllocationRulesInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1871,6 +2354,7 @@ export type BudgetWorkspaceCreateWithoutRecurringPaymentsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1880,6 +2364,8 @@ export type BudgetWorkspaceCreateWithoutRecurringPaymentsInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -1895,6 +2381,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutRecurringPaymentsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1903,6 +2390,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutRecurringPaymentsInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1933,6 +2422,7 @@ export type BudgetWorkspaceUpdateWithoutRecurringPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1942,6 +2432,8 @@ export type BudgetWorkspaceUpdateWithoutRecurringPaymentsInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1957,6 +2449,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutRecurringPaymentsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1965,6 +2458,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutRecurringPaymentsInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1979,6 +2474,7 @@ export type BudgetWorkspaceCreateWithoutSyncRunsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1988,6 +2484,8 @@ export type BudgetWorkspaceCreateWithoutSyncRunsInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -2003,6 +2501,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutSyncRunsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2011,6 +2510,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutSyncRunsInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -2041,6 +2542,7 @@ export type BudgetWorkspaceUpdateWithoutSyncRunsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2050,6 +2552,8 @@ export type BudgetWorkspaceUpdateWithoutSyncRunsInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -2065,6 +2569,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutSyncRunsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2073,6 +2578,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutSyncRunsInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -2087,6 +2594,7 @@ export type BudgetWorkspaceCreateWithoutInsightsInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2096,6 +2604,8 @@ export type BudgetWorkspaceCreateWithoutInsightsInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -2111,6 +2621,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutInsightsInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2119,6 +2630,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutInsightsInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -2149,6 +2662,7 @@ export type BudgetWorkspaceUpdateWithoutInsightsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2158,6 +2672,8 @@ export type BudgetWorkspaceUpdateWithoutInsightsInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -2173,6 +2689,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutInsightsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2181,6 +2698,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutInsightsInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -2195,6 +2714,7 @@ export type BudgetWorkspaceCreateWithoutRulesInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2204,6 +2724,8 @@ export type BudgetWorkspaceCreateWithoutRulesInput = {
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
@@ -2219,6 +2741,7 @@ export type BudgetWorkspaceUncheckedCreateWithoutRulesInput = {
   userId: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2227,6 +2750,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutRulesInput = {
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutWorkspaceInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedCreateNestedManyWithoutWorkspaceInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -2257,6 +2782,7 @@ export type BudgetWorkspaceUpdateWithoutRulesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2266,6 +2792,8 @@ export type BudgetWorkspaceUpdateWithoutRulesInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -2281,6 +2809,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutRulesInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2289,6 +2818,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutRulesInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -2303,6 +2834,7 @@ export type BudgetWorkspaceCreateManyUserInput = {
   id?: string
   name?: string
   currency?: string
+  paydayDay?: number | null
   demo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2312,6 +2844,7 @@ export type BudgetWorkspaceUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2320,6 +2853,8 @@ export type BudgetWorkspaceUpdateWithoutUserInput = {
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
@@ -2335,6 +2870,7 @@ export type BudgetWorkspaceUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2343,6 +2879,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutUserInput = {
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutWorkspaceNestedInput
+  savingsGoals?: Prisma.SavingsGoalUncheckedUpdateManyWithoutWorkspaceNestedInput
   allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -2358,6 +2896,7 @@ export type BudgetWorkspaceUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  paydayDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2374,6 +2913,8 @@ export type BudgetWorkspaceCountOutputType = {
   merchants: number
   budgetMonths: number
   budgetBuckets: number
+  categoryBudgets: number
+  savingsGoals: number
   allocationRules: number
   transactions: number
   recurringPayments: number
@@ -2391,6 +2932,8 @@ export type BudgetWorkspaceCountOutputTypeSelect<ExtArgs extends runtime.Types.E
   merchants?: boolean | BudgetWorkspaceCountOutputTypeCountMerchantsArgs
   budgetMonths?: boolean | BudgetWorkspaceCountOutputTypeCountBudgetMonthsArgs
   budgetBuckets?: boolean | BudgetWorkspaceCountOutputTypeCountBudgetBucketsArgs
+  categoryBudgets?: boolean | BudgetWorkspaceCountOutputTypeCountCategoryBudgetsArgs
+  savingsGoals?: boolean | BudgetWorkspaceCountOutputTypeCountSavingsGoalsArgs
   allocationRules?: boolean | BudgetWorkspaceCountOutputTypeCountAllocationRulesArgs
   transactions?: boolean | BudgetWorkspaceCountOutputTypeCountTransactionsArgs
   recurringPayments?: boolean | BudgetWorkspaceCountOutputTypeCountRecurringPaymentsArgs
@@ -2445,6 +2988,20 @@ export type BudgetWorkspaceCountOutputTypeCountBudgetMonthsArgs<ExtArgs extends 
  */
 export type BudgetWorkspaceCountOutputTypeCountBudgetBucketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BudgetBucketWhereInput
+}
+
+/**
+ * BudgetWorkspaceCountOutputType without action
+ */
+export type BudgetWorkspaceCountOutputTypeCountCategoryBudgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CategoryBudgetWhereInput
+}
+
+/**
+ * BudgetWorkspaceCountOutputType without action
+ */
+export type BudgetWorkspaceCountOutputTypeCountSavingsGoalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavingsGoalWhereInput
 }
 
 /**
@@ -2516,6 +3073,7 @@ export type BudgetWorkspaceSelect<ExtArgs extends runtime.Types.Extensions.Inter
   userId?: boolean
   name?: boolean
   currency?: boolean
+  paydayDay?: boolean
   demo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2525,6 +3083,8 @@ export type BudgetWorkspaceSelect<ExtArgs extends runtime.Types.Extensions.Inter
   merchants?: boolean | Prisma.BudgetWorkspace$merchantsArgs<ExtArgs>
   budgetMonths?: boolean | Prisma.BudgetWorkspace$budgetMonthsArgs<ExtArgs>
   budgetBuckets?: boolean | Prisma.BudgetWorkspace$budgetBucketsArgs<ExtArgs>
+  categoryBudgets?: boolean | Prisma.BudgetWorkspace$categoryBudgetsArgs<ExtArgs>
+  savingsGoals?: boolean | Prisma.BudgetWorkspace$savingsGoalsArgs<ExtArgs>
   allocationRules?: boolean | Prisma.BudgetWorkspace$allocationRulesArgs<ExtArgs>
   transactions?: boolean | Prisma.BudgetWorkspace$transactionsArgs<ExtArgs>
   recurringPayments?: boolean | Prisma.BudgetWorkspace$recurringPaymentsArgs<ExtArgs>
@@ -2542,6 +3102,7 @@ export type BudgetWorkspaceSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   userId?: boolean
   name?: boolean
   currency?: boolean
+  paydayDay?: boolean
   demo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2553,6 +3114,7 @@ export type BudgetWorkspaceSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   userId?: boolean
   name?: boolean
   currency?: boolean
+  paydayDay?: boolean
   demo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2564,12 +3126,13 @@ export type BudgetWorkspaceSelectScalar = {
   userId?: boolean
   name?: boolean
   currency?: boolean
+  paydayDay?: boolean
   demo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BudgetWorkspaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "currency" | "demo" | "createdAt" | "updatedAt", ExtArgs["result"]["budgetWorkspace"]>
+export type BudgetWorkspaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "currency" | "paydayDay" | "demo" | "createdAt" | "updatedAt", ExtArgs["result"]["budgetWorkspace"]>
 export type BudgetWorkspaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   accounts?: boolean | Prisma.BudgetWorkspace$accountsArgs<ExtArgs>
@@ -2577,6 +3140,8 @@ export type BudgetWorkspaceInclude<ExtArgs extends runtime.Types.Extensions.Inte
   merchants?: boolean | Prisma.BudgetWorkspace$merchantsArgs<ExtArgs>
   budgetMonths?: boolean | Prisma.BudgetWorkspace$budgetMonthsArgs<ExtArgs>
   budgetBuckets?: boolean | Prisma.BudgetWorkspace$budgetBucketsArgs<ExtArgs>
+  categoryBudgets?: boolean | Prisma.BudgetWorkspace$categoryBudgetsArgs<ExtArgs>
+  savingsGoals?: boolean | Prisma.BudgetWorkspace$savingsGoalsArgs<ExtArgs>
   allocationRules?: boolean | Prisma.BudgetWorkspace$allocationRulesArgs<ExtArgs>
   transactions?: boolean | Prisma.BudgetWorkspace$transactionsArgs<ExtArgs>
   recurringPayments?: boolean | Prisma.BudgetWorkspace$recurringPaymentsArgs<ExtArgs>
@@ -2604,6 +3169,8 @@ export type $BudgetWorkspacePayload<ExtArgs extends runtime.Types.Extensions.Int
     merchants: Prisma.$MerchantPayload<ExtArgs>[]
     budgetMonths: Prisma.$BudgetMonthPayload<ExtArgs>[]
     budgetBuckets: Prisma.$BudgetBucketPayload<ExtArgs>[]
+    categoryBudgets: Prisma.$CategoryBudgetPayload<ExtArgs>[]
+    savingsGoals: Prisma.$SavingsGoalPayload<ExtArgs>[]
     allocationRules: Prisma.$BudgetAllocationRulePayload<ExtArgs>[]
     transactions: Prisma.$FinanceTransactionPayload<ExtArgs>[]
     recurringPayments: Prisma.$RecurringPaymentPayload<ExtArgs>[]
@@ -2619,6 +3186,10 @@ export type $BudgetWorkspacePayload<ExtArgs extends runtime.Types.Extensions.Int
     userId: string
     name: string
     currency: string
+    /**
+     * Day of month the pay cycle starts. Null means detect it from income.
+     */
+    paydayDay: number | null
     demo: boolean
     createdAt: Date
     updatedAt: Date
@@ -3022,6 +3593,8 @@ export interface Prisma__BudgetWorkspaceClient<T, Null = never, ExtArgs extends 
   merchants<T extends Prisma.BudgetWorkspace$merchantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$merchantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MerchantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   budgetMonths<T extends Prisma.BudgetWorkspace$budgetMonthsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$budgetMonthsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetMonthPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   budgetBuckets<T extends Prisma.BudgetWorkspace$budgetBucketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$budgetBucketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetBucketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  categoryBudgets<T extends Prisma.BudgetWorkspace$categoryBudgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$categoryBudgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryBudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savingsGoals<T extends Prisma.BudgetWorkspace$savingsGoalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$savingsGoalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavingsGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   allocationRules<T extends Prisma.BudgetWorkspace$allocationRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$allocationRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetAllocationRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.BudgetWorkspace$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recurringPayments<T extends Prisma.BudgetWorkspace$recurringPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$recurringPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecurringPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3064,6 +3637,7 @@ export interface BudgetWorkspaceFieldRefs {
   readonly userId: Prisma.FieldRef<"BudgetWorkspace", 'String'>
   readonly name: Prisma.FieldRef<"BudgetWorkspace", 'String'>
   readonly currency: Prisma.FieldRef<"BudgetWorkspace", 'String'>
+  readonly paydayDay: Prisma.FieldRef<"BudgetWorkspace", 'Int'>
   readonly demo: Prisma.FieldRef<"BudgetWorkspace", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"BudgetWorkspace", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"BudgetWorkspace", 'DateTime'>
@@ -3585,6 +4159,54 @@ export type BudgetWorkspace$budgetBucketsArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.BudgetBucketScalarFieldEnum | Prisma.BudgetBucketScalarFieldEnum[]
+}
+
+/**
+ * BudgetWorkspace.categoryBudgets
+ */
+export type BudgetWorkspace$categoryBudgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CategoryBudget
+   */
+  select?: Prisma.CategoryBudgetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CategoryBudget
+   */
+  omit?: Prisma.CategoryBudgetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryBudgetInclude<ExtArgs> | null
+  where?: Prisma.CategoryBudgetWhereInput
+  orderBy?: Prisma.CategoryBudgetOrderByWithRelationInput | Prisma.CategoryBudgetOrderByWithRelationInput[]
+  cursor?: Prisma.CategoryBudgetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CategoryBudgetScalarFieldEnum | Prisma.CategoryBudgetScalarFieldEnum[]
+}
+
+/**
+ * BudgetWorkspace.savingsGoals
+ */
+export type BudgetWorkspace$savingsGoalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavingsGoal
+   */
+  select?: Prisma.SavingsGoalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavingsGoal
+   */
+  omit?: Prisma.SavingsGoalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavingsGoalInclude<ExtArgs> | null
+  where?: Prisma.SavingsGoalWhereInput
+  orderBy?: Prisma.SavingsGoalOrderByWithRelationInput | Prisma.SavingsGoalOrderByWithRelationInput[]
+  cursor?: Prisma.SavingsGoalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavingsGoalScalarFieldEnum | Prisma.SavingsGoalScalarFieldEnum[]
 }
 
 /**

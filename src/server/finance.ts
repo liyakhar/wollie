@@ -693,6 +693,33 @@ async function loadFinancePlanningData(transactions: FinanceTransaction[], works
   }
 }
 
+/**
+ * Accounts, transactions, and bills for one workspace, from the dev sample
+ * or the live bank data. Used by the budgets and goals model (money.ts).
+ */
+export async function loadMoneySnapshot(workspaceId: string) {
+  const devDashboard = await getDevFinanceDashboard(workspaceId)
+  if (devDashboard) {
+    return {
+      accounts: devDashboard.accounts,
+      transactions: devDashboard.transactions,
+      recurringPayments: devDashboard.recurringPayments,
+      currency: devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'EUR',
+      syncStatus: devDashboard.syncStatus,
+    }
+  }
+
+  const syncState = await loadBankSyncState()
+  const planning = await loadFinancePlanningData(syncState.transactions, workspaceId)
+  return {
+    accounts: syncState.accounts,
+    transactions: markRecurringTransactions(syncState.transactions, planning.recurringPayments),
+    recurringPayments: planning.recurringPayments,
+    currency: planning.currency,
+    syncStatus: syncState.status,
+  }
+}
+
 async function requirePrivateFinanceHousehold() {
   const context = await requireFinanceHousehold()
   setResponseHeader('Cache-Control', 'private, no-store, max-age=0')

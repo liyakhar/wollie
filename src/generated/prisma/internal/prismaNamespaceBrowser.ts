@@ -64,6 +64,9 @@ export const ModelName = {
   FinanceTransaction: 'FinanceTransaction',
   BudgetMonth: 'BudgetMonth',
   BudgetAllocation: 'BudgetAllocation',
+  CategoryBudget: 'CategoryBudget',
+  SavingsGoal: 'SavingsGoal',
+  GoalContribution: 'GoalContribution',
   BudgetBucket: 'BudgetBucket',
   BudgetBucketCategory: 'BudgetBucketCategory',
   BudgetAllocationRule: 'BudgetAllocationRule',
@@ -136,6 +139,7 @@ export const BudgetWorkspaceScalarFieldEnum = {
   userId: 'userId',
   name: 'name',
   currency: 'currency',
+  paydayDay: 'paydayDay',
   demo: 'demo',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -287,6 +291,48 @@ export const BudgetAllocationScalarFieldEnum = {
 } as const
 
 export type BudgetAllocationScalarFieldEnum = (typeof BudgetAllocationScalarFieldEnum)[keyof typeof BudgetAllocationScalarFieldEnum]
+
+
+export const CategoryBudgetScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  categoryId: 'categoryId',
+  limitMinor: 'limitMinor',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryBudgetScalarFieldEnum = (typeof CategoryBudgetScalarFieldEnum)[keyof typeof CategoryBudgetScalarFieldEnum]
+
+
+export const SavingsGoalScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  name: 'name',
+  icon: 'icon',
+  targetMinor: 'targetMinor',
+  monthlyMinor: 'monthlyMinor',
+  targetDate: 'targetDate',
+  startingMinor: 'startingMinor',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SavingsGoalScalarFieldEnum = (typeof SavingsGoalScalarFieldEnum)[keyof typeof SavingsGoalScalarFieldEnum]
+
+
+export const GoalContributionScalarFieldEnum = {
+  id: 'id',
+  goalId: 'goalId',
+  cycleStart: 'cycleStart',
+  amountMinor: 'amountMinor',
+  skipped: 'skipped',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GoalContributionScalarFieldEnum = (typeof GoalContributionScalarFieldEnum)[keyof typeof GoalContributionScalarFieldEnum]
 
 
 export const BudgetBucketScalarFieldEnum = {

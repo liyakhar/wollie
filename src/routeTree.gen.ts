@@ -44,6 +44,7 @@ import { Route as DemoUpcomingRouteImport } from './routes/demo/upcoming'
 import { Route as DemoTransactionsRouteImport } from './routes/demo/transactions'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoPrismaRouteImport } from './routes/demo/prisma'
+import { Route as DemoGoalsRouteImport } from './routes/demo/goals'
 import { Route as DemoBudgetsRouteImport } from './routes/demo/budgets'
 import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
 import { Route as DemoAccountsRouteImport } from './routes/demo/accounts'
@@ -51,8 +52,10 @@ import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as BillingSuccessRouteImport } from './routes/billing/success'
 import { Route as AppTransactionsRouteImport } from './routes/app/transactions'
 import { Route as AppRecurringRouteImport } from './routes/app/recurring'
+import { Route as AppMoneyPlanRouteImport } from './routes/app/money-plan'
 import { Route as AppInsightsRouteImport } from './routes/app/insights'
 import { Route as AppHouseholdRouteImport } from './routes/app/household'
+import { Route as AppGoalsRouteImport } from './routes/app/goals'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppBudgetsRouteImport } from './routes/app/budgets'
 import { Route as AppBillingRouteImport } from './routes/app/billing'
@@ -238,6 +241,11 @@ const DemoPrismaRoute = DemoPrismaRouteImport.update({
   path: '/prisma',
   getParentRoute: () => DemoRouteRoute,
 } as any)
+const DemoGoalsRoute = DemoGoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
 const DemoBudgetsRoute = DemoBudgetsRouteImport.update({
   id: '/budgets',
   path: '/budgets',
@@ -273,6 +281,11 @@ const AppRecurringRoute = AppRecurringRouteImport.update({
   path: '/recurring',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppMoneyPlanRoute = AppMoneyPlanRouteImport.update({
+  id: '/money-plan',
+  path: '/money-plan',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppInsightsRoute = AppInsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
@@ -281,6 +294,11 @@ const AppInsightsRoute = AppInsightsRouteImport.update({
 const AppHouseholdRoute = AppHouseholdRouteImport.update({
   id: '/household',
   path: '/household',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppGoalsRoute = AppGoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppExploreRoute = AppExploreRouteImport.update({
@@ -352,8 +370,10 @@ export interface FileRoutesByFullPath {
   '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/goals': typeof AppGoalsRoute
   '/app/household': typeof AppHouseholdRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/money-plan': typeof AppMoneyPlanRoute
   '/app/recurring': typeof AppRecurringRoute
   '/app/transactions': typeof AppTransactionsRoute
   '/billing/success': typeof BillingSuccessRoute
@@ -361,6 +381,7 @@ export interface FileRoutesByFullPath {
   '/demo/accounts': typeof DemoAccountsRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/budgets': typeof DemoBudgetsRoute
+  '/demo/goals': typeof DemoGoalsRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/transactions': typeof DemoTransactionsRoute
@@ -398,8 +419,10 @@ export interface FileRoutesByTo {
   '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/goals': typeof AppGoalsRoute
   '/app/household': typeof AppHouseholdRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/money-plan': typeof AppMoneyPlanRoute
   '/app/recurring': typeof AppRecurringRoute
   '/app/transactions': typeof AppTransactionsRoute
   '/billing/success': typeof BillingSuccessRoute
@@ -407,6 +430,7 @@ export interface FileRoutesByTo {
   '/demo/accounts': typeof DemoAccountsRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/budgets': typeof DemoBudgetsRoute
+  '/demo/goals': typeof DemoGoalsRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/transactions': typeof DemoTransactionsRoute
@@ -453,8 +477,10 @@ export interface FileRoutesById {
   '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/goals': typeof AppGoalsRoute
   '/app/household': typeof AppHouseholdRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/money-plan': typeof AppMoneyPlanRoute
   '/app/recurring': typeof AppRecurringRoute
   '/app/transactions': typeof AppTransactionsRoute
   '/billing/success': typeof BillingSuccessRoute
@@ -462,6 +488,7 @@ export interface FileRoutesById {
   '/demo/accounts': typeof DemoAccountsRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/budgets': typeof DemoBudgetsRoute
+  '/demo/goals': typeof DemoGoalsRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/transactions': typeof DemoTransactionsRoute
@@ -510,8 +537,10 @@ export interface FileRouteTypes {
     | '/app/billing'
     | '/app/budgets'
     | '/app/explore'
+    | '/app/goals'
     | '/app/household'
     | '/app/insights'
+    | '/app/money-plan'
     | '/app/recurring'
     | '/app/transactions'
     | '/billing/success'
@@ -519,6 +548,7 @@ export interface FileRouteTypes {
     | '/demo/accounts'
     | '/demo/better-auth'
     | '/demo/budgets'
+    | '/demo/goals'
     | '/demo/prisma'
     | '/demo/tanstack-query'
     | '/demo/transactions'
@@ -556,8 +586,10 @@ export interface FileRouteTypes {
     | '/app/billing'
     | '/app/budgets'
     | '/app/explore'
+    | '/app/goals'
     | '/app/household'
     | '/app/insights'
+    | '/app/money-plan'
     | '/app/recurring'
     | '/app/transactions'
     | '/billing/success'
@@ -565,6 +597,7 @@ export interface FileRouteTypes {
     | '/demo/accounts'
     | '/demo/better-auth'
     | '/demo/budgets'
+    | '/demo/goals'
     | '/demo/prisma'
     | '/demo/tanstack-query'
     | '/demo/transactions'
@@ -610,8 +643,10 @@ export interface FileRouteTypes {
     | '/app/billing'
     | '/app/budgets'
     | '/app/explore'
+    | '/app/goals'
     | '/app/household'
     | '/app/insights'
+    | '/app/money-plan'
     | '/app/recurring'
     | '/app/transactions'
     | '/billing/success'
@@ -619,6 +654,7 @@ export interface FileRouteTypes {
     | '/demo/accounts'
     | '/demo/better-auth'
     | '/demo/budgets'
+    | '/demo/goals'
     | '/demo/prisma'
     | '/demo/tanstack-query'
     | '/demo/transactions'
@@ -917,6 +953,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoPrismaRouteImport
       parentRoute: typeof DemoRouteRoute
     }
+    '/demo/goals': {
+      id: '/demo/goals'
+      path: '/goals'
+      fullPath: '/demo/goals'
+      preLoaderRoute: typeof DemoGoalsRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
     '/demo/budgets': {
       id: '/demo/budgets'
       path: '/budgets'
@@ -966,6 +1009,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRecurringRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/money-plan': {
+      id: '/app/money-plan'
+      path: '/money-plan'
+      fullPath: '/app/money-plan'
+      preLoaderRoute: typeof AppMoneyPlanRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/insights': {
       id: '/app/insights'
       path: '/insights'
@@ -978,6 +1028,13 @@ declare module '@tanstack/react-router' {
       path: '/household'
       fullPath: '/app/household'
       preLoaderRoute: typeof AppHouseholdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/goals': {
+      id: '/app/goals'
+      path: '/goals'
+      fullPath: '/app/goals'
+      preLoaderRoute: typeof AppGoalsRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/app/explore': {
@@ -1063,8 +1120,10 @@ interface AppRouteRouteChildren {
   AppBillingRoute: typeof AppBillingRoute
   AppBudgetsRoute: typeof AppBudgetsRoute
   AppExploreRoute: typeof AppExploreRoute
+  AppGoalsRoute: typeof AppGoalsRoute
   AppHouseholdRoute: typeof AppHouseholdRoute
   AppInsightsRoute: typeof AppInsightsRoute
+  AppMoneyPlanRoute: typeof AppMoneyPlanRoute
   AppRecurringRoute: typeof AppRecurringRoute
   AppTransactionsRoute: typeof AppTransactionsRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -1076,8 +1135,10 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppBillingRoute: AppBillingRoute,
   AppBudgetsRoute: AppBudgetsRoute,
   AppExploreRoute: AppExploreRoute,
+  AppGoalsRoute: AppGoalsRoute,
   AppHouseholdRoute: AppHouseholdRoute,
   AppInsightsRoute: AppInsightsRoute,
+  AppMoneyPlanRoute: AppMoneyPlanRoute,
   AppRecurringRoute: AppRecurringRoute,
   AppTransactionsRoute: AppTransactionsRoute,
   AppIndexRoute: AppIndexRoute,
@@ -1092,6 +1153,7 @@ interface DemoRouteRouteChildren {
   DemoAccountsRoute: typeof DemoAccountsRoute
   DemoBetterAuthRoute: typeof DemoBetterAuthRoute
   DemoBudgetsRoute: typeof DemoBudgetsRoute
+  DemoGoalsRoute: typeof DemoGoalsRoute
   DemoPrismaRoute: typeof DemoPrismaRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   DemoTransactionsRoute: typeof DemoTransactionsRoute
@@ -1103,6 +1165,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoAccountsRoute: DemoAccountsRoute,
   DemoBetterAuthRoute: DemoBetterAuthRoute,
   DemoBudgetsRoute: DemoBudgetsRoute,
+  DemoGoalsRoute: DemoGoalsRoute,
   DemoPrismaRoute: DemoPrismaRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   DemoTransactionsRoute: DemoTransactionsRoute,

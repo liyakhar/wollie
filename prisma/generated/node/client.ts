@@ -107,6 +107,21 @@ export type BudgetMonth = Prisma.BudgetMonthModel
  */
 export type BudgetAllocation = Prisma.BudgetAllocationModel
 /**
+ * Model CategoryBudget
+ * A standing spending limit for one category, applied every pay cycle.
+ */
+export type CategoryBudget = Prisma.CategoryBudgetModel
+/**
+ * Model SavingsGoal
+ * Money the user sets aside each cycle, for a target or open-ended.
+ */
+export type SavingsGoal = Prisma.SavingsGoalModel
+/**
+ * Model GoalContribution
+ * What the user saved for a goal in one pay cycle, or that they skipped it.
+ */
+export type GoalContribution = Prisma.GoalContributionModel
+/**
  * Model BudgetBucket
  * 
  */
