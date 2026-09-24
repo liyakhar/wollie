@@ -165,7 +165,11 @@ The phone app is calm and flat. Source: the "Phone shape system" and "Minimal ph
 | Dialogs | 24px |
 | Bottom menu | Floating glass pill |
 
-No square corners on phones. Fields use a soft ink fill (`--fill-soft`), not a border.
+No square corners on phones.
+
+### Glass material
+
+Fields, secondary buttons, the Plan switch, sheets, and the bottom menu share one frosted glass look: `--glass-fill`, `--glass-edge`, `--glass-blur`. The selected item in any switch is a bright glass lens (`--lens-fill`, `--lens-edge`) that slides with `--glass-ease`. Primary buttons stay solid deep blue.
 
 ### Layout
 
