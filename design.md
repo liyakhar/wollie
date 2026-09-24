@@ -184,3 +184,14 @@ Fields, secondary buttons, the Plan switch, sheets, and the bottom menu share on
 - Tab change: the glass lens glides (420ms, ease-out, no overshoot) and stretches slightly.
 - Page change: a 320ms fade and 6px rise.
 - Reduced motion turns both off.
+
+### Phone theme: Glass
+
+The phone app uses its own theme, set in the "Phone theme: Glass" block of `src/press.css`. It remaps the brand tokens only on phone app pages. Desktop and marketing keep the warm Wollie theme.
+
+- Font: Apple system font (SF Pro). Money numbers use SF Pro Rounded.
+- Canvas: cool light grey with a fixed soft aurora (blue, violet, cyan) behind glass.
+- Ink: near-black. Quiet text: ink at 50%.
+- Accent: electric blue, for the active tab, links, and money still available.
+- Primary buttons: near-black pills. Positive green and negative red keep their meaning.
+- Type: title 34px bold, hero number 60px rounded, section titles 13px semibold quiet, rows 16px.
