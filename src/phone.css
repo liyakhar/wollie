@@ -1071,3 +1071,108 @@ body:not(:has(.app-shell)) {
     color: inherit !important;
   }
 }
+
+/* ---------- Account pages in the Court palette ---------- */
+@media (max-width: 63.99rem) {
+  .auth-page .auth-page__brand::after {
+    content: ".";
+    color: #ff5f1f;
+  }
+
+  .auth-page .auth-page__brand {
+    font-size: 1.375rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  .auth-page .app-form__input,
+  .app-page .app-form__input {
+    background: #f3f3f1 !important;
+    box-shadow: none !important;
+  }
+
+  .auth-page .app-form__input:focus,
+  .app-page .app-form__input:focus {
+    outline: 0 !important;
+    box-shadow: 0 0 0 2px #0b0b0c !important;
+  }
+
+  .auth-page .btn,
+  .app-page .btn {
+    min-height: 3.25rem !important;
+    background: #0b0b0c !important;
+    box-shadow: none !important;
+    color: #d6f53d !important;
+    font-size: 1.0625rem !important;
+  }
+
+  .auth-page .btn * {
+    color: inherit !important;
+  }
+
+  /* Links: black, quiet; "Forgot password?" in clay orange. */
+  .auth-page a:not(.auth-page__brand),
+  .auth-page .login-switch {
+    color: #0b0b0c !important;
+    text-decoration: none !important;
+  }
+
+  .auth-page .app-form a,
+  .auth-page .app-form__hint a {
+    color: #d9460a !important;
+    text-decoration: none !important;
+  }
+
+  .auth-page .auth-footer {
+    display: grid !important;
+    justify-items: center;
+    gap: 0.25rem !important;
+    margin-top: 0.5rem;
+  }
+
+  .auth-page .auth-footer .login-switch {
+    min-height: 2.75rem;
+    font-size: 0.9375rem !important;
+  }
+
+  /* Pricing lives on the website; the phone app keeps sign in simple. */
+  .auth-page .auth-footer a[href^="/pricing"] {
+    display: none !important;
+  }
+
+  .auth-page .auth-page__intro {
+    color: rgb(11 11 12 / 0.55) !important;
+  }
+}
+
+@media (max-width: 63.99rem) {
+  .auth-page .auth-footer {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center !important;
+    justify-content: center;
+  }
+
+  .auth-page .auth-footer > * {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .auth-page [class*="underline"],
+  .auth-page .app-form__label a,
+  .auth-page label a {
+    color: #d9460a !important;
+    text-decoration: none !important;
+  }
+}
+
+@media (max-width: 63.99rem) {
+  .auth-page .auth-link,
+  .auth-page a.auth-link {
+    color: #d9460a !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    border: 0 !important;
+    background-image: none !important;
+  }
+}
