@@ -1,0 +1,917 @@
+/* ==================================================================
+ * Wollie phone app — "Glass"
+ *
+ * One stylesheet for every phone screen of the signed-in app and the
+ * demo (widths below 64rem). Desktop and marketing pages are not
+ * touched. See DESIGN.md, "Phone app".
+ *
+ * Performance rules:
+ *   - One page background, painted on <html>. No fixed layers.
+ *   - Live blur (backdrop-filter) only on the floating menu.
+ *   - Animate transform and opacity only.
+ * ================================================================== */
+
+/* ---------- All widths: parts that exist only on phones ---------- */
+
+.wollie-profile-button,
+.wollie-profile-links,
+.wollie-transaction-filters__toggle {
+  display: none;
+}
+
+.wollie-transaction-filters__search-row {
+  display: flex;
+  flex: 1 1 18rem;
+  max-width: 24rem;
+  gap: var(--space-sm);
+}
+
+.wollie-transaction-filters__search-row .wollie-transaction-filters__search {
+  width: auto;
+  flex: 1 1 auto;
+}
+
+@keyframes wollie-page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes wollie-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+
+.app-shell__page {
+  min-width: 0;
+  animation: wollie-page-in 180ms ease-out backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell__page {
+    animation: none;
+  }
+}
+
+/* The iOS app draws edge to edge (viewport-fit=cover). Pages outside
+ * the app shell keep clear of the notch and home bar. On desktop and
+ * in normal browsers these insets are 0. */
+body:not(:has(.app-shell)) {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ======================= Phones only ======================= */
+@media (max-width: 63.99rem) {
+  /* ---------- Tokens ----------
+   * Set on the shell and on pop-up layers, which render outside it. */
+  .app-shell,
+  [data-radix-popper-content-wrapper],
+  [data-slot="dialog-content"] {
+    --g-canvas: #f2f3f7;
+    --g-ink: #0e1016;
+    --g-ink-2: rgb(14 16 22 / 0.56);
+    --g-ink-3: rgb(14 16 22 / 0.36);
+    --g-line: rgb(14 16 22 / 0.08);
+    --g-accent: #2f6bff;
+    --g-accent-soft: rgb(47 107 255 / 0.12);
+    --g-positive: #1f9d55;
+    --g-negative: #e5484d;
+
+    --g-surface: rgb(255 255 255 / 0.74);
+    --g-surface-strong: #ffffff;
+    --g-edge:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 0 0 0.5px rgb(14 16 22 / 0.07),
+      0 1px 2px rgb(14 16 22 / 0.04);
+    --g-lens-edge:
+      inset 0 1px 0 #ffffff,
+      0 0 0 0.5px rgb(14 16 22 / 0.06),
+      0 2px 6px rgb(14 16 22 / 0.08);
+
+    --g-pill: 9999px;
+    --g-sheet: 1.5rem;
+    --g-row: 0.75rem;
+    --g-ease: cubic-bezier(0.25, 1, 0.5, 1);
+
+    --g-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
+      "Helvetica Neue", sans-serif;
+    --g-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+      system-ui, "Helvetica Neue", sans-serif;
+    --g-font-rounded: ui-rounded, "SF Pro Rounded", -apple-system,
+      BlinkMacSystemFont, system-ui, sans-serif;
+
+    /* Remap brand tokens so older rules and inline colours follow. */
+    --font-brand-body: var(--g-font);
+    --font-brand-display: var(--g-font-display);
+    --color-brand-cream: var(--g-canvas);
+    --color-brand-cream-deep: #e6e8ee;
+    --color-brand-paper: var(--g-surface-strong);
+    --color-brand-ink: var(--g-ink);
+    --color-brand-ink-soft: var(--g-ink-2);
+    --color-brand-blue: var(--g-accent);
+    --color-brand-blue-deep: var(--g-ink);
+    --color-brand-on-blue: #ffffff;
+    --color-brand-orange: var(--g-accent);
+    --color-brand-orange-deep: var(--g-accent);
+    --color-brand-orange-soft: var(--g-accent-soft);
+    --color-brand-on-orange: var(--g-ink);
+    --color-brand-sage: var(--g-accent);
+    --color-brand-rule: var(--g-line);
+    --color-brand-focus: var(--g-accent);
+    --color-wollie-accent: var(--g-ink);
+    --color-wollie-accent-hover: #262a33;
+    --color-wollie-accent-contrast: #ffffff;
+    --color-semantic-primary: var(--g-ink);
+    --color-semantic-active: var(--g-accent);
+    --color-semantic-active-soft: var(--g-accent-soft);
+    --color-semantic-positive: var(--g-positive);
+    --color-semantic-positive-strong: var(--g-positive);
+    --color-semantic-negative: var(--g-negative);
+    --color-semantic-neutral: var(--g-ink-2);
+    --color-semantic-neutral-soft: rgb(14 16 22 / 0.05);
+    --color-money-actual: var(--g-ink);
+    --color-money-available: var(--g-accent);
+    --color-money-missing: rgb(14 16 22 / 0.08);
+  }
+
+  /* ---------- One background ----------
+   * Painted once on <html>. The shell and page are transparent, so
+   * there is never a second colour on top. */
+  html:has(.app-shell) {
+    /* Flat, and the same colour as the iOS app frame (capacitor.config.ts
+     * backgroundColor), so the status bar strip and page never differ. */
+    background: #f2f3f7;
+    overscroll-behavior-y: none;
+  }
+
+  html:has(.app-shell) body,
+  .app-shell,
+  .app-shell .app-shell__main,
+  .app-shell .wollie-workspace-page {
+    min-height: 0 !important;
+    background: transparent !important;
+  }
+
+  .app-shell {
+    color: var(--g-ink);
+    font-family: var(--g-font);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .app-shell ::selection {
+    background: var(--g-accent-soft);
+  }
+
+  /* ---------- Frame ---------- */
+  .app-shell > .app-nav {
+    display: none !important;
+  }
+
+  .app-shell .app-shell__main {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Status bar strip: solid canvas, fading out, so content that
+   * scrolls under the clock stays readable. */
+  .app-shell::before {
+    content: "";
+    position: fixed;
+    z-index: 30;
+    inset: 0 0 auto 0;
+    height: calc(env(safe-area-inset-top) + 0.75rem);
+    background: linear-gradient(#f2f3f7 70%, rgb(242 243 247 / 0));
+    pointer-events: none;
+  }
+
+  .app-shell .wollie-workspace-page {
+    gap: 2rem !important;
+    padding: 1rem 1.25rem calc(7rem + env(safe-area-inset-bottom)) !important;
+    color: var(--g-ink) !important;
+    font-family: var(--g-font) !important;
+    font-size: 1rem;
+  }
+
+  /* ---------- Bottom menu: floating glass pill ---------- */
+  .app-shell .app-mobile-nav {
+    position: fixed;
+    z-index: 40;
+    inset: auto 0 max(0.75rem, calc(env(safe-area-inset-bottom) - 0.25rem)) 0;
+    width: min(calc(100% - 2.5rem), 22.5rem);
+    max-width: none;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    padding: 0.375rem;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--g-pill);
+    background: rgb(255 255 255 / 0.62);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 0 0 0.5px rgb(14 16 22 / 0.08);
+    color: var(--g-ink);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    backdrop-filter: blur(20px) saturate(1.8);
+    transform: translateZ(0);
+  }
+
+  .app-shell .app-mobile-nav__indicator {
+    position: absolute;
+    top: 0.375rem;
+    bottom: 0.375rem;
+    left: 0.375rem;
+    width: calc((100% - 0.75rem) / 4);
+    border-radius: var(--g-pill);
+    background: var(--g-surface-strong);
+    box-shadow: var(--g-lens-edge);
+    transform: translateX(calc(100% * var(--tab-index, 0)));
+    transition:
+      transform 380ms var(--g-ease),
+      scale 380ms var(--g-ease),
+      opacity 160ms ease;
+    will-change: transform;
+    pointer-events: none;
+  }
+
+  .app-shell .app-mobile-nav[data-moving] .app-mobile-nav__indicator {
+    scale: 1.04 0.94;
+  }
+
+  .app-shell .app-mobile-nav[data-has-active="false"] .app-mobile-nav__indicator {
+    opacity: 0;
+  }
+
+  .app-shell .app-mobile-nav__item {
+    position: relative;
+    min-width: 0;
+    min-height: 3.125rem;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.1875rem;
+    padding: 0.25rem 0;
+    border: 0;
+    border-radius: var(--g-pill);
+    background: transparent !important;
+    color: var(--g-ink-3);
+    font-family: var(--g-font);
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 200ms ease;
+    touch-action: manipulation;
+  }
+
+  .app-shell .app-mobile-nav__item svg {
+    width: 1.3125rem;
+    height: 1.3125rem;
+  }
+
+  .app-shell .app-mobile-nav__item.is-active {
+    color: var(--g-accent);
+  }
+
+  .app-shell .app-mobile-nav__item:focus-visible {
+    outline: 2px solid var(--g-accent);
+    outline-offset: -2px;
+  }
+
+  /* ---------- Page header ---------- */
+  .app-shell .wollie-workspace-page > header > div:empty {
+    display: none !important;
+  }
+
+  .app-shell .wollie-workspace-page > header {
+    gap: 0.75rem !important;
+    padding-bottom: 0 !important;
+    border: 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page > header h1 {
+    color: var(--g-ink) !important;
+    font-family: var(--g-font-display) !important;
+    font-size: 2.125rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.028em !important;
+    line-height: 1.05 !important;
+  }
+
+  .app-shell .wollie-workspace-page > header p,
+  .app-shell .wollie-workspace-page > header [data-slot="badge"],
+  .app-shell .wollie-workspace-page > header > a,
+  .app-shell .wollie-workspace-page > header > [data-slot="button"] {
+    display: none !important;
+  }
+
+  .app-shell .wollie-page-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .app-shell .wollie-profile-button {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin-right: -0.25rem;
+    border-radius: var(--g-pill);
+  }
+
+  .app-shell .wollie-profile-button [data-slot="avatar"] {
+    background: var(--g-surface-strong);
+    box-shadow: var(--g-lens-edge);
+  }
+
+  .app-shell .wollie-profile-button [data-slot="avatar-fallback"] {
+    background: transparent;
+    color: var(--g-accent);
+    font-family: var(--g-font-rounded);
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  /* ---------- Content sits on the canvas: no card frames ---------- */
+  .app-shell .wollie-workspace-page [data-slot="card"],
+  .app-shell .wollie-workspace-page .rounded-lg.border,
+  .app-shell .wollie-workspace-page .money-plan-section,
+  .app-shell .wollie-workspace-page .money-plan-section__list {
+    gap: 0.75rem !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .app-shell .wollie-workspace-page .rounded-lg.border > div,
+  .app-shell .wollie-workspace-page .rounded-lg.border > ul > li,
+  .app-shell .wollie-workspace-page [data-slot="card-header"],
+  .app-shell .wollie-workspace-page [data-slot="card-content"],
+  .app-shell .wollie-workspace-page [data-slot="card-content"] > ul > li,
+  .app-shell .wollie-workspace-page [data-slot="card-footer"],
+  .app-shell .wollie-workspace-page .money-plan-envelope {
+    padding-inline: 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="card-header"],
+  .app-shell .wollie-workspace-page [data-slot="card-content"],
+  .app-shell .wollie-workspace-page .rounded-lg.border > div {
+    padding-block: 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page .border-b,
+  .app-shell .wollie-workspace-page .border-t,
+  .app-shell .wollie-workspace-page .divide-y > *,
+  .app-shell .wollie-workspace-page .money-plan-envelope {
+    border-color: transparent !important;
+  }
+
+  /* Helper text, legends, and explainers stay on desktop only. */
+  .app-shell .wollie-workspace-page details,
+  .app-shell .wollie-workspace-page p.max-w-2xl,
+  .app-shell .wollie-workspace-page p.text-xs.leading-5,
+  .app-shell .wollie-workspace-page [data-slot="card-description"],
+  .app-shell .wollie-workspace-page .money-plan-envelope [data-slot="badge"],
+  .app-shell .wollie-workspace-page .money-plan-envelope p.text-xs,
+  .app-shell .wollie-workspace-page .money-plan-legend,
+  .app-shell .wollie-workspace-page .money-plan-section__header p,
+  .app-shell .wollie-workspace-page section[aria-label="Category totals"],
+  .app-shell section[aria-labelledby="transactions-heading"] > div:first-child,
+  .app-shell .wollie-workspace-page h2 + span.text-sm,
+  .app-shell .wollie-workspace-page .flex.items-center.gap-2 > svg:first-child {
+    display: none !important;
+  }
+
+  /* ---------- Type scale ----------
+   * Title 34 · Hero 60 rounded · Section 13 semibold quiet ·
+   * Row 16 · Meta 13 quiet · Amount 16 semibold rounded. */
+  .app-shell .wollie-workspace-page .text-sm {
+    font-size: 0.9375rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .app-shell .wollie-workspace-page .text-xs {
+    font-size: 0.8125rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .app-shell .wollie-workspace-page .text-zinc-400,
+  .app-shell .wollie-workspace-page .text-zinc-500,
+  .app-shell .wollie-workspace-page .text-zinc-600 {
+    color: var(--g-ink-2) !important;
+  }
+
+  .app-shell .wollie-workspace-page .text-zinc-700,
+  .app-shell .wollie-workspace-page .text-zinc-900,
+  .app-shell .wollie-workspace-page .text-zinc-950 {
+    color: var(--g-ink) !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="card-title"],
+  .app-shell .wollie-workspace-page [data-slot="card-header"] h2,
+  .app-shell .wollie-workspace-page .money-plan-section__heading,
+  .app-shell .wollie-workspace-page p.uppercase,
+  .app-shell .wollie-workspace-page section > div:first-child h2.font-semibold:not([class*="clamp"]) {
+    color: var(--g-ink-2) !important;
+    font-family: var(--g-font) !important;
+    font-size: 0.8125rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    line-height: 1.2 !important;
+    text-transform: none !important;
+  }
+
+  .app-shell .money-plan-section__header {
+    padding: 0 0 0.25rem !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="card-header"]:has([data-slot="card-action"]) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="card-action"] a,
+  .app-shell .wollie-workspace-page a.underline {
+    color: var(--g-accent) !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+  }
+
+  /* Label above the hero number: same on every screen. */
+  .app-shell .wollie-workspace-page p.uppercase:has(+ h2[class*="clamp(2.5rem"]),
+  .app-shell .wollie-workspace-page p.text-sm.font-medium:has(+ .text-4xl) {
+    color: var(--g-ink-2) !important;
+    font-size: 0.9375rem !important;
+    font-weight: 500 !important;
+  }
+
+  .app-shell .wollie-workspace-page h2[class*="clamp(2.5rem"],
+  .app-shell .wollie-workspace-page .text-4xl {
+    margin-top: 0.375rem !important;
+    font-family: var(--g-font-rounded) !important;
+    font-size: 3.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.035em !important;
+    line-height: 1 !important;
+  }
+
+  .app-shell .wollie-workspace-page h2[class*="clamp(2.5rem"] + p {
+    margin-top: 0.625rem !important;
+    font-size: 0.9375rem !important;
+  }
+
+  .app-shell .wollie-workspace-page .tabular-nums {
+    font-family: var(--g-font-rounded) !important;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Rows ---------- */
+  .app-shell .wollie-workspace-page li,
+  .app-shell .wollie-workspace-page .wollie-transaction-row {
+    min-height: 3.75rem;
+  }
+
+  .app-shell .wollie-workspace-page li p.font-medium,
+  .app-shell .wollie-workspace-page .wollie-transaction-row p.font-medium {
+    color: var(--g-ink);
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+  }
+
+  .app-shell .wollie-workspace-page li p.tabular-nums,
+  .app-shell .wollie-workspace-page .wollie-transaction-row > p:last-child {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+  }
+
+  .app-shell .wollie-workspace-page li p.text-xs,
+  .app-shell .wollie-workspace-page .wollie-transaction-row p.text-xs {
+    margin-top: 0.125rem !important;
+  }
+
+  /* Activity rows: name and amount on top, meta and category below. */
+  .app-shell .wollie-workspace-page .wollie-transaction-row {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 0.25rem 1rem !important;
+    padding: 0.625rem 0 !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-transaction-row > :first-child {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-transaction-row > p:last-child {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-transaction-row > [role="combobox"] {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    justify-self: end;
+    width: auto !important;
+    height: 1.5rem !important;
+    min-height: 0 !important;
+    gap: 0.25rem;
+    padding: 0 0.5rem !important;
+    color: var(--g-ink-2) !important;
+    font-size: 0.75rem !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-transaction-row > [role="combobox"] svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  /* ---------- Shapes and surfaces ----------
+   * Tap targets are pills. Panels are 24px sheets. No live blur. */
+  .app-shell .wollie-workspace-page .rounded,
+  .app-shell .wollie-workspace-page .rounded-sm,
+  .app-shell .wollie-workspace-page .rounded-md {
+    border-radius: var(--g-row) !important;
+  }
+
+  .app-shell .wollie-workspace-page .rounded-full {
+    border-radius: var(--g-pill) !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="button"],
+  .app-shell .wollie-workspace-page .wollie-primary-action {
+    min-height: 2.75rem;
+    padding-inline: 1.25rem;
+    border-radius: var(--g-pill) !important;
+    font-weight: 600;
+    touch-action: manipulation;
+    transition: transform 120ms ease;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-primary-action {
+    background: var(--g-ink) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16) !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="button"]:active {
+    transform: scale(0.97);
+  }
+
+  /* Fields, secondary buttons, chips, filter button: frosted fill. */
+  .app-shell .wollie-workspace-page [data-slot="input"],
+  .app-shell .wollie-workspace-page [data-slot="select-trigger"],
+  .app-shell .wollie-workspace-page select,
+  .app-shell .wollie-workspace-page textarea,
+  .app-shell .wollie-workspace-page input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  .app-shell .wollie-workspace-page [data-slot="button"][data-variant="outline"],
+  .app-shell .wollie-transaction-filters__toggle {
+    border-color: transparent !important;
+    background: var(--g-surface) !important;
+    box-shadow: var(--g-edge) !important;
+    color: var(--g-ink) !important;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="input"],
+  .app-shell .wollie-workspace-page [data-slot="select-trigger"],
+  .app-shell .wollie-workspace-page select,
+  .app-shell .wollie-workspace-page input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]) {
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    border-radius: var(--g-pill) !important;
+    font-size: 1rem;
+  }
+
+  .app-shell .wollie-workspace-page textarea {
+    padding: 0.75rem 1rem;
+    border-radius: 1rem !important;
+    font-size: 1rem;
+  }
+
+  .app-shell .wollie-workspace-page :is(input, select, textarea, [data-slot="select-trigger"]):focus-visible {
+    outline: 2px solid var(--g-accent) !important;
+    outline-offset: 1px;
+  }
+
+  .app-shell .wollie-workspace-page [data-slot="badge"] {
+    border-color: transparent !important;
+    border-radius: var(--g-pill) !important;
+    background: rgb(14 16 22 / 0.06) !important;
+    color: var(--g-ink-2) !important;
+    font-weight: 500;
+  }
+
+  /* Progress bars: thin, round, glass track. */
+  .app-shell .wollie-workspace-page .h-2\.5.rounded-full {
+    height: 0.375rem !important;
+    background: rgb(14 16 22 / 0.07) !important;
+  }
+
+  /* Sheets: setup panels, notes, forms. */
+  .app-shell .wollie-workspace-page .wollie-sheet,
+  .app-shell .wollie-workspace-page .rounded-lg.border.bg-zinc-50,
+  .app-shell .wollie-workspace-page .rounded-md.border.bg-zinc-50,
+  .app-shell .wollie-workspace-page section.bg-zinc-50 {
+    padding: 1.25rem !important;
+    border: 0 !important;
+    border-radius: var(--g-sheet) !important;
+    background: var(--g-surface) !important;
+    box-shadow: var(--g-edge) !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-sheet > div > span.rounded-full {
+    border: 0 !important;
+    background: var(--g-accent-soft) !important;
+    color: var(--g-accent) !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-notes {
+    gap: 0 !important;
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: var(--g-sheet) !important;
+    background: var(--g-surface) !important;
+    box-shadow: var(--g-edge) !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-notes > * {
+    padding: 0.875rem 1.25rem !important;
+    background: transparent !important;
+    color: var(--g-ink-2) !important;
+  }
+
+  .app-shell .wollie-workspace-page .wollie-notes > * + * {
+    padding-top: 0 !important;
+  }
+
+  /* ---------- Plan ---------- */
+  .app-shell .wollie-workspace-page nav.money-plan-view-switch,
+  .app-shell .wollie-workspace-page nav.money-plan-view-switch.rounded-lg.border {
+    position: relative;
+    isolation: isolate;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem !important;
+    padding: 0.3125rem !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    border-radius: var(--g-pill) !important;
+    background: rgb(14 16 22 / 0.07) !important;
+    box-shadow: none !important;
+  }
+
+  .app-shell .money-plan-view-switch::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0.3125rem;
+    bottom: 0.3125rem;
+    left: 0.3125rem;
+    width: calc((100% - 0.875rem) / 2);
+    border-radius: var(--g-pill);
+    background: var(--g-surface-strong);
+    box-shadow: var(--g-lens-edge);
+    transition: transform 380ms var(--g-ease);
+    will-change: transform;
+  }
+
+  .app-shell .money-plan-view-switch:has(button:nth-of-type(2)[aria-pressed="true"])::before {
+    transform: translateX(calc(100% + 0.25rem));
+  }
+
+  .app-shell .money-plan-view-switch button {
+    min-width: 0;
+    min-height: 2.5rem;
+    margin: 0;
+    padding: 0 0.5rem;
+    border: 0 !important;
+    border-radius: var(--g-pill) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--g-ink-2);
+    font-size: 0.8125rem !important;
+    font-weight: 600;
+    white-space: nowrap !important;
+    transition: color 200ms ease;
+    touch-action: manipulation;
+  }
+
+  .app-shell .money-plan-view-switch button[aria-pressed="true"] {
+    color: var(--g-ink) !important;
+  }
+
+  .app-shell .money-plan-envelope {
+    gap: 0.625rem !important;
+    padding-block: 0.75rem !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  .app-shell .wollie-workspace-page .money-plan-section {
+    margin-top: 1.5rem;
+  }
+
+  .app-shell .wollie-workspace-page .money-plan-envelope p.tabular-nums.text-zinc-500,
+  .app-shell .money-plan-envelope p.font-medium:not(.tabular-nums) {
+    color: var(--g-ink-2) !important;
+    font-size: 0.8125rem !important;
+    font-weight: 400 !important;
+  }
+
+  .app-shell .wollie-workspace-page .money-plan-envelope p.tabular-nums {
+    font-size: 1rem !important;
+  }
+
+  .app-shell .wollie-workspace-page [class*="semantic-negative"] {
+    color: var(--g-negative) !important;
+  }
+
+  .app-shell .wollie-workspace-page [class*="semantic-positive"] {
+    color: var(--g-positive) !important;
+  }
+
+  .app-shell .money-plan-envelope__name {
+    font-family: var(--g-font-display) !important;
+    font-size: 1.0625rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em;
+  }
+
+  .app-shell .money-plan-envelope p.text-sm:not(.font-semibold):not(.tabular-nums) {
+    color: var(--g-ink-2) !important;
+    font-size: 0.8125rem !important;
+    font-weight: 400 !important;
+  }
+
+  /* ---------- Activity filters ---------- */
+  .app-shell .wollie-transaction-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .app-shell .wollie-transaction-filters__search-row {
+    width: 100%;
+    max-width: none;
+    flex: none;
+  }
+
+  .app-shell .wollie-transaction-filters__search-row .wollie-transaction-filters__search {
+    width: 0 !important;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .app-shell .wollie-transaction-filters__toggle {
+    position: relative;
+    display: grid;
+    flex: 0 0 auto;
+    width: 2.75rem;
+    min-height: 2.75rem;
+    place-items: center;
+    border: 0;
+    border-radius: var(--g-pill);
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .app-shell .wollie-transaction-filters__toggle[aria-expanded="true"] {
+    background: var(--g-surface-strong) !important;
+    color: var(--g-accent) !important;
+  }
+
+  .app-shell .wollie-transaction-filters__toggle svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .app-shell .wollie-transaction-filters__toggle span {
+    position: absolute;
+    top: 0.125rem;
+    right: 0.125rem;
+    min-width: 1rem;
+    height: 1rem;
+    display: grid;
+    place-items: center;
+    border-radius: var(--g-pill);
+    background: var(--g-accent);
+    color: #ffffff;
+    font-size: 0.625rem;
+    font-weight: 700;
+  }
+
+  .app-shell .wollie-transaction-filters__controls {
+    display: none;
+  }
+
+  .app-shell .wollie-transaction-filters[data-open] .wollie-transaction-filters__controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    animation: wollie-reveal 200ms var(--g-ease);
+  }
+
+  .app-shell .wollie-workspace-page [role="combobox"].wollie-transaction-filters__trigger {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* ---------- Profile page ---------- */
+  .app-shell .wollie-profile-links {
+    display: grid;
+    gap: 0.125rem;
+  }
+
+  .app-shell .wollie-profile-links > a,
+  .app-shell .wollie-profile-links > button {
+    min-height: 3.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--g-ink);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .app-shell .wollie-profile-links svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--g-ink-3);
+  }
+
+  .app-shell .wollie-profile-links svg:last-child:not(:first-child) {
+    width: 1rem;
+    height: 1rem;
+    margin-left: auto;
+  }
+
+  /* ---------- Pop-up menus and dialogs ---------- */
+  [data-slot="select-content"],
+  [data-slot="dropdown-menu-content"],
+  [data-slot="popover-content"],
+  .wollie-transaction-filters__content {
+    padding: 0.375rem !important;
+    border: 0 !important;
+    border-radius: 1.25rem !important;
+    background: #ffffff !important;
+    box-shadow:
+      0 0 0 0.5px rgb(14 16 22 / 0.08),
+      0 12px 32px rgb(14 16 22 / 0.14) !important;
+    color: var(--g-ink) !important;
+  }
+
+  [data-slot="select-item"],
+  [data-slot="dropdown-menu-item"] {
+    min-height: 2.75rem;
+    border-radius: 0.75rem !important;
+  }
+
+  [data-slot="dialog-content"],
+  [data-slot="alert-dialog-content"],
+  [data-slot="sheet-content"] {
+    border-radius: 1.5rem !important;
+  }
+
+  button[aria-label="Open TanStack Devtools"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 63.99rem) and (prefers-reduced-motion: reduce) {
+  .app-shell .app-mobile-nav__indicator,
+  .app-shell .money-plan-view-switch::before {
+    transition: none;
+  }
+
+  .app-shell .app-mobile-nav[data-moving] .app-mobile-nav__indicator {
+    scale: 1 1;
+  }
+
+  .app-shell .wollie-transaction-filters[data-open] .wollie-transaction-filters__controls {
+    animation: none;
+  }
+}

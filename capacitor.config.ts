@@ -12,8 +12,8 @@ const config: CapacitorConfig = {
     allowNavigation: [new URL(serverUrl).hostname],
   },
   ios: {
-    backgroundColor: '#fbf3e6',
-    contentInset: 'automatic',
+    backgroundColor: '#f2f3f7',
+    contentInset: 'never',
     preferredContentMode: 'mobile',
   },
 }

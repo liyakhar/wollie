@@ -12,7 +12,10 @@ export function getRouter() {
     context,
     scrollRestoration: true,
     defaultPreload: 'intent',
-    defaultPreloadStaleTime: 0,
+    // Reuse loaded page data for 30 s so tab switches are instant.
+    // Edits call router.invalidate(), which refreshes right away.
+    defaultStaleTime: 30_000,
+    defaultPreloadStaleTime: 30_000,
   })
 
   setupRouterSsrQueryIntegration({ router, queryClient: context.queryClient })

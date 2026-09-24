@@ -13,6 +13,7 @@
 
 @import "tw-animate-css";
 @import "./press.css";
+@import "./phone.css";
 
 @custom-variant dark (&:is(.dark *));
 

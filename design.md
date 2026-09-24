@@ -153,45 +153,34 @@ Use the existing 4-point named scale in `tokens.css`. App pages use compact `--s
 
 ## Phone app (below 64rem)
 
-The phone app is calm and flat. Source: the "Phone shape system" and "Minimal phone layout" blocks at the end of `src/press.css`.
+Theme name: Glass. Source of truth: `src/phone.css` (the only file with phone rules). Desktop and marketing keep the warm Wollie theme.
+
+### Look
+
+- Font: Apple system font (SF Pro). Money uses SF Pro Rounded.
+- Canvas: flat `#f2f3f7`, the same colour as the iOS app frame (`capacitor.config.ts` `backgroundColor`). One background only, painted on `<html>`.
+- Ink `#0e1016`. Quiet text: ink at 56%. Accent: electric blue `#2f6bff`. Positive green, negative red keep their meaning.
+- Primary buttons: near-black pills. Fields, chips, secondary buttons: white frosted fill with a hairline edge.
+- Type: title 34px bold, hero number 60px rounded, section titles 13px semibold quiet, rows 16px, meta 13px.
 
 ### Shapes
 
-| Element | Shape |
-| --- | --- |
-| Buttons, inputs, selects, chips, badges, segmented controls, progress bars | Full pill (`--shape-pill`) |
-| Setup panels, notes, forms that keep a surface | Soft sheet, 20px (`--shape-sheet`), paper fill, no border |
-| Pop-up menus | 20px, rows 12px (`--shape-row`) |
-| Dialogs | 24px |
-| Bottom menu | Floating glass pill |
-
-No square corners on phones.
-
-### Glass material
-
-Fields, secondary buttons, the Plan switch, sheets, and the bottom menu share one frosted glass look: `--glass-fill`, `--glass-edge`, `--glass-blur`. The selected item in any switch is a bright glass lens (`--lens-fill`, `--lens-edge`) that slides with `--glass-ease`. Primary buttons stay solid deep blue.
+Tap targets are pills. Sheets (setup, notes, forms) are 24px. Pop-up menus 20px, rows 12px. No square corners.
 
 ### Layout
 
-- No top bar. The page title is the first thing on screen.
-- Four tabs: Home, Activity, Plan, Bills. The profile button on Home opens settings, bank accounts, household, and sign out.
-- Lists and summaries sit on the canvas without card frames or divider lines.
-- Helper paragraphs, legends, and explainers are hidden on phones.
+- The iOS app draws edge to edge (`contentInset: 'never'`, `viewport-fit=cover`). CSS keeps content clear of the notch and home bar with `env(safe-area-inset-*)`.
+- No top bar. Four tabs: Home, Activity, Plan, Bills. Profile button on Home opens settings, accounts, household, sign out.
+- Lists sit on the canvas without card frames or dividers. Helper text is hidden on phones.
 - Pages are as tall as their content, so short pages do not scroll.
 
-### Motion
+### Motion and performance
 
-- Tab change: the glass lens glides (420ms, ease-out, no overshoot) and stretches slightly.
-- Page change: a 320ms fade and 6px rise.
-- Reduced motion turns both off.
+- Live blur only on the floating menu. Everything else uses solid or translucent fills.
+- Animate transform and opacity only. Tab lens and Plan switch glide 380ms, ease-out, no overshoot. Page change: 180ms fade.
+- Loaded page data is reused for 30 s (`src/router.tsx`), so tab switches are instant. Edits refresh at once.
+- Reduced motion turns animation off.
 
-### Phone theme: Glass
+### Testing
 
-The phone app uses its own theme, set in the "Phone theme: Glass" block of `src/press.css`. It remaps the brand tokens only on phone app pages. Desktop and marketing keep the warm Wollie theme.
-
-- Font: Apple system font (SF Pro). Money numbers use SF Pro Rounded.
-- Canvas: cool light grey with a fixed soft aurora (blue, violet, cyan) behind glass.
-- Ink: near-black. Quiet text: ink at 50%.
-- Accent: electric blue, for the active tab, links, and money still available.
-- Primary buttons: near-black pills. Positive green and negative red keep their meaning.
-- Type: title 34px bold, hero number 60px rounded, section titles 13px semibold quiet, rows 16px.
+Test phone changes in the real iOS app shell in the Simulator, not only in a browser. The frame, safe areas, and scrolling differ.
