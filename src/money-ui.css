@@ -1227,3 +1227,243 @@ html.m-sheet-open {
   font-weight: 500;
   letter-spacing: -0.02em;
 }
+
+/* ---------- Intro (first launch) ---------- */
+.m-intro {
+  --m-ink: #0b0b0c;
+  --m-ink-2: rgb(11 11 12 / 0.55);
+  --m-lime: #d6f53d;
+  --m-clay: #ff5f1f;
+  --m-clay-text: #d9460a;
+  --m-accent: var(--m-clay-text);
+  --m-pill: 9999px;
+  --m-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --m-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: env(safe-area-inset-top) 0 calc(1rem + env(safe-area-inset-bottom));
+  background: #ffffff;
+  color: var(--m-ink);
+  font-family: var(--m-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.m-intro__top {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 2.75rem;
+  padding: 0.25rem 1.25rem 0;
+}
+
+.m-intro__skip {
+  min-height: 2.75rem;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--m-ink-2);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.m-intro__track {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.m-intro__track::-webkit-scrollbar {
+  display: none;
+}
+
+.m-intro__slide {
+  flex: 0 0 100%;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 1rem;
+  min-width: 0;
+  padding: 0 1.5rem;
+  scroll-snap-align: start;
+}
+
+.m-intro__art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+.m-intro__art img {
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.m-intro__wordmark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--m-font-display);
+  font-size: clamp(2.25rem, 11vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.m-intro__wordmark span {
+  color: var(--m-clay);
+}
+
+.m-intro__copy {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 24rem;
+  padding-bottom: 0.5rem;
+}
+
+.m-intro__copy h1 {
+  margin: 0;
+  font-family: var(--m-font-display);
+  font-size: clamp(1.75rem, 8vw, 2.125rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.m-intro__copy p {
+  margin: 0;
+  color: var(--m-ink-2);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.m-intro__bottom {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem 0;
+}
+
+.m-intro__dots {
+  display: flex;
+  gap: 0.375rem;
+  margin-bottom: 0.75rem;
+}
+
+.m-intro__dots span {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--m-pill);
+  background: rgb(11 11 12 / 0.14);
+  transition: width 320ms cubic-bezier(0.25, 1, 0.5, 1), background-color 200ms ease;
+}
+
+.m-intro__dots span.is-on {
+  width: 1.5rem;
+  background: var(--m-ink);
+}
+
+.m-intro .m-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3.25rem;
+  border: 0;
+  border-radius: var(--m-pill);
+  background: var(--m-ink);
+  color: var(--m-lime);
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 120ms ease;
+}
+
+.m-intro .m-button:active {
+  transform: scale(0.98);
+}
+
+.m-intro .m-link {
+  justify-self: center;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  background: none;
+  color: var(--m-ink);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.m-intro :focus-visible {
+  outline: 2px solid var(--m-clay);
+  outline-offset: 2px;
+}
+
+@media (min-width: 48rem) {
+  .m-intro__art,
+  .m-intro__copy,
+  .m-intro__bottom {
+    width: min(100%, 30rem);
+    margin-inline: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m-intro__dots span {
+    transition: none;
+  }
+}
+
+.m-intro--single .m-intro__slide {
+  overflow: hidden;
+}
+
+.m-intro .m-error {
+  margin: 0;
+  color: #e5383b;
+  font-size: 0.875rem;
+}
+
+/* The art fills its row exactly; the picture is centred inside it, so the
+ * wordmark (also centred) lands in the picture's empty middle. */
+.m-intro__art {
+  overflow: hidden;
+}
+
+.m-intro__art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+}
+
+.m-intro__wordmark {
+  z-index: 1;
+}
+
+.m-intro__wordmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.m-intro__art img {
+  mix-blend-mode: multiply;
+}

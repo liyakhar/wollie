@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StartRouteImport } from './routes/start'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -66,6 +67,11 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as PPostIdEditRouteRouteImport } from './routes/p/$postId/edit/route'
 import { Route as PPostIdEditIndexRouteImport } from './routes/p/$postId/edit/index'
 
+const StartRoute = StartRouteImport.update({
+  id: '/start',
+  path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -366,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/start': typeof StartRoute
   '/app/accounts': typeof AppAccountsRoute
   '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
@@ -415,6 +422,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/start': typeof StartRoute
   '/app/accounts': typeof AppAccountsRoute
   '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
@@ -473,6 +481,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/start': typeof StartRoute
   '/app/accounts': typeof AppAccountsRoute
   '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
@@ -533,6 +542,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/start'
     | '/app/accounts'
     | '/app/billing'
     | '/app/budgets'
@@ -582,6 +592,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/start'
     | '/app/accounts'
     | '/app/billing'
     | '/app/budgets'
@@ -639,6 +650,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/start'
     | '/app/accounts'
     | '/app/billing'
     | '/app/budgets'
@@ -698,6 +710,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StartRoute: typeof StartRoute
   BillingSuccessRoute: typeof BillingSuccessRoute
   BlogSlugRoute: typeof BlogSlugRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -708,6 +721,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/start': {
+      id: '/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -1311,6 +1331,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StartRoute: StartRoute,
   BillingSuccessRoute: BillingSuccessRoute,
   BlogSlugRoute: BlogSlugRoute,
   InviteTokenRoute: InviteTokenRoute,

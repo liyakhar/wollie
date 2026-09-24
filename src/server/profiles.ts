@@ -358,6 +358,11 @@ export const requireSignedIn = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     const user = await getSessionUser()
     if (!user) {
+      // First visit: show the intro. After that, go straight to sign in.
+      const { getCookie } = await import('@tanstack/react-start/server')
+      if (getCookie('wollie_intro') !== '1') {
+        throw redirect({ to: '/start', search: { redirect: data.redirect ?? '/app' } })
+      }
       throw redirect({
         to: '/login',
         search: loginSearch({ redirect: data.redirect ?? '/app' }),

@@ -33,83 +33,50 @@ function WelcomePage() {
   const router = useRouter()
   const { redirect: redirectTo } = Route.useSearch()
   const { profile } = Route.useLoaderData()
-  const [username, setUsername] = useState(profile?.username ?? '')
-  const [headline, setHeadline] = useState(profile?.headline ?? '')
   const [field] = useState<Category>(profile?.field ?? 'FINANCE')
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<'bank' | 'later' | null>(null)
 
   if (!profile) {
     return <main className="app-loading">Loading…</main>
   }
 
-  const finish = async () => {
-    setError('')
-    const resolvedUsername = username.trim().toLowerCase() || profile.username
-    if (!resolvedUsername || !/^[a-z0-9-]+$/.test(resolvedUsername)) {
-      setError('Choose a username with letters, numbers, and hyphens only')
-      return
-    }
-    setLoading(true)
-    try {
-      await completeOnboarding({
-        data: { username: resolvedUsername, field, headline },
-      })
-      void router.navigate({ href: redirectTo })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not save profile')
-      setLoading(false)
-    }
-  }
+  // The money app needs no public username; keep a stable internal one.
+  const username = profile.username || `u-${Math.random().toString(36).slice(2, 10)}`
 
-  const handleStep1 = (e: React.FormEvent) => {
-    e.preventDefault()
-    void finish()
+  const finish = async (next: 'bank' | 'later') => {
+    setError('')
+    setLoading(next)
+    try {
+      await completeOnboarding({ data: { username, field, headline: profile.headline ?? '' } })
+      void router.navigate({ href: next === 'bank' ? '/app/accounts' : redirectTo })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Try again.')
+      setLoading(null)
+    }
   }
 
   return (
-    <main id="main" className="app-page">
-      <header className="app-page__head">
-        <p className="app-page__eyebrow">Wollie</p>
-        <h1 className="app-page__title">Start.</h1>
-      </header>
-
-      <form onSubmit={handleStep1} className="app-form app-form--narrow">
-        <div className="app-form__field">
-          <label className="app-form__label" htmlFor="welcome-username">
-            Name
-          </label>
-          <input
-            id="welcome-username"
-            className="app-form__input app-form__textarea--mono"
-            value={username}
-            onChange={(e) => setUsername(e.target.value.toLowerCase())}
-            pattern="[a-z0-9-]+"
-            required
-          />
+    <main id="main" className="m-intro m-intro--single">
+      <div className="m-intro__top" />
+      <section className="m-intro__slide">
+        <div className="m-intro__art">
+          <img src="/onboarding/intro-2.webp" alt="" width={900} height={1350} decoding="async" />
         </div>
-
-        <div className="app-form__field">
-          <label className="app-form__label" htmlFor="welcome-headline">
-            Note <span className="app-form__optional">(optional)</span>
-          </label>
-          <input
-            id="welcome-headline"
-            className="app-form__input"
-            value={headline}
-            onChange={(e) => setHeadline(e.target.value)}
-            placeholder="Personal budget"
-          />
+        <div className="m-intro__copy">
+          <h1>You’re in.</h1>
+          <p>One step left: connect your bank, and Wollie shows what you can safely spend.</p>
         </div>
-
-        {error && <p className="post-detail__error">{error}</p>}
-
-        <div className="app-form__actions">
-          <button type="submit" className="btn" disabled={loading}>
-            <span className="btn__label">{loading ? 'Saving…' : 'Open budget'}</span>
-          </button>
-        </div>
-      </form>
+      </section>
+      <div className="m-intro__bottom">
+        {error && <p className="m-error" role="alert">{error}</p>}
+        <button type="button" className="m-button" disabled={loading !== null} onClick={() => void finish('bank')}>
+          {loading === 'bank' ? 'Opening…' : 'Connect bank'}
+        </button>
+        <button type="button" className="m-link" disabled={loading !== null} onClick={() => void finish('later')}>
+          {loading === 'later' ? 'Opening…' : 'Later'}
+        </button>
+      </div>
     </main>
   )
 }

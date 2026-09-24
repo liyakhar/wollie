@@ -1,88 +1,87 @@
-import type { SVGProps } from 'react'
-import { HugeiconsIcon, type IconSvgElement } from '@hugeicons/react'
+import type { ComponentType, SVGProps } from 'react'
 import {
-  Add01Icon,
-  Airplane01Icon,
-  ArrowDataTransferHorizontalIcon,
-  ArrowDownLeft01Icon,
-  ArrowLeft01Icon,
-  ArrowRight01Icon,
-  BankIcon,
-  Cancel01Icon,
-  Car01Icon,
-  ChartColumnIcon,
-  CircleIcon,
-  CreditCardIcon,
-  FavouriteIcon,
-  GameController01Icon,
-  GiftIcon,
-  Home01Icon,
-  LaptopIcon,
-  MortarboardIcon,
-  PiggyBankIcon,
-  Plant01Icon,
-  Invoice01Icon,
-  Restaurant01Icon,
-  Search01Icon,
-  Shield01Icon,
-  ShoppingBag01Icon,
-  ShoppingCart01Icon,
-  Target02Icon,
-  Tick02Icon,
-  Train01Icon,
-} from '@hugeicons/core-free-icons'
+  Add,
+  ArrowDownLeft,
+  ArrowsHorizontal,
+  Car,
+  ChartColumn,
+  Checkmark,
+  ChevronLeft,
+  ChevronRight,
+  CircleDash,
+  Close,
+  Education,
+  Favorite,
+  Finance,
+  GameConsole,
+  Gift,
+  Home,
+  Laptop,
+  Plane,
+  Receipt,
+  Restaurant,
+  Search,
+  Security,
+  ShoppingBag,
+  ShoppingCart,
+  Sprout,
+  Target,
+  Train,
+  Wallet,
+} from '@carbon/icons-react'
 
 /**
- * Icon set: Hugeicons "stroke rounded" — thin, fully rounded line icons.
- * One stroke width everywhere; size comes from CSS.
+ * Icon set: IBM Carbon — precise, geometric, technical outlines.
+ * Size comes from CSS; `strokeWidth` is accepted and ignored so callers
+ * stay the same if the set changes again.
  */
-type IconProps = Omit<SVGProps<SVGSVGElement>, 'ref'> & { strokeWidth?: number }
+type IconProps = SVGProps<SVGSVGElement> & { strokeWidth?: number }
 export type AppIcon = (props: IconProps) => React.JSX.Element
 
-const STROKE = 1.6
+type CarbonIcon = ComponentType<SVGProps<SVGSVGElement> & { size?: number | string }>
 
-function make(icon: IconSvgElement): AppIcon {
-  return function Icon({ strokeWidth = STROKE, ...props }: IconProps) {
-    return <HugeiconsIcon icon={icon} strokeWidth={strokeWidth} size="1em" {...props} />
+function make(Icon: CarbonIcon): AppIcon {
+  return function AppIconView({ strokeWidth: _strokeWidth, ...props }: IconProps) {
+    return <Icon size={24} {...props} />
   }
 }
 
-export const IconAdd = make(Add01Icon)
-export const IconBank = make(BankIcon)
-export const IconCheck = make(Tick02Icon)
-export const IconChevronLeft = make(ArrowLeft01Icon)
-export const IconChevronRight = make(ArrowRight01Icon)
-export const IconClose = make(Cancel01Icon)
-export const IconSearch = make(Search01Icon)
+export const IconAdd = make(Add)
+export const IconBank = make(Finance)
+export const IconCheck = make(Checkmark)
+export const IconChevronLeft = make(ChevronLeft)
+export const IconChevronRight = make(ChevronRight)
+export const IconClose = make(Close)
+export const IconSearch = make(Search)
 
 /** Tab bar icons. */
-export const IconHome = make(Home01Icon)
-export const IconActivity = make(CreditCardIcon)
-export const IconBudgets = make(ChartColumnIcon)
-export const IconGoals = make(Target02Icon)
+export const IconHome = make(Home)
+export const IconActivity = make(Receipt)
+export const IconBudgets = make(ChartColumn)
+export const IconGoals = make(Target)
 
 const CATEGORY_ICONS: Record<string, AppIcon> = {
-  groceries: make(ShoppingCart01Icon),
-  dining: make(Restaurant01Icon),
-  'eating out': make(Restaurant01Icon),
-  restaurants: make(Restaurant01Icon),
-  transport: make(Train01Icon),
-  shopping: make(ShoppingBag01Icon),
-  subscriptions: make(Invoice01Icon),
-  health: make(FavouriteIcon),
+  groceries: make(ShoppingCart),
+  dining: make(Restaurant),
+  'eating out': make(Restaurant),
+  restaurants: make(Restaurant),
+  transport: make(Train),
+  shopping: make(ShoppingBag),
+  subscriptions: make(Receipt),
+  health: make(Favorite),
   housing: IconHome,
   rent: IconHome,
-  income: make(ArrowDownLeft01Icon),
-  transfer: make(ArrowDataTransferHorizontalIcon),
-  savings: make(PiggyBankIcon),
-  fun: make(GameController01Icon),
-  entertainment: make(GameController01Icon),
-  gifts: make(GiftIcon),
-  education: make(MortarboardIcon),
-  car: make(Car01Icon),
+  income: make(ArrowDownLeft),
+  transfer: make(ArrowsHorizontal),
+  savings: make(Wallet),
+  fun: make(GameConsole),
+  entertainment: make(GameConsole),
+  gifts: make(Gift),
+  education: make(Education),
+  car: make(Car),
 }
 
-const FALLBACK = make(CircleIcon)
+const FALLBACK = make(CircleDash)
 
 export function categoryIcon(category: string): AppIcon {
   return CATEGORY_ICONS[category.toLocaleLowerCase()] ?? FALLBACK
@@ -90,15 +89,15 @@ export function categoryIcon(category: string): AppIcon {
 
 export const GOAL_ICON_OPTIONS: Array<{ id: string; label: string; icon: AppIcon }> = [
   { id: 'target', label: 'Goal', icon: IconGoals },
-  { id: 'plane', label: 'Travel', icon: make(Airplane01Icon) },
-  { id: 'shield', label: 'Safety', icon: make(Shield01Icon) },
-  { id: 'sprout', label: 'Future', icon: make(Plant01Icon) },
+  { id: 'plane', label: 'Travel', icon: make(Plane) },
+  { id: 'shield', label: 'Safety', icon: make(Security) },
+  { id: 'sprout', label: 'Future', icon: make(Sprout) },
   { id: 'home', label: 'Home', icon: IconHome },
-  { id: 'laptop', label: 'Tech', icon: make(LaptopIcon) },
-  { id: 'gift', label: 'Gift', icon: make(GiftIcon) },
-  { id: 'graduation-cap', label: 'Study', icon: make(MortarboardIcon) },
-  { id: 'car', label: 'Car', icon: make(Car01Icon) },
-  { id: 'heart', label: 'Health', icon: make(FavouriteIcon) },
+  { id: 'laptop', label: 'Tech', icon: make(Laptop) },
+  { id: 'gift', label: 'Gift', icon: make(Gift) },
+  { id: 'graduation-cap', label: 'Study', icon: make(Education) },
+  { id: 'car', label: 'Car', icon: make(Car) },
+  { id: 'heart', label: 'Health', icon: make(Favorite) },
 ]
 
 export function goalIcon(id: string): AppIcon {
