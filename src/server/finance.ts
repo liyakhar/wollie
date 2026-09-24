@@ -1,4 +1,4 @@
-import { createServerFn } from '@tanstack/react-start'
+import { createServerFn, createServerOnlyFn } from '@tanstack/react-start'
 import { setResponseHeader } from '@tanstack/react-start/server'
 import {
   detectRecurringPayments,
@@ -697,7 +697,7 @@ async function loadFinancePlanningData(transactions: FinanceTransaction[], works
  * Accounts, transactions, and bills for one workspace, from the dev sample
  * or the live bank data. Used by the budgets and goals model (money.ts).
  */
-export async function loadMoneySnapshot(workspaceId: string) {
+export const loadMoneySnapshot = createServerOnlyFn(async (workspaceId: string) => {
   const devDashboard = await getDevFinanceDashboard(workspaceId)
   if (devDashboard) {
     return {
@@ -718,7 +718,7 @@ export async function loadMoneySnapshot(workspaceId: string) {
     currency: planning.currency,
     syncStatus: syncState.status,
   }
-}
+})
 
 async function requirePrivateFinanceHousehold() {
   const context = await requireFinanceHousehold()
