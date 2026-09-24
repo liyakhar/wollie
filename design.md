@@ -184,3 +184,16 @@ Tap targets are pills. Sheets (setup, notes, forms) are 24px. Pop-up menus 20px,
 ### Testing
 
 Test phone changes in the real iOS app shell in the Simulator, not only in a browser. The frame, safe areas, and scrolling differ.
+
+### Phone theme: Court (replaces Glass colours, 2026-09-24)
+
+Tennis palette, chosen by the owner. Source: the "Court" blocks in `src/money-ui.css` and `src/phone.css`.
+
+- Canvas: white `#ffffff` (the iOS app frame matches, `capacitor.config.ts`).
+- Ink: near-black `#0b0b0c`. Fields and chips: warm grey `#f3f3f1`, no borders or shadows.
+- Tennis-ball lime `#d6f53d`: the Home card, selected chips, the active tab icon, primary button labels, progress bars (`#b8dc1a`) while money is left.
+- Clay orange `#ff5f1f` (text `#d9460a`): links, "to save" amounts, low budgets, attention dots.
+- Red `#e5383b` only for over budget and errors. Green text `#2c8a2c` for income and goals reached.
+- Primary buttons: black with a lime label. The selected tab and switch option: black lens, lime label.
+- Icons: Hugeicons "stroke rounded", 1.6 px stroke, via `src/components/money/icons.tsx`.
+- Layout: every number and heading aligned left.

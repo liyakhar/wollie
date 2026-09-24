@@ -72,13 +72,13 @@ body:not(:has(.app-shell)) {
   .app-page,
   [data-radix-popper-content-wrapper],
   [data-slot="dialog-content"] {
-    --g-canvas: #f2f3f7;
-    --g-ink: #0e1016;
+    --g-canvas: #ffffff;
+    --g-ink: #0b0b0c;
     --g-ink-2: rgb(14 16 22 / 0.56);
     --g-ink-3: rgb(14 16 22 / 0.36);
     --g-line: rgb(14 16 22 / 0.08);
-    --g-accent: #4f5bff;
-    --g-accent-soft: rgb(79 91 255 / 0.12);
+    --g-accent: #e0480a;
+    --g-accent-soft: rgb(255 95 31 / 0.12);
     --g-positive: #1f9d55;
     --g-negative: #e5484d;
 
@@ -145,7 +145,7 @@ body:not(:has(.app-shell)) {
   html:has(.app-shell) {
     /* Flat, and the same colour as the iOS app frame (capacitor.config.ts
      * backgroundColor), so the status bar strip and page never differ. */
-    background: #f2f3f7;
+    background: #ffffff;
     overscroll-behavior-y: none;
   }
 
@@ -185,7 +185,7 @@ body:not(:has(.app-shell)) {
     z-index: 30;
     inset: 0 0 auto 0;
     height: calc(env(safe-area-inset-top) + 0.75rem);
-    background: linear-gradient(#f2f3f7 70%, rgb(242 243 247 / 0));
+    background: linear-gradient(#ffffff 70%, rgb(255 255 255 / 0));
     pointer-events: none;
   }
 
@@ -923,7 +923,7 @@ body:not(:has(.app-shell)) {
 @media (max-width: 63.99rem) {
   html:has(.auth-page),
   html:has(.app-page) {
-    background: #f2f3f7;
+    background: #ffffff;
     overscroll-behavior-y: none;
   }
 
@@ -1035,5 +1035,31 @@ body:not(:has(.app-shell)) {
     font-family: var(--g-font) !important;
     font-weight: 600 !important;
     text-decoration: none !important;
+  }
+}
+
+/* Court palette for the tab bar: black lens, lime icon. */
+@media (max-width: 63.99rem) {
+  .app-shell .app-mobile-nav {
+    background: rgb(243 243 241 / 0.86);
+    box-shadow: 0 0 0 0.5px rgb(11 11 12 / 0.08);
+  }
+
+  .app-shell .app-mobile-nav__indicator {
+    background: #0b0b0c;
+    box-shadow: none;
+  }
+
+  .app-shell .app-mobile-nav__item {
+    color: rgb(11 11 12 / 0.45);
+  }
+
+  .app-shell .app-mobile-nav__item.is-active {
+    color: #d6f53d;
+  }
+
+  .app-shell .app-mobile-nav__item svg {
+    width: 1.375rem;
+    height: 1.375rem;
   }
 }

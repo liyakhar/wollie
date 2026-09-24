@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
-import { Plus } from '@phosphor-icons/react'
+import { IconAdd } from './icons'
 import { formatMoney } from '#/lib/finance-demo'
 import type { MoneyOverview } from '#/lib/money-overview'
 import { saveBudget, setPayday } from '#/server/money'
 import { BudgetRow, paydayLabel } from './HomeScreen'
-import { categoryIcon, categoryLabel, ICON_WEIGHT } from './icons'
+import { categoryIcon, categoryLabel } from './icons'
 import { Sheet } from './Sheet'
 
 type Editing =
@@ -51,7 +51,7 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
             aria-label="Add budget"
             onClick={() => setEditing({ mode: 'add', category: overview.budgetOptions[0]?.category ?? '', limit: String(overview.budgetOptions[0]?.suggested || '') })}
           >
-            <Plus aria-hidden="true" weight="bold" />
+            <IconAdd aria-hidden="true" />
           </button>
         )}
       </header>
@@ -132,7 +132,7 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
                       className={`m-choice${selected ? ' is-selected' : ''}`}
                       onClick={() => setEditing({ ...editing, category: option.category, limit: option.suggested ? String(option.suggested) : editing.limit })}
                     >
-                      <Icon aria-hidden="true" weight={ICON_WEIGHT} />
+                      <Icon aria-hidden="true" />
                       <span>{categoryLabel(option.category)}</span>
                     </button>
                   )

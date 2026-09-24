@@ -1045,3 +1045,159 @@ html.m-sheet-open {
 .m-connect__dot {
   background: var(--m-grad);
 }
+
+/* ==================================================================
+ * Court (2026-09-24): tennis palette. White court, black ink,
+ * tennis-ball lime for money you still have, clay orange for action.
+ *   Hallmark · genre: modern-minimal · theme: custom "Court"
+ *   paper #ffffff · ink #0b0b0c · lime oklch(92% 0.2 121) · clay oklch(67% 0.2 42)
+ *   axes: light / rounded-sans (SF Rounded numerals) / chromatic-other
+ * ================================================================== */
+.m-screen,
+.m-sheet {
+  --m-canvas: #ffffff;
+  --m-ink: #0b0b0c;
+  --m-ink-2: rgb(11 11 12 / 0.55);
+  --m-ink-3: rgb(11 11 12 / 0.32);
+  --m-track: rgb(11 11 12 / 0.07);
+  --m-fill: #f3f3f1;
+  --m-lime: #d6f53d;
+  --m-lime-deep: #b8dc1a;
+  --m-clay: #ff5f1f;
+  --m-clay-text: #d9460a;
+  --m-accent: var(--m-clay-text);
+  --m-accent-soft: rgb(255 95 31 / 0.1);
+  --m-positive: #2c8a2c;
+  --m-negative: #e5383b;
+  --m-surface: var(--m-fill);
+  --m-edge: none;
+  --m-grad: var(--m-lime);
+}
+
+/* Home card: a tennis ball on a white court. */
+.m-balance {
+  background:
+    radial-gradient(90% 120% at 100% 0%, #ecff8a 0%, transparent 60%),
+    var(--m-lime);
+  box-shadow: none;
+  color: var(--m-ink);
+}
+
+.m-balance::before {
+  background: none;
+}
+
+/* The seam of a tennis ball, drawn once, very quiet. */
+.m-balance::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -40%;
+  right: -28%;
+  width: 70%;
+  aspect-ratio: 1;
+  border: 2px solid rgb(255 255 255 / 0.55);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.m-balance__label {
+  color: rgb(11 11 12 / 0.62);
+}
+
+.m-glass-chip {
+  background: rgb(11 11 12 / 0.08);
+  box-shadow: none;
+  color: var(--m-ink);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Bars: lime while money is left, clay when low, red when over. */
+.m-bar {
+  height: 0.5rem;
+}
+
+.m-bar > span {
+  background: var(--m-lime-deep);
+  background-size: auto;
+}
+
+.m-bar.is-low > span {
+  background: var(--m-clay);
+}
+
+.m-bar.is-over > span {
+  background: var(--m-negative);
+}
+
+/* Black buttons with a lime label. */
+.m-button--primary {
+  background: var(--m-ink);
+  box-shadow: none;
+  color: var(--m-lime);
+}
+
+.m-button,
+.m-chip,
+.m-choice,
+.m-search,
+.m-field input,
+.m-icon-button--glass {
+  box-shadow: none;
+}
+
+.m-button:not(.m-button--primary):not(.m-button--danger),
+.m-chip:not(.is-on),
+.m-choice:not(.is-selected),
+.m-search,
+.m-field input,
+.m-icon-button--glass {
+  background: var(--m-fill);
+}
+
+.m-search:focus-within,
+.m-field input:focus-visible {
+  box-shadow: 0 0 0 2px var(--m-ink);
+}
+
+.m-choice.is-selected {
+  background: var(--m-lime);
+  box-shadow: none;
+  color: var(--m-ink);
+}
+
+.m-chip.is-on {
+  background: var(--m-ink);
+  color: var(--m-lime);
+}
+
+.m-dot {
+  background: var(--m-clay);
+}
+
+.m-switch {
+  background: var(--m-fill);
+}
+
+.m-switch::before {
+  background: var(--m-ink);
+  box-shadow: none;
+}
+
+.m-switch button[aria-selected="true"] {
+  color: var(--m-lime);
+}
+
+.m-sheet__panel {
+  background: #ffffff;
+}
+
+.m-connect__dot {
+  background: var(--m-lime);
+  box-shadow: 0 0 0 2px var(--m-ink);
+}
+
+.m-alert {
+  background: rgb(229 56 59 / 0.08);
+}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { X } from '@phosphor-icons/react'
+import { IconClose } from './icons'
 
 /**
  * Bottom sheet for small edits. Slides up over a dimmed page, closes on
@@ -47,7 +47,7 @@ export function Sheet({
         <div className="m-sheet__head">
           <h2>{title}</h2>
           <button type="button" className="m-icon-button" onClick={onClose} aria-label="Close">
-            <X aria-hidden="true" weight="bold" />
+            <IconClose aria-hidden="true" />
           </button>
         </div>
         <div className="m-sheet__body">{children}</div>

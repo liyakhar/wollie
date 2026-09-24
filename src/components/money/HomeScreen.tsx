@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { CaretRight, Bank } from '@phosphor-icons/react'
+import { IconChevronRight, IconBank } from './icons'
 import { ProfileButton } from '#/components/ProfileButton'
 import { formatMoney } from '#/lib/finance-demo'
 import type { MoneyOverview } from '#/lib/money-overview'
-import { categoryIcon, categoryLabel, goalIcon, ICON_WEIGHT } from './icons'
+import { categoryIcon, categoryLabel, goalIcon } from './icons'
 
 function dueLabel(date: string) {
   const [y, m, d] = date.split('-').map(Number)
@@ -27,7 +27,7 @@ export function ConnectBank({ demo = false }: { demo?: boolean }) {
   return (
     <main id="main" className="m-screen m-connect">
       <div className="m-connect__art" aria-hidden="true">
-        <Bank weight="bold" />
+        <IconBank />
         <span className="m-connect__dot" />
       </div>
       <h1>Connect your bank</h1>
@@ -84,7 +84,7 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
           <span className="m-row__main">
             {overview.reviewCount} {overview.reviewCount === 1 ? 'transaction needs' : 'transactions need'} a category
           </span>
-          <CaretRight className="m-row__chevron" aria-hidden="true" weight={ICON_WEIGHT} />
+          <IconChevronRight className="m-row__chevron" aria-hidden="true" />
         </Link>
       )}
 
@@ -92,14 +92,14 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
         <section className="m-section">
           <Link to={demo ? '/demo/upcoming' : '/app/recurring'} className="m-section__head">
             <h2>Up next</h2>
-            <CaretRight aria-hidden="true" weight={ICON_WEIGHT} />
+            <IconChevronRight aria-hidden="true" />
           </Link>
           <ul className="m-list">
             {overview.bills.slice(0, 3).map((bill) => {
               const Icon = categoryIcon(bill.category)
               return (
                 <li key={bill.id} className="m-row">
-                  <Icon className="m-row__icon" aria-hidden="true" weight={ICON_WEIGHT} />
+                  <Icon className="m-row__icon" aria-hidden="true" />
                   <span className="m-row__main">
                     <span className="m-row__title">{bill.name}</span>
                     <span className="m-row__meta">{dueLabel(bill.date)}</span>
@@ -116,7 +116,7 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
         <section className="m-section">
           <Link to={`${base}/budgets`} className="m-section__head">
             <h2>Budgets</h2>
-            <CaretRight aria-hidden="true" weight={ICON_WEIGHT} />
+            <IconChevronRight aria-hidden="true" />
           </Link>
           <ul className="m-list">
             {tightest.map((budget) => <BudgetRow key={budget.id} budget={budget} currency={currency} />)}
@@ -128,14 +128,14 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
         <section className="m-section">
           <Link to={`${base}/goals`} className="m-section__head">
             <h2>Goals</h2>
-            <CaretRight aria-hidden="true" weight={ICON_WEIGHT} />
+            <IconChevronRight aria-hidden="true" />
           </Link>
           <ul className="m-list">
             {goalsShown.map((goal) => {
               const Icon = goalIcon(goal.icon)
               return (
                 <li key={goal.id} className="m-row m-row--stack">
-                  <Icon className="m-row__icon" aria-hidden="true" weight={ICON_WEIGHT} />
+                  <Icon className="m-row__icon" aria-hidden="true" />
                   <span className="m-row__main">
                     <span className="m-row__line">
                       <span className="m-row__title">{goal.name}</span>
@@ -193,7 +193,7 @@ export function BudgetRow({
   const Icon = categoryIcon(budget.category)
   const content = (
     <>
-      <Icon className="m-row__icon" aria-hidden="true" weight={ICON_WEIGHT} />
+      <Icon className="m-row__icon" aria-hidden="true" />
       <span className="m-row__main">
         <span className="m-row__line">
           <span className="m-row__title">{categoryLabel(budget.category)}</span>

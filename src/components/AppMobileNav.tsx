@@ -1,19 +1,19 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
-import { ChartBar, CreditCard, House, Target } from "@phosphor-icons/react";
+import { IconActivity, IconBudgets, IconGoals, IconHome } from "#/components/money/icons";
 
 const appTabs = [
-  { to: "/app", label: "Home", icon: House },
-  { to: "/app/transactions", label: "Activity", icon: CreditCard },
-  { to: "/app/budgets", label: "Budgets", icon: ChartBar },
-  { to: "/app/goals", label: "Goals", icon: Target },
+  { to: "/app", label: "Home", icon: IconHome },
+  { to: "/app/transactions", label: "Activity", icon: IconActivity },
+  { to: "/app/budgets", label: "Budgets", icon: IconBudgets },
+  { to: "/app/goals", label: "Goals", icon: IconGoals },
 ] as const;
 
 const demoTabs = [
-  { to: "/demo", label: "Home", icon: House },
-  { to: "/demo/transactions", label: "Activity", icon: CreditCard },
-  { to: "/demo/budgets", label: "Budgets", icon: ChartBar },
-  { to: "/demo/goals", label: "Goals", icon: Target },
+  { to: "/demo", label: "Home", icon: IconHome },
+  { to: "/demo/transactions", label: "Activity", icon: IconActivity },
+  { to: "/demo/budgets", label: "Budgets", icon: IconBudgets },
+  { to: "/demo/goals", label: "Goals", icon: IconGoals },
 ] as const;
 
 function activeTabIndex(pathname: string, tabs: ReadonlyArray<{ to: string }>) {
@@ -70,7 +70,7 @@ export function AppMobileNav({
           }
           aria-current={index === active ? "page" : undefined}
         >
-          <Icon aria-hidden="true" weight={index === active ? "duotone" : "regular"} />
+          <Icon aria-hidden="true" strokeWidth={index === active ? 2 : 1.6} />
           <span>{label}</span>
         </Link>
       ))}

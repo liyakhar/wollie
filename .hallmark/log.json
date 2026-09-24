@@ -1,5 +1,14 @@
 [
   {
+    "date": "2026-09-24",
+    "macrostructure": "App Workbench (phone)",
+    "theme": "custom",
+    "theme_axes": "light / rounded-sans / chromatic-other",
+    "vibe": "tennis court: lime ball, clay, white, black",
+    "enrichment": "none",
+    "brief": "Wollie phone money screens redesign"
+  },
+  {
     "date": "2026-08-31",
     "scope": "auth",
     "macrostructure": "Illustrated split entry",
@@ -42,6 +51,6 @@
     "macrostructure": "Type Specimen",
     "theme": "studied-DNA (source: https://www.usehallmark.com/examples/press-01/)",
     "enrichment": "none",
-    "brief": "Onie feed · press-01 template"
+    "brief": "Onie feed \u00b7 press-01 template"
   }
 ]

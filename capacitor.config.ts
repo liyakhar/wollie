@@ -12,7 +12,7 @@ const config: CapacitorConfig = {
     allowNavigation: [new URL(serverUrl).hostname],
   },
   ios: {
-    backgroundColor: '#f2f3f7',
+    backgroundColor: '#ffffff',
     contentInset: 'never',
     preferredContentMode: 'mobile',
   },
