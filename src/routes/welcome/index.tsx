@@ -3,6 +3,7 @@ import { useState } from 'react'
 import type { Category } from '#/generated/prisma/client'
 import { completeOnboarding, getMyProfile } from '#/server/profiles'
 import { buildPageMeta } from '#/lib/seo'
+import { WOLLIE_PLANS } from '#/lib/billing-plans'
 
 const welcomeMeta = buildPageMeta({
   path: '/welcome',
@@ -35,7 +36,7 @@ function WelcomePage() {
   const { profile } = Route.useLoaderData()
   const [field] = useState<Category>(profile?.field ?? 'FINANCE')
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState<'bank' | 'later' | null>(null)
+  const [loading, setLoading] = useState<'later' | null>(null)
 
   if (!profile) {
     return <main className="app-loading">Loading…</main>
@@ -44,39 +45,60 @@ function WelcomePage() {
   // The money app needs no public username; keep a stable internal one.
   const username = profile.username || `u-${Math.random().toString(36).slice(2, 10)}`
 
-  const finish = async (next: 'bank' | 'later') => {
+  const finish = async (next: 'later') => {
     setError('')
     setLoading(next)
     try {
       await completeOnboarding({ data: { username, field, headline: profile.headline ?? '' } })
-      void router.navigate({ href: next === 'bank' ? '/app/accounts' : redirectTo })
+      void router.navigate({ href: redirectTo })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Try again.')
       setLoading(null)
     }
   }
 
-  return (
-    <main id="main" className="m-intro m-intro--single">
-      <div className="m-intro__top" />
-      <section className="m-intro__slide">
-        <div className="m-intro__art">
-          <img src="/onboarding/intro-2.webp" alt="" width={900} height={1350} decoding="async" />
+  {
+    return (
+      <main id="main" className="m-intro m-intro--single m-plan">
+        <div className="m-intro__top" />
+        <section className="m-plan__body">
+          <h1>Start free.</h1>
+          <p className="m-plan__lede">Everything you need to get going. No card needed.</p>
+
+          <div className="m-plan__card m-plan__card--free">
+            <div className="m-plan__head">
+              <strong>Free</strong>
+              <span>€0</span>
+            </div>
+            <ul>
+              <li>Up to {WOLLIE_PLANS.free.limits.bankConnections} bank connections</li>
+              <li>Budgets that reset on payday</li>
+              <li>Savings goals</li>
+              <li>Share with a partner</li>
+            </ul>
+          </div>
+
+          <div className="m-plan__card">
+            <div className="m-plan__head">
+              <strong>Household</strong>
+              <span>€{WOLLIE_PLANS.household.monthlyPrice}/month</span>
+            </div>
+            <ul>
+              <li>Unlimited bank connections</li>
+              <li>Unlimited budgets</li>
+              <li>Backup and restore</li>
+            </ul>
+            <p className="m-plan__note">Upgrade any time from your profile.</p>
+          </div>
+        </section>
+        <div className="m-intro__bottom">
+          {error && <p className="m-error" role="alert">{error}</p>}
+          <button type="button" className="m-button m-button--primary" disabled={loading !== null} onClick={() => void finish('later')}>
+            {loading ? 'Opening…' : 'Start free'}
+          </button>
         </div>
-        <div className="m-intro__copy">
-          <h1>You’re in.</h1>
-          <p>One step left: connect your bank, and Wollie shows what you can safely spend.</p>
-        </div>
-      </section>
-      <div className="m-intro__bottom">
-        {error && <p className="m-error" role="alert">{error}</p>}
-        <button type="button" className="m-button" disabled={loading !== null} onClick={() => void finish('bank')}>
-          {loading === 'bank' ? 'Opening…' : 'Connect bank'}
-        </button>
-        <button type="button" className="m-link" disabled={loading !== null} onClick={() => void finish('later')}>
-          {loading === 'later' ? 'Opening…' : 'Later'}
-        </button>
-      </div>
-    </main>
-  )
+      </main>
+    )
+  }
+
 }

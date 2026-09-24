@@ -148,7 +148,8 @@ function createAuth() {
                 userId: user.id,
                 username,
                 field: 'FINANCE',
-                onboarded: true,
+                // New accounts see the one-screen "Start free" step once.
+                onboarded: false,
               },
             })
           },
