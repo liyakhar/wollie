@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight, Landmark } from 'lucide-react'
+import { CaretRight, Bank } from '@phosphor-icons/react'
 import { ProfileButton } from '#/components/ProfileButton'
 import { formatMoney } from '#/lib/finance-demo'
 import type { MoneyOverview } from '#/lib/money-overview'
-import { categoryIcon, categoryLabel, goalIcon, ICON_STROKE } from './icons'
+import { categoryIcon, categoryLabel, goalIcon, ICON_WEIGHT } from './icons'
 
 function dueLabel(date: string) {
   const [y, m, d] = date.split('-').map(Number)
@@ -27,7 +27,7 @@ export function ConnectBank({ demo = false }: { demo?: boolean }) {
   return (
     <main id="main" className="m-screen m-connect">
       <div className="m-connect__art" aria-hidden="true">
-        <Landmark strokeWidth={1.25} />
+        <Bank weight="bold" />
         <span className="m-connect__dot" />
       </div>
       <h1>Connect your bank</h1>
@@ -56,14 +56,17 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
         <ProfileButton demo={demo} />
       </header>
 
-      <section className="m-hero" aria-label="Safe to spend">
-        <p className={`m-hero__number${overview.safeToSpend < 0 ? ' is-negative' : ''}`}>
-          {money(Math.max(overview.safeToSpend, 0))}
+      <section className="m-balance" aria-label="Safe to spend">
+        <p className="m-balance__label">Safe to spend</p>
+        <p className="m-balance__number">
+          <SplitMoney value={Math.max(overview.safeToSpend, 0)} currency={currency} />
         </p>
-        <p className="m-hero__label">safe to spend</p>
-        <p className="m-hero__meta">
-          {money(overview.perDay)} a day · {overview.cycle.daysLeft} {overview.cycle.daysLeft === 1 ? 'day' : 'days'} to payday
-        </p>
+        <div className="m-balance__chips">
+          <span className="m-glass-chip">{money(overview.perDay)} a day</span>
+          <span className="m-glass-chip">
+            {overview.cycle.daysLeft} {overview.cycle.daysLeft === 1 ? 'day' : 'days'} to payday
+          </span>
+        </div>
       </section>
 
       {overview.short > 0 && (
@@ -81,7 +84,7 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
           <span className="m-row__main">
             {overview.reviewCount} {overview.reviewCount === 1 ? 'transaction needs' : 'transactions need'} a category
           </span>
-          <ChevronRight className="m-row__chevron" aria-hidden="true" strokeWidth={ICON_STROKE} />
+          <CaretRight className="m-row__chevron" aria-hidden="true" weight={ICON_WEIGHT} />
         </Link>
       )}
 
@@ -89,14 +92,14 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
         <section className="m-section">
           <Link to={demo ? '/demo/upcoming' : '/app/recurring'} className="m-section__head">
             <h2>Up next</h2>
-            <ChevronRight aria-hidden="true" strokeWidth={ICON_STROKE} />
+            <CaretRight aria-hidden="true" weight={ICON_WEIGHT} />
           </Link>
           <ul className="m-list">
             {overview.bills.slice(0, 3).map((bill) => {
               const Icon = categoryIcon(bill.category)
               return (
                 <li key={bill.id} className="m-row">
-                  <Icon className="m-row__icon" aria-hidden="true" strokeWidth={ICON_STROKE} />
+                  <Icon className="m-row__icon" aria-hidden="true" weight={ICON_WEIGHT} />
                   <span className="m-row__main">
                     <span className="m-row__title">{bill.name}</span>
                     <span className="m-row__meta">{dueLabel(bill.date)}</span>
@@ -113,7 +116,7 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
         <section className="m-section">
           <Link to={`${base}/budgets`} className="m-section__head">
             <h2>Budgets</h2>
-            <ChevronRight aria-hidden="true" strokeWidth={ICON_STROKE} />
+            <CaretRight aria-hidden="true" weight={ICON_WEIGHT} />
           </Link>
           <ul className="m-list">
             {tightest.map((budget) => <BudgetRow key={budget.id} budget={budget} currency={currency} />)}
@@ -125,14 +128,14 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
         <section className="m-section">
           <Link to={`${base}/goals`} className="m-section__head">
             <h2>Goals</h2>
-            <ChevronRight aria-hidden="true" strokeWidth={ICON_STROKE} />
+            <CaretRight aria-hidden="true" weight={ICON_WEIGHT} />
           </Link>
           <ul className="m-list">
             {goalsShown.map((goal) => {
               const Icon = goalIcon(goal.icon)
               return (
                 <li key={goal.id} className="m-row m-row--stack">
-                  <Icon className="m-row__icon" aria-hidden="true" strokeWidth={ICON_STROKE} />
+                  <Icon className="m-row__icon" aria-hidden="true" weight={ICON_WEIGHT} />
                   <span className="m-row__main">
                     <span className="m-row__line">
                       <span className="m-row__title">{goal.name}</span>
@@ -162,6 +165,14 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
   )
 }
 
+/** Whole units large, cents small: "€2,357" + ".82". */
+export function SplitMoney({ value, currency }: { value: number; currency: string }) {
+  const text = formatMoney(value, currency)
+  const match = text.match(/^(.*?)([.,]\d{2})$/)
+  if (!match) return <>{text}</>
+  return <>{match[1]}<span className="m-cents">{match[2]}</span></>
+}
+
 export function Bar({ share, state = 'ok' }: { share: number; state?: 'ok' | 'low' | 'over' }) {
   return (
     <span className={`m-bar is-${state}`} aria-hidden="true">
@@ -182,7 +193,7 @@ export function BudgetRow({
   const Icon = categoryIcon(budget.category)
   const content = (
     <>
-      <Icon className="m-row__icon" aria-hidden="true" strokeWidth={ICON_STROKE} />
+      <Icon className="m-row__icon" aria-hidden="true" weight={ICON_WEIGHT} />
       <span className="m-row__main">
         <span className="m-row__line">
           <span className="m-row__title">{categoryLabel(budget.category)}</span>

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
-import { Check, Plus } from 'lucide-react'
+import { Check, Plus } from '@phosphor-icons/react'
 import { formatMoney } from '#/lib/finance-demo'
 import type { MoneyOverview } from '#/lib/money-overview'
 import { archiveGoal, recordGoalCycle, saveGoal } from '#/server/money'
-import { Bar } from './HomeScreen'
-import { GOAL_ICON_OPTIONS, goalIcon, ICON_STROKE } from './icons'
+import { Bar, SplitMoney } from './HomeScreen'
+import { GOAL_ICON_OPTIONS, goalIcon, ICON_WEIGHT } from './icons'
 import { Sheet } from './Sheet'
 
 type Goal = MoneyOverview['goals'][number]
@@ -67,7 +67,7 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
         <h1>Goals</h1>
         {!demo && (
           <button type="button" className="m-icon-button m-icon-button--glass" aria-label="Add goal" onClick={() => setDraft(EMPTY_DRAFT)}>
-            <Plus aria-hidden="true" strokeWidth={1.75} />
+            <Plus aria-hidden="true" weight="bold" />
           </button>
         )}
       </header>
@@ -75,8 +75,8 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
       {overview.goals.length > 0 ? (
         <>
           <section className="m-hero m-hero--compact" aria-label="Saved">
-            <p className="m-hero__number">{money(overview.goalsSaved)}</p>
-            <p className="m-hero__label">saved</p>
+            <p className="m-hero__label">Saved</p>
+            <p className="m-hero__number"><SplitMoney value={overview.goalsSaved} currency={overview.currency} /></p>
             {overview.goalsDue > 0 && (
               <p className="m-hero__meta">{money(overview.goalsDue)} to set aside this month</p>
             )}
@@ -92,7 +92,7 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
               ].filter(Boolean).join(' · ')
               const content = (
                 <>
-                  <Icon className="m-row__icon" aria-hidden="true" strokeWidth={ICON_STROKE} />
+                  <Icon className="m-row__icon" aria-hidden="true" weight={ICON_WEIGHT} />
                   <span className="m-row__main">
                     <span className="m-row__line">
                       <span className="m-row__title">{goal.name}</span>
@@ -240,7 +240,7 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
                   className={`m-choice m-choice--icon${draft.icon === option.id ? ' is-selected' : ''}`}
                   onClick={() => setDraft({ ...draft, icon: option.id })}
                 >
-                  <option.icon aria-hidden="true" strokeWidth={ICON_STROKE} />
+                  <option.icon aria-hidden="true" weight={ICON_WEIGHT} />
                 </button>
               ))}
             </div>
@@ -300,7 +300,7 @@ function GoalStatus({ goal, money }: { goal: Goal; money: (value: number) => str
   if (goal.monthly > 0) {
     return (
       <span className="m-row__value m-positive">
-        <Check aria-hidden="true" strokeWidth={2} className="m-inline-icon" /> Saved
+        <Check aria-hidden="true" weight="bold" className="m-inline-icon" /> Saved
       </span>
     )
   }

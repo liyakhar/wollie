@@ -1,18 +1,18 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
-import { ChartNoAxesColumn, CreditCard, House, Target } from "lucide-react";
+import { ChartBar, CreditCard, House, Target } from "@phosphor-icons/react";
 
 const appTabs = [
   { to: "/app", label: "Home", icon: House },
   { to: "/app/transactions", label: "Activity", icon: CreditCard },
-  { to: "/app/budgets", label: "Budgets", icon: ChartNoAxesColumn },
+  { to: "/app/budgets", label: "Budgets", icon: ChartBar },
   { to: "/app/goals", label: "Goals", icon: Target },
 ] as const;
 
 const demoTabs = [
   { to: "/demo", label: "Home", icon: House },
   { to: "/demo/transactions", label: "Activity", icon: CreditCard },
-  { to: "/demo/budgets", label: "Budgets", icon: ChartNoAxesColumn },
+  { to: "/demo/budgets", label: "Budgets", icon: ChartBar },
   { to: "/demo/goals", label: "Goals", icon: Target },
 ] as const;
 
@@ -70,7 +70,7 @@ export function AppMobileNav({
           }
           aria-current={index === active ? "page" : undefined}
         >
-          <Icon aria-hidden="true" strokeWidth={index === active ? 2 : 1.5} />
+          <Icon aria-hidden="true" weight={index === active ? "duotone" : "regular"} />
           <span>{label}</span>
         </Link>
       ))}

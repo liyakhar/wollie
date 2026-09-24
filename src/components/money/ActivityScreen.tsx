@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
-import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react'
+import { CaretLeft, CaretRight, MagnifyingGlass, X } from '@phosphor-icons/react'
 import {
   formatMoney,
   type FinanceTransaction,
@@ -11,8 +11,8 @@ import {
   updateFinanceTransactionCategory,
 } from '#/server/finance'
 import { normalizeDate } from '#/lib/money-cycle'
-import { Bar } from './HomeScreen'
-import { categoryIcon, categoryLabel, ICON_STROKE } from './icons'
+import { Bar, SplitMoney } from './HomeScreen'
+import { categoryIcon, categoryLabel, ICON_WEIGHT } from './icons'
 import { Sheet } from './Sheet'
 
 export type ActivityData = {
@@ -142,7 +142,7 @@ export function ActivityScreen({ data, readOnly = false }: { data: ActivityData;
 
       <div className="m-toolbar">
         <label className="m-search">
-          <Search aria-hidden="true" strokeWidth={ICON_STROKE} />
+          <MagnifyingGlass aria-hidden="true" weight={ICON_WEIGHT} />
           <input
             type="search"
             value={query}
@@ -163,7 +163,7 @@ export function ActivityScreen({ data, readOnly = false }: { data: ActivityData;
             <div className="m-chips">
               {category && (
                 <button type="button" className="m-chip is-on" onClick={() => setCategory(null)}>
-                  {categoryLabel(category)} <X aria-hidden="true" strokeWidth={2} />
+                  {categoryLabel(category)} <X aria-hidden="true" weight="bold" />
                 </button>
               )}
               {reviewCount > 0 && (
@@ -187,7 +187,7 @@ export function ActivityScreen({ data, readOnly = false }: { data: ActivityData;
                     const Icon = categoryIcon(transaction.category)
                     const row = (
                       <>
-                        <Icon className="m-row__icon" aria-hidden="true" strokeWidth={ICON_STROKE} />
+                        <Icon className="m-row__icon" aria-hidden="true" weight={ICON_WEIGHT} />
                         <span className="m-row__main">
                           <span className="m-row__title">{readableMerchant(transaction.merchant)}</span>
                           <span className="m-row__meta">
@@ -223,17 +223,17 @@ export function ActivityScreen({ data, readOnly = false }: { data: ActivityData;
         <>
           <div className="m-month">
             <button type="button" className="m-icon-button" aria-label="Previous month" disabled={monthIndex >= months.length - 1} onClick={() => setMonthIndex(monthIndex + 1)}>
-              <ChevronLeft aria-hidden="true" strokeWidth={ICON_STROKE} />
+              <CaretLeft aria-hidden="true" weight={ICON_WEIGHT} />
             </button>
             <span>{month ? monthLabel(month) : '—'}</span>
             <button type="button" className="m-icon-button" aria-label="Next month" disabled={monthIndex === 0} onClick={() => setMonthIndex(monthIndex - 1)}>
-              <ChevronRight aria-hidden="true" strokeWidth={ICON_STROKE} />
+              <CaretRight aria-hidden="true" weight={ICON_WEIGHT} />
             </button>
           </div>
 
           <section className="m-hero m-hero--compact" aria-label="Spent">
-            <p className="m-hero__number">{money(byCategory.total)}</p>
-            <p className="m-hero__label">spent</p>
+            <p className="m-hero__label">Spent</p>
+            <p className="m-hero__number"><SplitMoney value={byCategory.total} currency={currency} /></p>
           </section>
 
           <ul className="m-list m-list--roomy">
@@ -242,7 +242,7 @@ export function ActivityScreen({ data, readOnly = false }: { data: ActivityData;
               return (
                 <li key={row.name} className="m-row m-row--stack">
                   <button type="button" className="m-row__button" onClick={() => { setCategory(row.name); setView('date') }}>
-                    <Icon className="m-row__icon" aria-hidden="true" strokeWidth={ICON_STROKE} />
+                    <Icon className="m-row__icon" aria-hidden="true" weight={ICON_WEIGHT} />
                     <span className="m-row__main">
                       <span className="m-row__line">
                         <span className="m-row__title">{categoryLabel(row.name)}</span>
@@ -284,7 +284,7 @@ export function ActivityScreen({ data, readOnly = false }: { data: ActivityData;
                       () => setActive(null),
                     )}
                   >
-                    <Icon aria-hidden="true" strokeWidth={ICON_STROKE} />
+                    <Icon aria-hidden="true" weight={ICON_WEIGHT} />
                     <span>{categoryLabel(name)}</span>
                   </button>
                 )

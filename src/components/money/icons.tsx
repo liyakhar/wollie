@@ -1,69 +1,73 @@
 import {
+  Airplane,
   ArrowDownLeft,
-  ArrowLeftRight,
+  ArrowsLeftRight,
   Car,
-  Circle,
-  Gamepad2,
+  CircleDashed,
+  ForkKnife,
+  GameController,
   Gift,
   GraduationCap,
-  Heart,
+  Heartbeat,
   House,
   Laptop,
   PiggyBank,
-  Plane,
-  ReceiptText,
-  Shield,
+  Plant,
+  Receipt,
+  ShieldCheck,
   ShoppingBag,
   ShoppingCart,
-  Sprout,
   Target,
-  TrainFront,
-  UtensilsCrossed,
-  type LucideIcon,
-} from 'lucide-react'
+  Train,
+  type Icon as PhosphorIcon,
+} from '@phosphor-icons/react'
 
-/** Precise Line: every icon is a 1.5 px monoline in ink. */
-export const ICON_STROKE = 1.5
+/**
+ * Icon set: Phosphor, "duotone" weight. A crisp ink outline with a soft
+ * tinted fill — modern and calm. Size comes from CSS.
+ */
+export type AppIcon = PhosphorIcon
+export const ICON_WEIGHT = 'duotone' as const
 
-const CATEGORY_ICONS: Record<string, LucideIcon> = {
+const CATEGORY_ICONS: Record<string, AppIcon> = {
   groceries: ShoppingCart,
-  dining: UtensilsCrossed,
-  'eating out': UtensilsCrossed,
-  restaurants: UtensilsCrossed,
-  transport: TrainFront,
+  dining: ForkKnife,
+  'eating out': ForkKnife,
+  restaurants: ForkKnife,
+  transport: Train,
   shopping: ShoppingBag,
-  subscriptions: ReceiptText,
-  health: Heart,
+  subscriptions: Receipt,
+  health: Heartbeat,
   housing: House,
   rent: House,
   income: ArrowDownLeft,
-  transfer: ArrowLeftRight,
+  transfer: ArrowsLeftRight,
   savings: PiggyBank,
-  fun: Gamepad2,
-  entertainment: Gamepad2,
+  fun: GameController,
+  entertainment: GameController,
   gifts: Gift,
   education: GraduationCap,
   car: Car,
 }
 
-export function categoryIcon(category: string): LucideIcon {
-  return CATEGORY_ICONS[category.toLocaleLowerCase()] ?? Circle
+export function categoryIcon(category: string): AppIcon {
+  return CATEGORY_ICONS[category.toLocaleLowerCase()] ?? CircleDashed
 }
 
-export const GOAL_ICON_OPTIONS: Array<{ id: string; label: string; icon: LucideIcon }> = [
+export const GOAL_ICON_OPTIONS: Array<{ id: string; label: string; icon: AppIcon }> = [
   { id: 'target', label: 'Goal', icon: Target },
-  { id: 'plane', label: 'Travel', icon: Plane },
-  { id: 'shield', label: 'Safety', icon: Shield },
-  { id: 'sprout', label: 'Future', icon: Sprout },
+  { id: 'plane', label: 'Travel', icon: Airplane },
+  { id: 'shield', label: 'Safety', icon: ShieldCheck },
+  { id: 'sprout', label: 'Future', icon: Plant },
   { id: 'home', label: 'Home', icon: House },
   { id: 'laptop', label: 'Tech', icon: Laptop },
   { id: 'gift', label: 'Gift', icon: Gift },
   { id: 'graduation-cap', label: 'Study', icon: GraduationCap },
   { id: 'car', label: 'Car', icon: Car },
-  { id: 'heart', label: 'Health', icon: Heart },
+  { id: 'heart', label: 'Health', icon: Heartbeat },
 ]
 
-export function goalIcon(id: string): LucideIcon {
+export function goalIcon(id: string): AppIcon {
   return GOAL_ICON_OPTIONS.find((option) => option.id === id)?.icon ?? Target
 }
 

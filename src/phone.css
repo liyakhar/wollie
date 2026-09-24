@@ -77,8 +77,8 @@ body:not(:has(.app-shell)) {
     --g-ink-2: rgb(14 16 22 / 0.56);
     --g-ink-3: rgb(14 16 22 / 0.36);
     --g-line: rgb(14 16 22 / 0.08);
-    --g-accent: #2f6bff;
-    --g-accent-soft: rgb(47 107 255 / 0.12);
+    --g-accent: #4f5bff;
+    --g-accent-soft: rgb(79 91 255 / 0.12);
     --g-positive: #1f9d55;
     --g-negative: #e5484d;
 

@@ -12,8 +12,12 @@ const cloudflarePages = process.env.NITRO_PRESET === 'cloudflare_pages'
 const cloudflareProjectName = process.env.CLOUDFLARE_PAGES_PROJECT || 'wollie-local-build'
 const cloudflareHyperdriveId = process.env.CLOUDFLARE_HYPERDRIVE_ID?.trim()
 
+// WOLLIE_LOCAL_HTTP=1 drops upgrade-insecure-requests so the iOS Simulator
+// can load a plain-http local server. Never set it in production.
+const upgradeInsecure = process.env.WOLLIE_LOCAL_HTTP === '1' ? '' : '; upgrade-insecure-requests'
+
 const securityHeaders = {
-  'content-security-policy': "default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' data:; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https://enablebanking.com; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
+  'content-security-policy': `default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' data:; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https://enablebanking.com; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'${upgradeInsecure}`,
   'permissions-policy': 'camera=(), geolocation=(), microphone=()',
   'referrer-policy': 'strict-origin-when-cross-origin',
   'strict-transport-security': 'max-age=31536000; includeSubDomains',
@@ -26,7 +30,7 @@ const securityHeaders = {
 // origin only; every other route keeps the stricter anti-framing policy.
 const embeddedDemoSecurityHeaders = {
   ...securityHeaders,
-  'content-security-policy': "default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' data:; form-action 'self'; frame-ancestors 'self'; img-src 'self' data: https://enablebanking.com; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
+  'content-security-policy': `default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' data:; form-action 'self'; frame-ancestors 'self'; img-src 'self' data: https://enablebanking.com; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'${upgradeInsecure}`,
   'x-frame-options': 'SAMEORIGIN',
 } as const
 
