@@ -68,6 +68,8 @@ body:not(:has(.app-shell)) {
   /* ---------- Tokens ----------
    * Set on the shell and on pop-up layers, which render outside it. */
   .app-shell,
+  .auth-page,
+  .app-page,
   [data-radix-popper-content-wrapper],
   [data-slot="dialog-content"] {
     --g-canvas: #f2f3f7;
@@ -913,5 +915,125 @@ body:not(:has(.app-shell)) {
 
   .app-shell .wollie-transaction-filters[data-open] .wollie-transaction-filters__controls {
     animation: none;
+  }
+}
+
+/* ---------- Account pages: sign in, sign up, welcome, reset ----------
+ * Same Glass look as the app, so the iOS frame and page always match. */
+@media (max-width: 63.99rem) {
+  html:has(.auth-page),
+  html:has(.app-page) {
+    background: #f2f3f7;
+    overscroll-behavior-y: none;
+  }
+
+  html:has(.auth-page) body,
+  html:has(.app-page) body,
+  .min-h-screen:has(.auth-page),
+  .min-h-screen:has(.app-page),
+  .auth-page,
+  .app-page,
+  .auth-page__panel,
+  .auth-page__content {
+    background: transparent !important;
+    color: var(--g-ink);
+    font-family: var(--g-font) !important;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .auth-visual,
+  .app-page__eyebrow {
+    display: none !important;
+  }
+
+  .auth-page .auth-page__brand,
+  .auth-page .auth-page__brand * {
+    color: var(--g-ink) !important;
+    font-family: var(--g-font-display) !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .auth-page .app-page__title,
+  .app-page .app-page__title {
+    color: var(--g-ink) !important;
+    font-family: var(--g-font-display) !important;
+    font-size: 2.125rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.028em !important;
+    line-height: 1.05 !important;
+  }
+
+  .auth-page .auth-page__intro,
+  .auth-page .app-page__lede,
+  .app-page .app-page__lede {
+    color: var(--g-ink-2) !important;
+    font-family: var(--g-font) !important;
+    font-size: 1rem !important;
+  }
+
+  .auth-page .app-form__label,
+  .app-page .app-form__label {
+    color: var(--g-ink-2) !important;
+    font-family: var(--g-font) !important;
+    font-size: 0.8125rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+
+  .auth-page .app-form__input,
+  .app-page .app-form__input {
+    min-height: 3rem !important;
+    padding: 0 1.125rem !important;
+    border: 0 !important;
+    border-radius: var(--g-pill) !important;
+    background: var(--g-surface) !important;
+    box-shadow: var(--g-edge) !important;
+    color: var(--g-ink) !important;
+    font-family: var(--g-font) !important;
+    font-size: 1rem !important;
+  }
+
+  .auth-page textarea.app-form__input,
+  .app-page textarea.app-form__input {
+    padding: 0.75rem 1.125rem !important;
+    border-radius: 1rem !important;
+  }
+
+  .auth-page .app-form__input:focus,
+  .app-page .app-form__input:focus {
+    outline: 2px solid var(--g-accent) !important;
+    outline-offset: 1px;
+  }
+
+  .auth-page .btn,
+  .app-page .btn {
+    min-height: 3.125rem !important;
+    border: 0 !important;
+    border-radius: var(--g-pill) !important;
+    background: var(--g-ink) !important;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16) !important;
+    color: #ffffff !important;
+    font-family: var(--g-font) !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    touch-action: manipulation;
+    transition: transform 120ms ease;
+  }
+
+  .auth-page .btn:active,
+  .app-page .btn:active {
+    transform: scale(0.98);
+  }
+
+  .auth-page a:not(.auth-page__brand),
+  .app-page a,
+  .auth-page .login-switch {
+    color: var(--g-accent) !important;
+    font-family: var(--g-font) !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
   }
 }
