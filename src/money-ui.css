@@ -1201,3 +1201,29 @@ html.m-sheet-open {
 .m-alert {
   background: rgb(229 56 59 / 0.08);
 }
+
+/* Numbers: Geist, a sharp modern sans with tabular figures (replaces SF Rounded). */
+.m-screen,
+.m-sheet {
+  --m-font-rounded: "Geist Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+.m-balance__number,
+.m-hero__number,
+.m-summary__number {
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  font-feature-settings: "tnum", "ss01";
+}
+
+.m-row__value,
+.m-row__amount {
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  font-feature-settings: "tnum";
+}
+
+.m-cents {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}

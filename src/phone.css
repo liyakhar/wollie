@@ -102,7 +102,7 @@ body:not(:has(.app-shell)) {
       "Helvetica Neue", sans-serif;
     --g-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display",
       system-ui, "Helvetica Neue", sans-serif;
-    --g-font-rounded: ui-rounded, "SF Pro Rounded", -apple-system,
+    --g-font-rounded: "Geist Variable", -apple-system,
       BlinkMacSystemFont, system-ui, sans-serif;
 
     /* Remap brand tokens so older rules and inline colours follow. */
@@ -1061,5 +1061,13 @@ body:not(:has(.app-shell)) {
   .app-shell .app-mobile-nav__item svg {
     width: 1.375rem;
     height: 1.375rem;
+  }
+}
+
+/* Icons always take the tab's colour (an older rule painted the active icon black). */
+@media (max-width: 63.99rem) {
+  .app-shell .app-mobile-nav__item svg,
+  .app-shell .app-mobile-nav__item.is-active svg {
+    color: inherit !important;
   }
 }
