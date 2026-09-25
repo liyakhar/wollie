@@ -35,6 +35,11 @@ export function ConnectBank({ demo = false }: { demo?: boolean }) {
       <Link to={demo ? '/demo/accounts' : '/app/accounts'} className="m-button m-button--primary m-button--wide">
         Connect bank
       </Link>
+      {!demo && (
+        <Link to="/demo" className="m-link m-link--center">
+          Explore with sample data
+        </Link>
+      )}
     </main>
   )
 }
