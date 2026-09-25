@@ -4,7 +4,8 @@ nixpkgsArchive = "51ad838b03a05b1de6f9f2a0fffecee64a9788ee"
 nixPkgs = ["nodejs_22", "pnpm-9_x"]
 
 [phases.install]
-cmds = ["pnpm install --frozen-lockfile"]
+# Build tools (vite) are devDependencies; install them even when NODE_ENV=production.
+cmds = ["pnpm install --frozen-lockfile --prod=false"]
 
 [phases.build]
 cmds = [
