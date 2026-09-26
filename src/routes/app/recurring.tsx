@@ -1,5 +1,6 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
+import { BillsScreen } from "#/components/money/BillsScreen";
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import { Input } from "#/components/ui/input";
@@ -22,8 +23,12 @@ import {
 
 export const Route = createFileRoute("/app/recurring")({
   loader: () => getFinanceRecurringPayments(),
-  component: RecurringPage,
+  component: BillsPage,
 });
+
+function BillsPage() {
+  return <BillsScreen data={Route.useLoaderData()} />;
+}
 
 type Draft = Pick<
   RecurringPayment,

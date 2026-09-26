@@ -39,6 +39,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as UUsernameRouteImport } from './routes/u/$username'
+import { Route as SettingsDataRouteImport } from './routes/settings/data'
 import { Route as PPostIdRouteImport } from './routes/p/$postId'
 import { Route as InviteTokenRouteImport } from './routes/invite/$token'
 import { Route as DemoUpcomingRouteImport } from './routes/demo/upcoming'
@@ -216,6 +217,11 @@ const UUsernameRoute = UUsernameRouteImport.update({
   id: '/$username',
   path: '/$username',
   getParentRoute: () => URouteRoute,
+} as any)
+const SettingsDataRoute = SettingsDataRouteImport.update({
+  id: '/data',
+  path: '/data',
+  getParentRoute: () => SettingsRouteRoute,
 } as any)
 const PPostIdRoute = PPostIdRouteImport.update({
   id: '/$postId',
@@ -395,6 +401,7 @@ export interface FileRoutesByFullPath {
   '/demo/upcoming': typeof DemoUpcomingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
+  '/settings/data': typeof SettingsDataRoute
   '/u/$username': typeof UUsernameRoute
   '/about/': typeof AboutIndexRoute
   '/app/': typeof AppIndexRoute
@@ -445,6 +452,7 @@ export interface FileRoutesByTo {
   '/demo/upcoming': typeof DemoUpcomingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
+  '/settings/data': typeof SettingsDataRoute
   '/u/$username': typeof UUsernameRoute
   '/about': typeof AboutIndexRoute
   '/app': typeof AppIndexRoute
@@ -504,6 +512,7 @@ export interface FileRoutesById {
   '/demo/upcoming': typeof DemoUpcomingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
+  '/settings/data': typeof SettingsDataRoute
   '/u/$username': typeof UUsernameRoute
   '/about/': typeof AboutIndexRoute
   '/app/': typeof AppIndexRoute
@@ -565,6 +574,7 @@ export interface FileRouteTypes {
     | '/demo/upcoming'
     | '/invite/$token'
     | '/p/$postId'
+    | '/settings/data'
     | '/u/$username'
     | '/about/'
     | '/app/'
@@ -615,6 +625,7 @@ export interface FileRouteTypes {
     | '/demo/upcoming'
     | '/invite/$token'
     | '/p/$postId'
+    | '/settings/data'
     | '/u/$username'
     | '/about'
     | '/app'
@@ -673,6 +684,7 @@ export interface FileRouteTypes {
     | '/demo/upcoming'
     | '/invite/$token'
     | '/p/$postId'
+    | '/settings/data'
     | '/u/$username'
     | '/about/'
     | '/app/'
@@ -930,6 +942,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/u/$username'
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof URouteRoute
+    }
+    '/settings/data': {
+      id: '/settings/data'
+      path: '/data'
+      fullPath: '/settings/data'
+      preLoaderRoute: typeof SettingsDataRouteImport
+      parentRoute: typeof SettingsRouteRoute
     }
     '/p/$postId': {
       id: '/p/$postId'
@@ -1266,10 +1285,12 @@ const ResetPasswordRouteRouteWithChildren =
   ResetPasswordRouteRoute._addFileChildren(ResetPasswordRouteRouteChildren)
 
 interface SettingsRouteRouteChildren {
+  SettingsDataRoute: typeof SettingsDataRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 const SettingsRouteRouteChildren: SettingsRouteRouteChildren = {
+  SettingsDataRoute: SettingsDataRoute,
   SettingsIndexRoute: SettingsIndexRoute,
 }
 

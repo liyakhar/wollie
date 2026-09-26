@@ -1,15 +1,6 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
-import { Copy, FileText, Mail, Users } from "lucide-react";
-import { Badge } from "#/components/ui/badge";
-import { Button } from "#/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "#/components/ui/card";
+import { IconBank, IconChevronLeft } from "#/components/money/icons";
 import { formatMoney } from "#/lib/finance-demo";
 import { buildPageMeta } from "#/lib/seo";
 import {
@@ -95,85 +86,63 @@ function HouseholdPage() {
     }
   }
 
-  return (
-    <main
-      id="main"
-      className="wollie-workspace-page mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8"
-    >
-      <header className="flex flex-col gap-4 border-b border-zinc-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {hasPartner ? "Household" : "Share with a partner"}
-          </h1>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">
-            {hasPartner
-              ? "Share the full picture while keeping a clear view of what is mine, yours, and ours."
-              : "Your money is private. Invite a partner when you want to plan together."}
-          </p>
-        </div>
-        <Button
-          asChild
-          variant="outline"
-          className="min-h-11 sm:justify-self-end"
-        >
-          <Link to="/app/reports/household" target="_blank">
-            <FileText aria-hidden="true" /> PDF report
-          </Link>
-        </Button>
-      </header>
+  const you = data.members.find((member) => member.id === data.currentMemberId);
+  const pendingInvites = isOwner && !partner ? data.invitations : [];
 
-      {(message || error) && (
-        <div
-          className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm"
-          role={error ? "alert" : "status"}
+  return (
+    <main id="main" className="m-screen">
+      <header className="m-title-row m-title-row--back">
+        <Link
+          to="/settings"
+          className="m-icon-button m-icon-button--glass"
+          aria-label="Back to Profile"
         >
-          {error || message}
-        </div>
+          <IconChevronLeft aria-hidden="true" />
+        </Link>
+      </header>
+      <h1 className="m-page-title">
+        {hasPartner ? "Household" : "Share with a partner"}
+      </h1>
+
+      {!hasPartner && (
+        <section className="m-share-hero">
+          <div className="m-share-hero__faces" aria-hidden="true">
+            <span className="m-avatar">{initialOf(you?.name)}</span>
+            <span className="m-avatar m-avatar--add">+</span>
+          </div>
+          <p>
+            Plan money together. You each keep your own login, and every
+            account shows whose it is: yours, theirs, or joint.
+          </p>
+        </section>
       )}
 
-      <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
-        <CardHeader className="border-b border-zinc-200 pb-4">
-          <CardTitle>{hasPartner ? "People" : "Your space"}</CardTitle>
-          <CardDescription>
-            {hasPartner ? "One shared household plan" : "Just you for now"}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-5 pt-5">
-          <ul className="divide-y divide-zinc-200">
+      {hasPartner && (
+        <section className="m-section">
+          <div className="m-section__head">
+            <h2>People</h2>
+          </div>
+          <ul className="m-list m-list--roomy">
             {data.members.map((member) => (
-              <li
-                key={member.id}
-                className="flex flex-col gap-3 py-4 first:pt-0 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-medium">{member.name}</p>
-                    <Badge
-                      variant="outline"
-                      className="rounded-md border-zinc-200 bg-white text-zinc-700"
-                    >
-                      {member.id === data.currentMemberId
-                        ? "You"
-                        : member.role === "OWNER"
-                          ? "Owner"
-                          : "Partner"}
-                    </Badge>
-                  </div>
-                  <p className="mt-1 truncate text-sm text-zinc-500">
-                    {member.email}
-                  </p>
-                </div>
-                {hasPartner && (
-                  <p className="text-sm tabular-nums text-zinc-600">
-                    {member.householdShareBasisPoints / 100}% of shared costs
-                  </p>
-                )}
+              <li key={member.id} className="m-row">
+                <span className="m-avatar m-avatar--small" aria-hidden="true">
+                  {initialOf(member.name)}
+                </span>
+                <span className="m-row__main">
+                  <span className="m-row__title">
+                    {member.name}
+                    {member.id === data.currentMemberId ? " (you)" : ""}
+                  </span>
+                  <span className="m-row__meta">
+                    Pays {member.householdShareBasisPoints / 100}% of shared
+                    costs
+                  </span>
+                </span>
                 {isOwner && member.role === "MEMBER" && (
-                  <Button
+                  <button
                     type="button"
-                    variant="ghost"
+                    className="m-text-button"
                     disabled={busy}
-                    className="min-h-11 justify-self-start text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
                     onClick={() => {
                       if (
                         !window.confirm(
@@ -191,96 +160,95 @@ function HouseholdPage() {
                     }}
                   >
                     Remove
-                  </Button>
+                  </button>
                 )}
               </li>
             ))}
           </ul>
+        </section>
+      )}
 
-          {isOwner && !partner && (
-            <form
-              onSubmit={invitePartner}
-              className="grid gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end"
-            >
-              <label className="grid gap-2 text-sm font-medium">
-                Invite your partner
-                <input
-                  type="email"
-                  required
-                  autoComplete="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.currentTarget.value)}
-                  placeholder="partner@example.com"
-                  className="min-h-11 rounded-md border border-zinc-200 bg-white px-3 text-base font-normal outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 sm:text-sm"
-                />
-              </label>
-              <Button
-                type="submit"
-                disabled={busy || !email}
-                className="min-h-11 wollie-primary-action"
-              >
-                <Mail aria-hidden="true" />{" "}
-                {busy ? "Sending…" : "Send invitation"}
-              </Button>
-            </form>
-          )}
+      {isOwner && !partner && (
+        <form onSubmit={invitePartner} className="m-form">
+          <label className="m-field">
+            <span>Your partner’s email</span>
+            <input
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(event) => setEmail(event.currentTarget.value)}
+              placeholder="name@example.com"
+            />
+          </label>
+          <button
+            type="submit"
+            disabled={busy || !email}
+            className="m-button m-button--primary m-button--wide"
+          >
+            {busy ? "Sending…" : "Send invite"}
+          </button>
+        </form>
+      )}
 
-          {inviteUrl && (
-            <div className="grid gap-2 rounded-lg border border-zinc-200 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
-              <div className="min-w-0">
-                <p className="text-sm font-medium">Invitation link</p>
-                <p className="mt-1 truncate text-xs text-zinc-500">
-                  {inviteUrl}
-                </p>
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                className="min-h-11"
-                onClick={() => void copyInviteLink()}
-              >
-                <Copy aria-hidden="true" /> Copy link
-              </Button>
-            </div>
-          )}
+      {inviteUrl && (
+        <div className="m-alert">
+          <p>Or send them this link yourself.</p>
+          <button
+            type="button"
+            className="m-alert__action"
+            onClick={() => void copyInviteLink()}
+          >
+            Copy link
+          </button>
+        </div>
+      )}
 
-          {isOwner && data.invitations.length > 0 && !partner && (
-            <div>
-              <p className="text-sm font-medium">Pending invitations</p>
-              <ul className="mt-2 divide-y divide-zinc-200">
-                {data.invitations.map((invitation) => (
-                  <li
-                    key={invitation.id}
-                    className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm"
-                  >
-                    <span>
-                      {invitation.email} · expires{" "}
-                      {new Date(invitation.expiresAt).toLocaleDateString()}
-                    </span>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      disabled={busy}
-                      className="min-h-11"
-                      onClick={() =>
-                        void refreshWith(
-                          () =>
-                            revokeHouseholdInvitation({
-                              data: { invitationId: invitation.id },
-                            }),
-                          "Invitation revoked.",
-                        )
-                      }
-                    >
-                      Revoke
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      {pendingInvites.length > 0 && (
+        <section className="m-section">
+          <div className="m-section__head">
+            <h2>Waiting to join</h2>
+          </div>
+          <ul className="m-list">
+            {pendingInvites.map((invitation) => (
+              <li key={invitation.id} className="m-row">
+                <span className="m-row__main">
+                  <span className="m-row__title">{invitation.email}</span>
+                  <span className="m-row__meta">
+                    Invite expires{" "}
+                    {new Date(invitation.expiresAt).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                    })}
+                  </span>
+                </span>
+                <button
+                  type="button"
+                  className="m-text-button"
+                  disabled={busy}
+                  onClick={() =>
+                    void refreshWith(
+                      () =>
+                        revokeHouseholdInvitation({
+                          data: { invitationId: invitation.id },
+                        }),
+                      "Invite cancelled.",
+                    )
+                  }
+                >
+                  Cancel
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(message || error) && (
+        <p className={error ? "m-error" : "m-hint"} role={error ? "alert" : "status"}>
+          {error || message}
+        </p>
+      )}
 
       {owner && partner && (
         <HouseholdSplitCard
@@ -311,51 +279,49 @@ function HouseholdPage() {
         />
       )}
 
-      <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
-        <CardHeader className="border-b border-zinc-200 pb-4">
-          <CardTitle>Account ownership</CardTitle>
-          <CardDescription>
-            Choose who each balance and transaction belongs to. Joint shares
-            must total 100%.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="pt-2">
-          {data.accounts.length === 0 ? (
-            <div className="grid min-h-40 place-items-center text-center text-sm text-zinc-500">
-              <div>
-                <Users className="mx-auto mb-3 size-5" aria-hidden="true" />
-                <p>Connect a bank account to assign ownership.</p>
-              </div>
-            </div>
-          ) : (
-            <ul className="divide-y divide-zinc-200">
-              {data.accounts.map((account) => (
-                <AccountOwnershipRow
-                  key={`${account.id}:${account.ownership.map((share: { shareBasisPoints: number }) => share.shareBasisPoints).join("-")}`}
-                  account={account}
-                  members={data.members}
-                  busy={busy}
-                  onSave={(shares) =>
-                    refreshWith(
-                      () =>
-                        updateAccountOwnership({
-                          data: { accountId: account.id, shares },
-                        }),
-                      `${account.name} ownership saved.`,
-                    )
-                  }
-                />
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
+      {hasPartner && data.accounts.length > 0 && (
+        <section className="m-section">
+          <div className="m-section__head">
+            <h2>Whose account is it?</h2>
+          </div>
+          <ul className="m-list m-list--roomy">
+            {data.accounts.map((account) => (
+              <AccountOwnershipRow
+                key={`${account.id}:${account.ownership.map((share: { shareBasisPoints: number }) => share.shareBasisPoints).join("-")}`}
+                account={account}
+                members={data.members}
+                currentMemberId={data.currentMemberId}
+                busy={busy}
+                onSave={(shares) =>
+                  refreshWith(
+                    () =>
+                      updateAccountOwnership({
+                        data: { accountId: account.id, shares },
+                      }),
+                    `${account.name} saved.`,
+                  )
+                }
+              />
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {hasPartner && (
+        <Link to="/app/reports/household" target="_blank" className="m-link m-link--center">
+          Download household report (PDF)
+        </Link>
+      )}
     </main>
   );
 }
 
 type Member = ReturnType<typeof Route.useLoaderData>["members"][number];
 type Account = ReturnType<typeof Route.useLoaderData>["accounts"][number];
+
+function initialOf(name?: string | null) {
+  return name?.trim().charAt(0).toUpperCase() || "W";
+}
 
 function HouseholdSplitCard({
   owner,
@@ -370,185 +336,124 @@ function HouseholdSplitCard({
   busy: boolean;
   onSave: (ownerPercent: number) => Promise<unknown>;
 }) {
-  const [ownerPercent, setOwnerPercent] = useState(
-    owner.householdShareBasisPoints / 100,
-  );
+  const saved = owner.householdShareBasisPoints / 100;
+  const [ownerPercent, setOwnerPercent] = useState(saved);
   return (
-    <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
-      <CardHeader className="border-b border-zinc-200 pb-4">
-        <CardTitle>Shared cost split</CardTitle>
-        <CardDescription>
-          Used for household budgets, bills, and each person’s safe-to-spend
-          view.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="grid gap-4 pt-5 sm:grid-cols-2">
-        <PercentField
-          name={owner.name}
+    <section className="m-section">
+      <div className="m-section__head">
+        <h2>Shared costs</h2>
+      </div>
+      <div className="m-split">
+        <div className="m-split__names">
+          <span>
+            {owner.name} <strong>{ownerPercent}%</strong>
+          </span>
+          <span>
+            <strong>{100 - ownerPercent}%</strong> {partner.name}
+          </span>
+        </div>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="5"
           value={ownerPercent}
           disabled={!editable || busy}
-          onChange={setOwnerPercent}
+          aria-label={`${owner.name}'s share of shared costs`}
+          onChange={(event) => setOwnerPercent(Number(event.currentTarget.value))}
+          className="m-split__range"
+          style={{ ["--split" as string]: `${ownerPercent}%` }}
         />
-        <PercentField
-          name={partner.name}
-          value={100 - ownerPercent}
-          disabled
-          onChange={() => undefined}
-        />
-        {editable && (
-          <Button
-            type="button"
-            disabled={busy}
-            className="min-h-11 wollie-primary-action sm:col-span-2 sm:justify-self-start"
-            onClick={() => void onSave(ownerPercent)}
-          >
-            Save cost split
-          </Button>
-        )}
-      </CardContent>
-    </Card>
+        <p className="m-row__meta">
+          Used to split joint bills and budgets, and each person’s safe to
+          spend.
+        </p>
+      </div>
+      {editable && ownerPercent !== saved && (
+        <button
+          type="button"
+          disabled={busy}
+          className="m-button m-button--primary m-button--wide"
+          onClick={() => void onSave(ownerPercent)}
+        >
+          Save split
+        </button>
+      )}
+    </section>
   );
 }
 
 function AccountOwnershipRow({
   account,
   members,
+  currentMemberId,
   busy,
   onSave,
 }: {
   account: Account;
   members: Member[];
+  currentMemberId: string;
   busy: boolean;
   onSave: (
     shares: Array<{ memberId: string; shareBasisPoints: number }>,
   ) => Promise<unknown>;
 }) {
-  const initial =
-    account.ownership.find(
+  const me = members.find((member) => member.id === currentMemberId) ?? members[0];
+  const other = members.find((member) => member.id !== me.id);
+  const myShare =
+    (account.ownership.find(
       (share: { memberId: string; shareBasisPoints: number }) =>
-        share.memberId === members[0]?.id,
-    )?.shareBasisPoints ?? 10_000;
-  const [firstPercent, setFirstPercent] = useState(initial / 100);
-  const second = members[1];
-  const ownerName = members.find(
-    (member) => member.userId === account.connectionOwnerUserId,
-  )?.name;
-  const freshness = account.lastSyncedAt || account.connectionLastSyncedAt;
-  const shares =
-    members.length === 1
-      ? [{ memberId: members[0].id, shareBasisPoints: 10_000 }]
-      : [
-          { memberId: members[0].id, shareBasisPoints: firstPercent * 100 },
-          { memberId: second.id, shareBasisPoints: (100 - firstPercent) * 100 },
-        ];
+        share.memberId === me.id,
+    )?.shareBasisPoints ?? 10_000) / 100;
+  const set = (mine: number) => {
+    if (!other || mine === myShare) return;
+    void onSave([
+      { memberId: me.id, shareBasisPoints: mine * 100 },
+      { memberId: other.id, shareBasisPoints: (100 - mine) * 100 },
+    ]);
+  };
+  const options = [
+    { label: "Mine", value: 100 },
+    { label: other ? `${other.name.split(" ")[0]}’s` : "Theirs", value: 0 },
+    { label: "Joint", value: 50 },
+  ];
+  const custom = !options.some((option) => option.value === myShare);
   return (
-    <li className="grid gap-4 py-5 first:pt-3 lg:grid-cols-[minmax(13rem,1fr)_minmax(18rem,1.4fr)_auto] lg:items-end">
-      <div className="min-w-0">
-        <p className="truncate text-sm font-medium">{account.name}</p>
-        <p className="mt-1 text-xs text-zinc-500">
-          {account.institution} ·{" "}
-          {formatMoney(account.balanceMinor / 100, account.currency)}
-        </p>
-        <p className="mt-1 text-xs text-zinc-500">
-          {connectionLabel(account.connectionStatus)}
-          {freshness
-            ? ` · updated ${new Date(freshness).toLocaleString()}`
-            : " · never updated"}
-          {ownerName ? ` · connected by ${ownerName}` : ""}
-        </p>
-      </div>
-      {second ? (
-        <div className="grid gap-3 sm:grid-cols-2">
-          <PercentField
-            name={members[0].name}
-            value={firstPercent}
-            disabled={busy}
-            onChange={setFirstPercent}
-          />
-          <PercentField
-            name={second.name}
-            value={100 - firstPercent}
-            disabled
-            onChange={() => undefined}
-          />
-          <div className="flex flex-wrap gap-2 sm:col-span-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="min-h-11"
-              onClick={() => setFirstPercent(100)}
-            >
-              Mine
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="min-h-11"
-              onClick={() => setFirstPercent(0)}
-            >
-              Yours
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="min-h-11"
-              onClick={() => setFirstPercent(50)}
-            >
-              Joint 50/50
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <p className="text-sm text-zinc-500">100% {members[0]?.name}</p>
-      )}
-      {second && (
-        <Button
-          type="button"
-          disabled={busy}
-          className="min-h-11 wollie-primary-action"
-          onClick={() => void onSave(shares)}
-        >
-          Save
-        </Button>
-      )}
-    </li>
-  );
-}
-
-function PercentField({
-  name,
-  value,
-  disabled,
-  onChange,
-}: {
-  name: string;
-  value: number;
-  disabled: boolean;
-  onChange: (value: number) => void;
-}) {
-  return (
-    <label className="grid gap-2 text-sm font-medium">
-      {name}
-      <span className="relative block">
-        <input
-          type="number"
-          min="0"
-          max="100"
-          step="1"
-          value={value}
-          disabled={disabled}
-          onChange={(event) =>
-            onChange(
-              Math.min(100, Math.max(0, Number(event.currentTarget.value))),
-            )
-          }
-          className="min-h-11 w-full rounded-md border border-zinc-200 bg-white px-3 pr-9 text-base font-normal tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 disabled:bg-zinc-50 disabled:text-zinc-500 sm:text-sm"
-        />
-        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-zinc-500">
-          %
+    <li className="m-row m-row--stack">
+      <span className="m-row__line">
+        <IconBank className="m-row__icon" aria-hidden="true" />
+        <span className="m-row__main">
+          <span className="m-row__title">{account.name}</span>
+          <span className="m-row__meta">
+            {account.institution} ·{" "}
+            {formatMoney(account.balanceMinor / 100, account.currency)}
+            {account.connectionStatus !== "CONNECTED"
+              ? ` · ${connectionLabel(account.connectionStatus)}`
+              : ""}
+          </span>
         </span>
       </span>
-    </label>
+      <span className="m-chips m-chips--indent" role="radiogroup" aria-label={`Who owns ${account.name}`}>
+        {options.map((option) => (
+          <button
+            key={option.label}
+            type="button"
+            role="radio"
+            aria-checked={myShare === option.value}
+            className={`m-chip${myShare === option.value ? " is-on" : ""}`}
+            disabled={busy}
+            onClick={() => set(option.value)}
+          >
+            {option.label}
+          </button>
+        ))}
+        {custom && (
+          <span className="m-chip is-on">
+            {myShare}/{100 - myShare}
+          </span>
+        )}
+      </span>
+    </li>
   );
 }
 

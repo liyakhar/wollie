@@ -1576,3 +1576,259 @@ html:has(.m-intro) body {
   background: var(--m-ink);
   color: var(--m-lime);
 }
+
+.m-suggestion-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 0 0.5rem 2.625rem;
+}
+
+.m-suggestion-actions .m-chip svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* ---------- Profile ---------- */
+.m-title-row--back {
+  justify-content: flex-start;
+}
+
+.m-identity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.m-identity__avatar {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  flex: 0 0 auto;
+  border-radius: var(--m-pill);
+  background: var(--m-lime);
+  color: var(--m-ink);
+  font-family: var(--m-font-display);
+  font-size: 1.625rem;
+  font-weight: 700;
+}
+
+.m-identity h1 {
+  font-family: var(--m-font-display);
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.m-identity p {
+  color: var(--m-ink-2);
+  font-size: 0.9375rem;
+}
+
+/* Grouped list: one soft grey block per group, rows split by hairlines. */
+.m-group {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.m-group h2 {
+  padding-left: 0.25rem;
+  color: var(--m-ink-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.m-group ul {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: var(--m-fill);
+  list-style: none;
+}
+
+.m-group li + li {
+  border-top: 1px solid rgb(11 11 12 / 0.06);
+}
+
+.m-group__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  padding: 0 1rem;
+  color: var(--m-ink);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 150ms ease;
+}
+
+.m-group__row:active {
+  background: rgb(11 11 12 / 0.05);
+}
+
+.m-group__label {
+  flex: 1 1 auto;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.m-group__value {
+  color: var(--m-ink-2);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+}
+
+.m-group__chevron {
+  width: 1rem;
+  height: 1rem;
+  color: var(--m-ink-3);
+}
+
+.m-group__row:focus-visible {
+  outline: 2px solid var(--m-clay);
+  outline-offset: -2px;
+}
+
+/* ---------- Accounts ---------- */
+.m-page-title {
+  margin-top: -0.5rem;
+  font-family: var(--m-font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.m-stack {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.m-field select {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 0.875rem;
+  background: var(--m-fill);
+  color: var(--m-ink);
+  font: inherit;
+  font-size: 1rem;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--m-ink-2) 50%), linear-gradient(135deg, var(--m-ink-2) 50%, transparent 50%);
+  background-position: calc(100% - 1.25rem) 50%, calc(100% - 0.9rem) 50%;
+  background-size: 0.35rem 0.35rem;
+  background-repeat: no-repeat;
+}
+
+.m-row__amount .m-text-button {
+  display: block;
+  margin-left: auto;
+}
+
+.m-text-button {
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  color: var(--m-ink-2);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.m-link--danger {
+  border: 0;
+  background: none;
+  color: var(--m-danger, #d92d20);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---------- Household ---------- */
+.m-avatar {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  flex: 0 0 auto;
+  border: 3px solid var(--m-bg, #fff);
+  border-radius: var(--m-pill);
+  background: var(--m-lime);
+  color: var(--m-ink);
+  font-family: var(--m-font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+}
+
+.m-avatar--add {
+  margin-left: -0.875rem;
+  background: var(--m-fill);
+  color: var(--m-ink-2);
+}
+
+.m-avatar--small {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  font-size: 0.9375rem;
+}
+
+.m-share-hero {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+  background: var(--m-fill);
+}
+
+.m-share-hero__faces {
+  display: flex;
+}
+
+.m-share-hero p {
+  color: var(--m-ink-2);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.m-split {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 1.25rem;
+  background: var(--m-fill);
+}
+
+.m-split__names {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9375rem;
+}
+
+.m-split__names strong {
+  font-family: var(--m-font-mono, inherit);
+  font-weight: 600;
+}
+
+.m-split__range {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: var(--m-pill);
+  background: linear-gradient(to right, var(--m-lime) var(--split), rgb(11 11 12 / 0.12) var(--split));
+  appearance: none;
+  cursor: pointer;
+}
+
+.m-split__range::-webkit-slider-thumb {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: var(--m-ink);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
+  appearance: none;
+}
+
+.m-chips--indent {
+  padding-left: 2.625rem;
+}

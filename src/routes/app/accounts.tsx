@@ -1,16 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { Download, Users } from "lucide-react";
-import { Badge } from "#/components/ui/badge";
-import { Button } from "#/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "#/components/ui/card";
+import { IconBank, IconChevronLeft } from "#/components/money/icons";
 import { formatMoney } from "#/lib/finance-demo";
 import { buildPageMeta } from "#/lib/seo";
 import { getFinanceAccounts } from "#/server/finance";
@@ -303,275 +293,204 @@ function AccountsPage() {
     }
   }
 
+  const bankConnected = useSynci ? synci.connected : enableBanking.connected;
+  const needsReconnect = useSynci ? synci.needsReconnect : enableBanking.needsReconnect;
+  const lastSynced = useSynci ? synci.lastSynced : enableBanking.lastSynced;
+  const canConnect = useSynci
+    ? synci.openForConnections
+    : enableBanking.openForConnections;
+  const currency = accounts[0]?.currency;
+  const total = accounts
+    .filter((account) => account.currency === currency)
+    .reduce((sum, account) => sum + account.balance, 0);
+
   return (
-    <main
-      id="main"
-      className="wollie-workspace-page mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8"
-    >
-      <header className="flex flex-col gap-4 border-b border-zinc-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Accounts</h1>
-          <p className="mt-1 text-sm text-zinc-500">
-            Connected banks and balances.
-          </p>
-        </div>
-        <Button
-          asChild
-          variant="outline"
-          className="min-h-11 sm:justify-self-end"
+    <main id="main" className="m-screen">
+      <header className="m-title-row m-title-row--back">
+        <Link
+          to="/settings"
+          className="m-icon-button m-icon-button--glass"
+          aria-label="Back to Profile"
         >
-          <Link to="/app/household">
-            <Users aria-hidden="true" /> Manage ownership
-          </Link>
-        </Button>
+          <IconChevronLeft aria-hidden="true" />
+        </Link>
       </header>
+      <h1 className="m-page-title">Bank accounts</h1>
 
       {!useSynci && enableBanking.environment?.toLowerCase() === "sandbox" && (
-        <p
-          className="rounded-lg border border-[var(--color-brand-rule)] bg-[var(--color-semantic-neutral-soft)] px-4 py-3 text-sm text-[var(--color-brand-ink)]"
-          role="status"
-        >
-          Sandbox data: these balances and transactions are sample data, not a
-          connected bank account.
+        <p className="m-hint" role="status">
+          Test mode: these balances are sample data, not a real bank.
         </p>
       )}
 
-      <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
-        <CardHeader className="border-b border-zinc-200 pb-4">
-          <CardTitle>Bank connections</CardTitle>
-          <CardDescription>
-            Secure, read-only access to your balances and transactions.
-          </CardDescription>
-          <CardAction>
-            <Badge
-              variant="outline"
-              className="rounded-md border-zinc-200 bg-white text-zinc-700"
-            >
-              {useSynci
-                ? synci.connected
-                  ? synci.needsReconnect
-                    ? "Reconnect"
-                    : `Synced ${synci.lastSynced}`
-                  : synci.registered
-                    ? "Connecting"
-                    : synci.openForConnections
-                      ? "Available"
-                      : "Coming soon"
-                : enableBanking.connected
-                  ? enableBanking.needsReconnect
-                    ? "Reconnect"
-                    : `Synced ${enableBanking.lastSynced}`
-                  : enableBanking.openForConnections
-                    ? enableBanking.environment
-                    : "Coming soon"}
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardContent className="grid gap-6 pt-6">
-          {useSynci ? (
-            !synci.openForConnections && !synci.registered ? (
-              <p className="text-sm text-zinc-600">
-                Bank connections are not open yet.
-              </p>
-            ) : synci.registered ? (
-              <div className="grid gap-3">
-                <div className="flex flex-wrap gap-2">
-                  {synci.openForConnections && (
-                    <Button
-                      type="button"
-                      disabled={loading}
-                      onClick={connectBank}
-                      className="wollie-primary-action"
-                    >
-                      {loading ? "Working…" : "Add or manage banks"}
-                    </Button>
-                  )}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={loading}
-                    onClick={syncConnectedBank}
-                  >
-                    Sync now
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    disabled={loading}
-                    onClick={disconnectConnectedBank}
-                    className="text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
-                  >
-                    Disconnect all
-                  </Button>
-                </div>
-                {!synci.connected && (
-                  <p className="text-xs leading-5 text-zinc-500">
-                    Finish connecting in the secure bank portal. Your accounts
-                    may take a moment to appear.
-                  </p>
-                )}
-              </div>
-            ) : (
-              <div className="flex flex-col items-start gap-3">
-                <p className="text-sm text-zinc-600">
-                  Connect up to two banks. You will sign in securely with each
-                  bank.
-                </p>
-                <Button
-                  type="button"
-                  disabled={loading}
-                  onClick={connectBank}
-                  className="wollie-primary-action"
-                >
-                  {loading ? "Connecting…" : "Connect a bank"}
-                </Button>
-              </div>
-            )
-          ) : !enableBanking.openForConnections ? (
-            <div className="flex flex-col items-start gap-3 text-sm text-zinc-600">
-              <p>
-                Bank connections are not open yet. We are finishing the secure
-                provider setup before testers connect real accounts.
-              </p>
-            </div>
-          ) : enableBanking.connected ? (
-            <div className="flex flex-wrap gap-2">
-              <Button
-                type="button"
-                disabled={loading}
-                onClick={syncConnectedBank}
-                className="wollie-primary-action"
-              >
-                {loading ? "Working…" : "Sync now"}
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                disabled={loading}
-                onClick={disconnectConnectedBank}
-                className="text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
-              >
-                Disconnect
-              </Button>
-            </div>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[14rem_minmax(16rem,1fr)_auto] lg:items-end">
-              <label className="grid gap-2 text-sm font-medium">
-                Country
-                <select
-                  value={country}
-                  onChange={(event) => setCountry(event.currentTarget.value)}
-                  disabled={loading || loadingBanks}
-                  className="h-9 rounded-md border border-zinc-200 bg-white px-3 text-sm font-normal outline-none focus-visible:ring-2 focus-visible:ring-zinc-950"
-                >
-                  {supportedCountries.map((item) => (
-                    <option key={item.code} value={item.code}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="grid gap-2 text-sm font-medium">
-                Bank
-                <select
-                  value={bankName}
-                  onChange={(event) => setBankName(event.currentTarget.value)}
-                  disabled={loading || loadingBanks}
-                  className="h-9 rounded-md border border-zinc-200 bg-white px-3 text-sm font-normal outline-none focus-visible:ring-2 focus-visible:ring-zinc-950"
-                >
-                  <option value="">
-                    {loadingBanks ? "Loading banks…" : "Choose a bank"}
-                  </option>
-                  {institutions.map((bank) => (
-                    <option
-                      key={`${bank.country}:${bank.name}`}
-                      value={bank.name}
-                    >
-                      {bank.name}
-                      {bank.beta ? " (beta)" : ""}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <Button
-                type="button"
-                disabled={loading || loadingBanks || !bankName}
-                onClick={connectBank}
-                className="wollie-primary-action"
-              >
-                {loading ? "Connecting…" : "Connect bank"}
-              </Button>
-            </div>
-          )}
+      {accounts.length > 0 && (
+        <section className="m-hero m-hero--compact" aria-label="Total balance">
+          <p className="m-hero__label">Total balance</p>
+          <p className="m-hero__number">{formatMoney(total, currency)}</p>
+          <p className="m-hero__meta">
+            {accounts.length} {accounts.length === 1 ? "account" : "accounts"}
+            {bankConnected && lastSynced ? ` · updated ${lastSynced}` : ""}
+          </p>
+        </section>
+      )}
 
-          {!(useSynci ? synci.connected : enableBanking.connected) && (
-            <p className="text-xs leading-5 text-zinc-500">
-              Coverage varies by bank. Wollie never asks for or stores your bank
-              password.
-            </p>
-          )}
-          {error && (
-            <p className="text-sm font-medium text-zinc-950" role="alert">
-              {error}
-            </p>
-          )}
-          {message && (
-            <p className="text-sm text-zinc-700" role="status">
-              {message}
-            </p>
-          )}
-        </CardContent>
-      </Card>
+      {needsReconnect && (
+        <div className="m-alert" role="alert">
+          <p>Your bank asks you to sign in again to keep syncing.</p>
+          <button
+            type="button"
+            className="m-alert__action"
+            disabled={loading}
+            onClick={connectBank}
+          >
+            Reconnect
+          </button>
+        </div>
+      )}
 
       {accounts.length > 0 && (
-        <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
-          <CardHeader className="border-b border-zinc-200 pb-4">
-            <CardTitle>Connected accounts</CardTitle>
-            <CardDescription>{accounts.length} total</CardDescription>
-          </CardHeader>
-          <CardContent className="pt-2">
-            <ul className="divide-y divide-zinc-200">
-              {accounts.map((account) => (
-                <li
-                  key={account.id}
-                  className="flex flex-col gap-3 py-3 first:pt-2 last:pb-1 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">
-                      {account.name}
-                    </p>
-                    <p className="mt-0.5 truncate text-xs text-zinc-500">
-                      {account.institution} · {account.type} ·{" "}
-                      {account.lastSynced}
-                    </p>
-                    <p className="mt-1 text-xs text-zinc-500">
-                      {connectionLabel(account.connectionStatus)} ·{" "}
+        <section className="m-section">
+          <div className="m-section__head">
+            <h2>Accounts</h2>
+          </div>
+          <ul className="m-list m-list--roomy">
+            {accounts.map((account) => (
+              <li key={account.id} className="m-row">
+                <IconBank className="m-row__icon" aria-hidden="true" />
+                <span className="m-row__main">
+                  <span className="m-row__title">{account.name}</span>
+                  <span className="m-row__meta">
+                    {account.institution} ·{" "}
+                    {connectionLabel(account.connectionStatus)}
+                  </span>
+                  {household.members.length > 1 && (
+                    <span className="m-row__meta">
                       {ownershipLabel(account.ownership, household.members)}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-3 sm:justify-end">
-                    <p className="text-sm font-medium tabular-nums">
-                      {formatMoney(account.balance, account.currency)}
-                    </p>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      disabled={exportingAccountId === account.id}
-                      onClick={() =>
-                        void exportAccount(account.id, account.name)
-                      }
-                      className="min-h-10 border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100"
-                    >
-                      <Download aria-hidden="true" />
-                      {exportingAccountId === account.id ? "Exporting…" : "CSV"}
-                    </Button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+                    </span>
+                  )}
+                </span>
+                <span className="m-row__amount">
+                  {formatMoney(account.balance, account.currency)}
+                  <button
+                    type="button"
+                    className="m-text-button"
+                    disabled={exportingAccountId === account.id}
+                    onClick={() => void exportAccount(account.id, account.name)}
+                  >
+                    {exportingAccountId === account.id ? "Exporting…" : "Export"}
+                  </button>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
+
+      {!bankConnected && canConnect && !useSynci && enableBanking.configured && (
+        <section className="m-section">
+          <div className="m-section__head">
+            <h2>Connect a bank</h2>
+          </div>
+          <div className="m-form">
+            <label className="m-field">
+              <span>Country</span>
+              <select
+                value={country}
+                onChange={(event) => setCountry(event.currentTarget.value)}
+                disabled={loading || loadingBanks}
+              >
+                {supportedCountries.map((item) => (
+                  <option key={item.code} value={item.code}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="m-field">
+              <span>Bank</span>
+              <select
+                value={bankName}
+                onChange={(event) => setBankName(event.currentTarget.value)}
+                disabled={loading || loadingBanks}
+              >
+                <option value="">
+                  {loadingBanks ? "Loading banks…" : "Choose your bank"}
+                </option>
+                {institutions.map((bank) => (
+                  <option key={`${bank.country}:${bank.name}`} value={bank.name}>
+                    {bank.name}
+                    {bank.beta ? " (beta)" : ""}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </section>
+      )}
+
+      {accounts.length === 0 && (
+        <section className="m-empty">
+          <h2>{canConnect ? "Connect your bank" : "Bank connections open soon"}</h2>
+          <p>
+            {canConnect
+              ? "Wollie reads your balances and transactions. It can never move money, and never sees your bank password."
+              : "We're finishing the secure bank setup. You can explore Wollie with sample data meanwhile."}
+          </p>
+          {!canConnect && (
+            <Link to="/demo" className="m-button m-button--wide">
+              Explore with sample data
+            </Link>
+          )}
+        </section>
+      )}
+
+      {error && (
+        <p className="m-error" role="alert">
+          {error}
+        </p>
+      )}
+      {message && (
+        <p className="m-hint" role="status">
+          {message}
+        </p>
+      )}
+
+      <div className="m-stack">
+        {canConnect && (!bankConnected || useSynci) && (
+          <button
+            type="button"
+            className="m-button m-button--primary m-button--wide"
+            disabled={loading || (!useSynci && !bankName)}
+            onClick={connectBank}
+          >
+            {loading
+              ? "Working…"
+              : useSynci && synci.registered
+                ? "Add or manage banks"
+                : "Connect a bank"}
+          </button>
+        )}
+        {bankConnected && (
+          <button
+            type="button"
+            className={`m-button m-button--wide${canConnect && useSynci ? "" : " m-button--primary"}`}
+            disabled={loading}
+            onClick={syncConnectedBank}
+          >
+            {loading ? "Syncing…" : "Sync now"}
+          </button>
+        )}
+        {(bankConnected || (useSynci && synci.registered)) && (
+          <button
+            type="button"
+            className="m-link m-link--center m-link--danger"
+            disabled={loading}
+            onClick={disconnectConnectedBank}
+          >
+            Disconnect {useSynci ? "all banks" : "bank"}
+          </button>
+        )}
+      </div>
     </main>
   );
 }
