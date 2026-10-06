@@ -1,0 +1,50 @@
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+@import "@fontsource-variable/inter";
+/*
+ * Wollie "Editorial Mono": paper white, ink black, one neon highlight,
+ * serif headlines, hairline borders, square corners. Loaded last so it
+ * overrides the earlier palettes. Reference: design-options/wollie-editorial.css
+ */
+html, html[data-accent], html[data-accent='rosin'], :root {
+  --color-paper: #fbfbf9;
+  --color-paper-2: #f1f1ed;
+  --color-paper-3: #e9e9e4;
+  --color-rule: rgb(17 17 17 / 0.14);
+  --color-rule-2: rgb(17 17 17 / 0.28);
+  --color-muted: rgb(17 17 17 / 0.62);
+  --color-neutral: rgb(17 17 17 / 0.72);
+  --color-ink-2: rgb(17 17 17 / 0.82);
+  --color-ink: #111111;
+  --color-accent: #e4ff4d;
+  --color-accent-2: #c9e62a;
+  --color-accent-ink: #111111;
+  --color-focus: #e4ff4d;
+  --color-wollie-accent: #e4ff4d;
+  --color-semantic-positive: #1c8a3a;
+  --color-semantic-negative: #d92d20;
+  --color-semantic-active: #e4ff4d;
+  --color-semantic-primary: #111111;
+  --ds-canvas: #fbfbf9;
+  --ds-ink: #111111;
+  --ds-lime: #e4ff4d;
+  --ds-lime-deep: #c9e62a;
+  --ds-lime-glow: #f0ff9a;
+  --ds-clay: #111111;
+  --ds-clay-text: #111111;
+  --ds-fill: #f1f1ed;
+  --radius: 4px;
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-body: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-brand-display: "Instrument Serif", Georgia, serif;
+  --font-brand-body: "Inter Variable", "Inter", system-ui, sans-serif;
+  --ds-font: "Inter Variable", "Inter", system-ui, sans-serif;
+  --ds-font-display: "Instrument Serif", Georgia, serif;
+}
+body { background: #fbfbf9; color: #111; font-family: var(--font-body); }
+h1, h2, h3, .ds-display, .ds-title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; letter-spacing: -0.02em; }
+button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border-radius: 4px; }
+.landing { --lp-head: "Instrument Serif", Georgia, serif; }
+.landing h1, .landing h2, .landing h3, .landing [class*="__title"] { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; letter-spacing: -0.02em; }
+.landing-hero__title { line-height: 1.02; }
+.landing .btn, .landing a[class*="btn"], .landing button { border-radius: 4px; }

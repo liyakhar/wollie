@@ -19,6 +19,7 @@
 @import "./design-system.css";
 @import "./web-shell.css";
 @import "./landing.css";
+@import "./editorial.css";
 
 @custom-variant dark (&:is(.dark *));
 
