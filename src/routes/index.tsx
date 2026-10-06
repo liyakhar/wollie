@@ -47,19 +47,19 @@ const nativeFlagScript = {
 // really are (percent of the file), used to centre each one by eye.
 const story = [
   {
-    image: "/onboarding/intro-1.webp",
+    image: "/onboarding/intro-1-clear.webp",
     title: "Your money, organised.",
     body: "Safe to spend, after bills and savings.",
     ink: { size: 776, x: 453, y: 442, w: 900, h: 900 },
   },
   {
-    image: "/onboarding/intro-2.webp",
+    image: "/onboarding/intro-2-clear.webp",
     title: "Know where it goes.",
     body: "Budgets reset on payday. Goals keep count.",
     ink: { size: 1029, x: 456, y: 664, w: 900, h: 1350 },
   },
   {
-    image: "/onboarding/intro-3.webp",
+    image: "/onboarding/intro-3-clear.webp",
     title: "On your own or together.",
     body: "Each partner connects their own accounts.",
     ink: { size: 826, x: 450, y: 674, w: 900, h: 1350 },

@@ -326,3 +326,33 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .phone .ds-bar.is-over { border-color: #d92d20; }
 .phone__summary .ds-bar { box-shadow: none !important; }
 .phone__save { background: none !important; color: #111; font-weight: 600; }
+
+/* ═══ Story illustrations: no box, a quiet entrance, then a slow float ═══ */
+.landing-story__frame, .landing-story__item:nth-child(2) .landing-story__frame { background: none !important; border: 0 !important; overflow: visible !important; border-radius: 0 !important; }
+.landing-story__frame img { transform-origin: 50% 60%; will-change: transform, opacity; transition: transform 700ms cubic-bezier(.2, .8, .2, 1); }
+/* ground shadow that breathes with the float */
+.landing-story__frame::after { content: ""; position: absolute; left: 22%; right: 22%; bottom: 4%; height: 7%; border-radius: 50%; background: radial-gradient(closest-side, rgb(17 17 17 / .16), transparent); filter: blur(2px); transform-origin: center; }
+@keyframes ill-in { from { opacity: 0; transform: translateY(2.25rem) scale(.92) rotate(-2.5deg); } to { opacity: 1; transform: none; } }
+@keyframes ill-float { 0%, 100% { translate: 0 0; rotate: 0deg; } 50% { translate: 0 -.65rem; rotate: .6deg; } }
+@keyframes ill-shadow { 0%, 100% { transform: scaleX(1); opacity: 1; } 50% { transform: scaleX(.82); opacity: .6; } }
+@keyframes ill-shadow-in { from { opacity: 0; transform: scaleX(.4); } to { opacity: 1; transform: scaleX(1); } }
+.landing--motion .landing-story__item[data-reveal]:not(.is-in) .landing-story__frame img { opacity: 0; }
+.landing--motion .landing-story__item.is-in .landing-story__frame img {
+  animation: ill-in 1200ms cubic-bezier(.2, .8, .2, 1) calc(var(--i, 0) * 140ms + 150ms) both,
+             ill-float 7s ease-in-out calc(var(--i, 0) * -1.4s - 1s) infinite;
+}
+.landing--motion .landing-story__item.is-in .landing-story__frame::after {
+  animation: ill-shadow-in 1200ms cubic-bezier(.2, .8, .2, 1) calc(var(--i, 0) * 140ms + 150ms) both,
+             ill-shadow 7s ease-in-out calc(var(--i, 0) * -1.4s - 1s) infinite;
+}
+@media (hover: hover) {
+  .landing-story__item:hover .landing-story__frame img { transform: scale(1.05) rotate(1.5deg); }
+  .landing-story__item:hover .landing-story__frame { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing--motion .landing-story__item .landing-story__frame img, .landing-story__frame::after { animation: none !important; opacity: 1 !important; }
+}
+
+@media (min-width: 48rem) { .landing-story__item { grid-template-columns: 5rem minmax(0, 1fr) 22rem; } .landing-story__frame { max-width: 22rem !important; } }
+/* Transparent artwork: no blend trick needed, so animation never flashes a box */
+.landing-story__frame img { mix-blend-mode: normal !important; }
