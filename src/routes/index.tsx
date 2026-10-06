@@ -531,6 +531,9 @@ function LandingPage() {
         <section className="landing-hero">
           <div className="ds-container landing-hero__grid">
             <div className="landing-hero__copy">
+              <p className="landing-eyebrow rise" style={{ "--d": "0ms" } as CSSProperties}>
+                <b>New</b> Money, for one or two
+              </p>
               <h1 className="landing-hero__title">
                 <span className="line"><span>Know what</span></span>
                 <span className="line">
@@ -549,6 +552,11 @@ function LandingPage() {
                   Try the demo
                 </Link>
               </div>
+              <ul className="landing-hero__proof rise" style={{ "--d": "700ms" } as CSSProperties}>
+                <li>Read-only bank link</li>
+                <li>No joint account needed</li>
+                <li>Free to start</li>
+              </ul>
             </div>
 
             <div className="landing-hero__stage" aria-hidden="false">
@@ -557,37 +565,66 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="ds-container landing-story" aria-label="What Wollie does">
-          <ul className="landing-story__list">
-            {story.map(({ image, title, body, ink }, index) => (
-              <li key={title} className="landing-story__item" data-reveal style={{ "--i": index } as CSSProperties}>
-                <div className="landing-story__frame">
-                  <img
-                    src={image}
-                    alt=""
-                    width={ink.w}
-                    height={ink.h}
-                    loading="lazy"
-                    decoding="async"
-                    style={{
-                      width: `${(ink.w * 0.8 * 100) / ink.size}%`,
-                      left: `${50 - (ink.x * 0.8 * 100) / ink.size}%`,
-                      top: `${50 - (ink.y * 0.8 * 100) / ink.size}%`,
-                    }}
-                  />
-                </div>
-                <h2 className="landing-story__title">{title}</h2>
-                <p className="ds-muted">{body}</p>
-              </li>
-            ))}
-          </ul>
+        <section className="landing-story" aria-label="What Wollie does">
+          <div className="ds-container">
+            <p className="landing-kicker">What it does</p>
+            <h2 className="landing-h2 landing-h2--xl">Three things. Done well.</h2>
+            <ul className="landing-story__list">
+              {story.map(({ image, title, body, ink }, index) => (
+                <li key={title} className="landing-story__item" data-reveal style={{ "--i": index } as CSSProperties}>
+                  <span className="landing-story__num">0{index + 1}</span>
+                  <div className="landing-story__text">
+                    <h3 className="landing-story__title">{title}</h3>
+                    <p className="ds-muted">{body}</p>
+                  </div>
+                  <div className="landing-story__frame">
+                    <img
+                      src={image}
+                      alt=""
+                      width={ink.w}
+                      height={ink.h}
+                      loading="lazy"
+                      decoding="async"
+                      style={{
+                        width: `${(ink.w * 0.8 * 100) / ink.size}%`,
+                        left: `${50 - (ink.x * 0.8 * 100) / ink.size}%`,
+                        top: `${50 - (ink.y * 0.8 * 100) / ink.size}%`,
+                      }}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="landing-how" aria-label="How it works">
+          <div className="ds-container">
+            <p className="landing-kicker">How it works</p>
+            <h2 className="landing-h2 landing-h2--xl">Start in <em>two minutes.</em></h2>
+            <ol className="landing-how__steps">
+              <li data-reveal><span>1</span><h3>Connect your bank</h3><p className="ds-muted">Pick your bank from the list. The link is read-only.</p></li>
+              <li data-reveal><span>2</span><h3>See what is safe</h3><p className="ds-muted">Bills and goals come out first. What is left is yours.</p></li>
+              <li data-reveal><span>3</span><h3>Invite your partner</h3><p className="ds-muted">Each of you connects your own accounts. Nothing is merged.</p></li>
+            </ol>
+          </div>
+        </section>
+
+        <section className="landing-promise" aria-label="Our promise">
+          <div className="ds-container landing-promise__inner" data-reveal>
+            <p className="landing-kicker landing-kicker--on-ink">Our promise</p>
+            <p className="landing-promise__text">Wollie cannot move your money. It can only <em>look.</em></p>
+            <p className="landing-promise__sub">Bank connections are read-only. We never see your bank password.</p>
+          </div>
         </section>
 
         <section id="banks" className="ds-container landing-banks" aria-labelledby="banks-title" data-reveal>
           <div className="landing-banks__intro">
+            <p className="landing-kicker">Banks</p>
             <h2 id="banks-title" className="landing-h2">
-              Is your bank on the list?
+              Is your bank <em>on the list?</em>
             </h2>
+            <p className="ds-muted">Pick your country and search. Check before you connect.</p>
           </div>
 
           <div className="ds-panel landing-finder">
@@ -664,9 +701,12 @@ function LandingPage() {
         </section>
 
         <section id="questions" className="ds-container landing-faq" aria-labelledby="questions-title" data-reveal>
-          <h2 id="questions-title" className="landing-h2">
-            Questions
-          </h2>
+          <div className="landing-faq__intro">
+            <p className="landing-kicker">FAQ</p>
+            <h2 id="questions-title" className="landing-h2">
+              Questions, <em>answered.</em>
+            </h2>
+          </div>
           <div className="landing-faq__list">
             {faqs.map((faq) => (
               <details key={faq.question} className="landing-faq__item">
@@ -682,26 +722,30 @@ function LandingPage() {
 
         <section className="ds-container landing-final" data-reveal>
           <div className="ds-balance landing-final__card">
-            <h2 className="landing-final__title">Try Wollie for free.</h2>
-            {primaryAction}
+            <h2 className="landing-final__title">Know what is <em>yours</em> to spend.</h2>
+            <div className="landing-final__actions">
+              {primaryAction}
+              <Link to="/demo" className="ds-btn ds-btn--lg landing-final__demo">Try the demo</Link>
+            </div>
           </div>
         </section>
       </main>
 
       <footer className="landing-footer">
-        <div className="ds-container landing-footer__row">
-          <Link to="/" className="ds-wordmark">
-            Wollie
-          </Link>
-          <nav aria-label="Footer navigation" className="landing-footer__nav">
-            <Link to="/about">About</Link>
-            <Link to="/pricing" search={{ checkout: undefined }}>
-              Pricing
-            </Link>
-            <Link to="/privacy">Privacy</Link>
-            <Link to="/terms">Terms</Link>
-          </nav>
-          <span className="ds-muted">© 2026 Wollie</span>
+        <div className="ds-container">
+          <div className="landing-footer__top">
+            <Link to="/" className="ds-wordmark landing-footer__mark">Wollie</Link>
+            <p className="landing-footer__tag">Know what you can spend.</p>
+          </div>
+          <div className="landing-footer__row">
+            <nav aria-label="Footer navigation" className="landing-footer__nav">
+              <Link to="/about">About</Link>
+              <Link to="/pricing" search={{ checkout: undefined }}>Pricing</Link>
+              <Link to="/privacy">Privacy</Link>
+              <Link to="/terms">Terms</Link>
+            </nav>
+            <span className="ds-muted">© 2026 Wollie</span>
+          </div>
         </div>
       </footer>
     </div>
