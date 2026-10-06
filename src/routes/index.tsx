@@ -531,9 +531,6 @@ function LandingPage() {
         <section className="landing-hero">
           <div className="ds-container landing-hero__grid">
             <div className="landing-hero__copy">
-              <p className="landing-eyebrow rise" style={{ "--d": "0ms" } as CSSProperties}>
-                <b>New</b> Money, for one or two
-              </p>
               <h1 className="landing-hero__title">
                 <span className="line"><span>Know what</span></span>
                 <span className="line">

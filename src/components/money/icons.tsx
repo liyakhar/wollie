@@ -1,87 +1,87 @@
 import type { ComponentType, SVGProps } from 'react'
 import {
-  Add,
+  Airplane,
   ArrowDownLeft,
-  ArrowsHorizontal,
+  ArrowsLeftRight,
+  Bank,
+  CaretLeft,
+  CaretRight,
+  ChartBar,
+  Check,
+  CircleDashed,
   Car,
-  ChartColumn,
-  Checkmark,
-  ChevronLeft,
-  ChevronRight,
-  CircleDash,
-  Close,
-  Education,
-  Favorite,
-  Finance,
-  GameConsole,
+  ForkKnife,
+  GameController,
   Gift,
-  Home,
+  GraduationCap,
+  Heart,
+  House,
   Laptop,
-  Plane,
+  MagnifyingGlass,
+  Plant,
+  Plus,
   Receipt,
-  Restaurant,
-  Search,
-  Security,
+  ShieldCheck,
   ShoppingBag,
   ShoppingCart,
-  Sprout,
   Target,
-  Train,
+  TrainSimple,
   Wallet,
-} from '@carbon/icons-react'
+  X,
+} from '@phosphor-icons/react'
 
 /**
- * Icon set: IBM Carbon — precise, geometric, technical outlines.
- * Size comes from CSS; `strokeWidth` is accepted and ignored so callers
- * stay the same if the set changes again.
+ * Icon set: Phosphor, regular weight. Soft, even outlines that sit well
+ * next to the serif type. Size comes from CSS; `strokeWidth` is accepted
+ * and ignored so callers stay the same if the set changes again.
  */
 type IconProps = SVGProps<SVGSVGElement> & { strokeWidth?: number }
 export type AppIcon = (props: IconProps) => React.JSX.Element
 
-type CarbonIcon = ComponentType<SVGProps<SVGSVGElement> & { size?: number | string }>
+type PhosphorIcon = ComponentType<SVGProps<SVGSVGElement> & { size?: number | string; weight?: 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone' }>
 
-function make(Icon: CarbonIcon): AppIcon {
+function make(Icon: PhosphorIcon): AppIcon {
   return function AppIconView({ strokeWidth: _strokeWidth, ...props }: IconProps) {
-    return <Icon size={24} {...props} />
+    return <Icon size={24} weight="regular" {...props} />
   }
 }
 
-export const IconAdd = make(Add)
-export const IconBank = make(Finance)
-export const IconCheck = make(Checkmark)
-export const IconChevronLeft = make(ChevronLeft)
-export const IconChevronRight = make(ChevronRight)
-export const IconClose = make(Close)
-export const IconSearch = make(Search)
+export const IconAdd = make(Plus)
+export const IconBank = make(Bank)
+export const IconCheck = make(Check)
+export const IconChevronLeft = make(CaretLeft)
+export const IconChevronRight = make(CaretRight)
+export const IconClose = make(X)
+export const IconSearch = make(MagnifyingGlass)
 
 /** Tab bar icons. */
-export const IconHome = make(Home)
+export const IconHome = make(House)
 export const IconActivity = make(Receipt)
-export const IconBudgets = make(ChartColumn)
+export const IconBudgets = make(ChartBar)
 export const IconGoals = make(Target)
 
 const CATEGORY_ICONS: Record<string, AppIcon> = {
   groceries: make(ShoppingCart),
-  dining: make(Restaurant),
-  'eating out': make(Restaurant),
-  restaurants: make(Restaurant),
-  transport: make(Train),
+  dining: make(ForkKnife),
+  'eating out': make(ForkKnife),
+  restaurants: make(ForkKnife),
+  transport: make(TrainSimple),
   shopping: make(ShoppingBag),
   subscriptions: make(Receipt),
-  health: make(Favorite),
+  health: make(Heart),
   housing: IconHome,
   rent: IconHome,
   income: make(ArrowDownLeft),
-  transfer: make(ArrowsHorizontal),
+  transfer: make(ArrowsLeftRight),
   savings: make(Wallet),
-  fun: make(GameConsole),
-  entertainment: make(GameConsole),
+  fun: make(GameController),
+  entertainment: make(GameController),
   gifts: make(Gift),
-  education: make(Education),
+  education: make(GraduationCap),
   car: make(Car),
 }
 
-const FALLBACK = make(CircleDash)
+const FALLBACK = make(CircleDashed)
 
 export function categoryIcon(category: string): AppIcon {
   return CATEGORY_ICONS[category.toLocaleLowerCase()] ?? FALLBACK
@@ -89,15 +89,15 @@ export function categoryIcon(category: string): AppIcon {
 
 export const GOAL_ICON_OPTIONS: Array<{ id: string; label: string; icon: AppIcon }> = [
   { id: 'target', label: 'Goal', icon: IconGoals },
-  { id: 'plane', label: 'Travel', icon: make(Plane) },
-  { id: 'shield', label: 'Safety', icon: make(Security) },
-  { id: 'sprout', label: 'Future', icon: make(Sprout) },
+  { id: 'plane', label: 'Travel', icon: make(Airplane) },
+  { id: 'shield', label: 'Safety', icon: make(ShieldCheck) },
+  { id: 'sprout', label: 'Future', icon: make(Plant) },
   { id: 'home', label: 'Home', icon: IconHome },
   { id: 'laptop', label: 'Tech', icon: make(Laptop) },
   { id: 'gift', label: 'Gift', icon: make(Gift) },
-  { id: 'graduation-cap', label: 'Study', icon: make(Education) },
+  { id: 'graduation-cap', label: 'Study', icon: make(GraduationCap) },
   { id: 'car', label: 'Car', icon: make(Car) },
-  { id: 'heart', label: 'Health', icon: make(Favorite) },
+  { id: 'heart', label: 'Health', icon: make(Heart) },
 ]
 
 export function goalIcon(id: string): AppIcon {
