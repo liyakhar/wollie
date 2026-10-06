@@ -1,4 +1,4 @@
-import { createServerFn } from '@tanstack/react-start'
+import { createServerFn, createServerOnlyFn } from '@tanstack/react-start'
 import { setResponseHeader } from '@tanstack/react-start/server'
 import { FINANCE_CATEGORIES } from '#/lib/finance-demo'
 import { buildCyclePlan, payCycle, detectPayday, type Goal } from '#/lib/money-cycle'
@@ -42,7 +42,7 @@ async function currentCycleStart(workspaceId: string, paydayDay: number | null) 
 
 /* ------------------------------ Read ------------------------------ */
 
-export async function buildMoneyOverview(workspaceId: string) {
+export const buildMoneyOverview = createServerOnlyFn(async (workspaceId: string) => {
   const prisma = await getDb()
   const [snapshot, workspace] = await Promise.all([
     loadMoneySnapshot(workspaceId),
@@ -113,7 +113,7 @@ export async function buildMoneyOverview(workspaceId: string) {
     transactions: snapshot.transactions,
     categories,
   })
-}
+})
 
 export const getMoneyOverview = createServerFn({ method: 'GET' }).handler(async () => {
   const context = await requireHousehold()
