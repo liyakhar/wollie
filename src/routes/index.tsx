@@ -185,7 +185,7 @@ const PURCHASES = [
 const formatWhole = (n: number) => Math.floor(n).toLocaleString("en-US");
 const formatCents = (n: number) => String(Math.round((n - Math.floor(n)) * 100)).padStart(2, "0");
 
-const SCREENS = ["Home", "Budgets", "Goals"] as const;
+const SCREENS = ["Home", "Activity", "Budgets", "Goals"] as const;
 
 /**
  * The app at real iPhone proportions (1206 x 2622), cycling Home, Budgets, Goals.
@@ -201,9 +201,9 @@ function PhoneHome() {
   const Future = goalIcon("sprout");
   const tabs = [
     { label: "Home", Icon: IconHome, screen: 0 },
-    { label: "Activity", Icon: IconActivity, screen: -1 },
-    { label: "Budgets", Icon: IconBudgets, screen: 1 },
-    { label: "Goals", Icon: IconGoals, screen: 2 },
+    { label: "Activity", Icon: IconActivity, screen: 1 },
+    { label: "Budgets", Icon: IconBudgets, screen: 2 },
+    { label: "Goals", Icon: IconGoals, screen: 3 },
   ];
 
   const [screen, setScreen] = useState(0);
@@ -323,6 +323,46 @@ function PhoneHome() {
 
           <section className={pageClass(1)} aria-hidden={screen !== 1}>
             <div className="phone__head">
+              <p className="phone__title">Activity</p>
+            </div>
+            <p className="phone__h">Today</p>
+            <div className="phone__rows">
+              <div className="phone__row">
+                <Groceries className="phone__icon" />
+                <div>
+                  <p className="phone__line"><span>Bakery</span><span><b>−€4.20</b></span></p>
+                  <p className="phone__meta">Groceries</p>
+                </div>
+              </div>
+              <div className="phone__row">
+                <Transport className="phone__icon" />
+                <div>
+                  <p className="phone__line"><span>City Rail</span><span><b>−€3.10</b></span></p>
+                  <p className="phone__meta">Transport</p>
+                </div>
+              </div>
+            </div>
+            <p className="phone__h">Yesterday</p>
+            <div className="phone__rows">
+              <div className="phone__row">
+                <Dining className="phone__icon" />
+                <div>
+                  <p className="phone__line"><span>Noodle bar</span><span><b>−€14.50</b></span></p>
+                  <p className="phone__meta">Eating out</p>
+                </div>
+              </div>
+              <div className="phone__row">
+                <Future className="phone__icon" />
+                <div>
+                  <p className="phone__line"><span>Salary</span><span className="phone__pos"><b>+€3,200</b></span></p>
+                  <p className="phone__meta">Income</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className={pageClass(2)} aria-hidden={screen !== 2}>
+            <div className="phone__head">
               <p className="phone__title">Budgets</p>
             </div>
             <div className="phone__summary">
@@ -365,7 +405,7 @@ function PhoneHome() {
             <p className="phone__cta">+ Add budget</p>
           </section>
 
-          <section className={pageClass(2)} aria-hidden={screen !== 2}>
+          <section className={pageClass(3)} aria-hidden={screen !== 3}>
             <div className="phone__head">
               <p className="phone__title">Goals</p>
             </div>
@@ -395,12 +435,21 @@ function PhoneHome() {
           </section>
         </div>
 
-        <nav className="ds-tabbar phone__tabs" aria-hidden="true">
+        <nav className="ds-tabbar phone__tabs" aria-label="App screens">
           {tabs.map(({ label, Icon, screen: target }) => (
-            <span key={label} className={`ds-tabbar__item${screen === target ? " is-active" : ""}`}>
+            <button
+              key={label}
+              type="button"
+              className={`ds-tabbar__item${screen === target ? " is-active" : ""}`}
+              aria-current={screen === target ? "page" : undefined}
+              onClick={() => {
+                setScreen(target);
+                setPicks((count) => count + 1);
+              }}
+            >
               <Icon />
               {label}
-            </span>
+            </button>
           ))}
         </nav>
         <span className="phone__home-bar" aria-hidden="true" />

@@ -300,3 +300,11 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
   :root .app-shell > aside.app-nav { min-height: 100vh; height: auto; align-self: stretch; }
   :root .app-shell .app-shell__main .wollie-workspace-page h1 { font-size: 2.75rem !important; }
 }
+/* Clickable phone tabs */
+.phone__tabs button.ds-tabbar__item { border: 0; background: transparent; font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .2s ease, color .2s ease; }
+.phone__tabs button.ds-tabbar__item:hover:not(.is-active) { background: rgb(17 17 17 / .06); color: #111; }
+.phone__tabs button.ds-tabbar__item.is-active { background: #111; color: #e4ff4d; }
+.phone__meta { margin: .25em 0 0; font-size: .78em; color: rgb(17 17 17 / .55); }
+.phone__pos { color: #1c8a3a; }
+.phone__tabs { position: relative; z-index: 3; }
+.phone__dots { display: none; }
