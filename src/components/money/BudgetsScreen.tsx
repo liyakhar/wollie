@@ -58,13 +58,20 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
 
       {overview.budgets.length > 0 ? (
         <>
-          <section className="m-summary">
+          <section className="m-summary m-summary--card">
+            <p className="m-summary__label">Left this month</p>
             <p className="m-summary__number">
-              {money(overview.budgetsLeft)} <span>left of {money(overview.budgetsLimit)}</span>
+              {money(overview.budgetsLeft)} <span>of {money(overview.budgetsLimit)}</span>
             </p>
-            <button type="button" className="m-link" onClick={() => !demo && setPaydayOpen(true)} disabled={demo}>
-              {resets}
-            </button>
+            <span className="m-bar" aria-hidden="true">
+              <span style={{ transform: `scaleX(${overview.budgetsLimit > 0 ? Math.min(1, Math.max(0, (overview.budgetsLimit - overview.budgetsLeft) / overview.budgetsLimit)) : 0})` }} />
+            </span>
+            <p className="m-summary__foot">
+              <span>{money(Math.max(0, overview.budgetsLimit - overview.budgetsLeft))} spent</span>
+              <button type="button" className="m-link" onClick={() => !demo && setPaydayOpen(true)} disabled={demo}>
+                {resets}
+              </button>
+            </p>
           </section>
 
           {overview.short > 0 && (
@@ -75,6 +82,8 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
             </p>
           )}
 
+          <section className="m-section">
+          <div className="m-section__head m-section__head--static"><h2>Categories</h2><span className="m-section__count">{overview.budgets.length}</span></div>
           <ul className="m-list m-list--roomy">
             {overview.budgets.map((budget) => (
               <BudgetRow
@@ -85,6 +94,17 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
               />
             ))}
           </ul>
+          </section>
+          {!demo && (
+            <button
+              type="button"
+              className="m-button m-button--wide m-button--ghost"
+              onClick={() => setEditing({ mode: 'add', category: overview.budgetOptions[0]?.category ?? '', limit: String(overview.budgetOptions[0]?.suggested || '') })}
+            >
+              Add budget
+            </button>
+          )}
+          {demo && <p className="m-footnote">Example data. Create a workspace to set your own budgets.</p>}
         </>
       ) : (
         <section className="m-empty">

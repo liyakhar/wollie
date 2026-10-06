@@ -113,3 +113,51 @@ body { background-color: #fbfbf9; }
 .m-title-row > a > *, .m-title-row > button > * { background: transparent !important; border-radius: 0 !important; }
 .m-switch, [class*="m-segment"], .m-toolbar [role="tablist"] { border-radius: 4px !important; }
 .m-toolbar [role="tablist"] > *, .m-toolbar [role="tab"] { border-radius: 3px !important; }
+
+/* ═══ Layout rhythm: calm top, clear hierarchy, nothing floating ═══ */
+.m-screen { gap: 2rem; padding: .5rem 1.25rem calc(8rem + env(safe-area-inset-bottom)); min-height: 100dvh; align-content: start; }
+.m-title-row { min-height: 3rem; margin-bottom: .25rem; }
+.m-summary--card { gap: 0; padding: 1.5rem; border: 1px solid #111; border-radius: 4px; background: #e4ff4d; box-shadow: 4px 4px 0 #111; }
+.m-summary__label { font: 500 .6875rem/1 "Inter Variable", Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #111; opacity: .72; margin-bottom: .75rem !important; }
+.m-summary--card .m-summary__number { font: 400 3.5rem/1 "Instrument Serif", Georgia, serif; letter-spacing: -0.03em; color: #111; margin-bottom: 1.25rem; }
+.m-summary--card .m-summary__number span { font: 400 1rem "Inter Variable", Inter, sans-serif; letter-spacing: 0; color: rgb(17 17 17 / .6); }
+.m-summary--card .m-bar { height: .5rem; background: rgb(17 17 17 / .12); box-shadow: inset 0 0 0 1px #111; margin-bottom: .9rem; }
+.m-summary--card .m-bar > span { background: #111; }
+.m-summary__foot { display: flex; justify-content: space-between; align-items: center; font-size: .8125rem; color: #111; }
+.m-summary__foot .m-link { font-size: .8125rem; }
+.m-section__head--static { display: flex; align-items: center; justify-content: space-between; min-height: 2.25rem; padding-bottom: .6rem; border-bottom: 1px solid #111; margin-bottom: .25rem; }
+.m-section__head--static h2 { font: 500 .6875rem/1 "Inter Variable", Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+.m-section__count { font-size: .75rem; color: var(--m-ink-2); }
+.m-list--roomy { gap: 0; }
+.m-row { padding: 1.1rem 0; }
+.m-button--ghost { background: transparent; color: #111; border: 1px solid #111; }
+.m-button--ghost:hover { background: #e4ff4d; }
+.m-footnote { text-align: center; font-size: .8125rem; color: var(--m-ink-2); padding-top: .5rem; }
+.m-title-row .m-icon-button { border-radius: 4px; background: #111; color: #e4ff4d; border: 1px solid #111; box-shadow: none; }
+
+/* ═══ Account pages on the phone (Accounts, Bills, Transactions, ...) ═══ */
+@media (max-width: 63.99rem) {
+  :root .app-shell, :root .app-shell .app-shell__main {
+    --g-canvas: #fbfbf9; --g-ink: #111111; --g-line: rgb(17 17 17 / .14);
+    --g-accent: #111111; --g-accent-soft: #e4ff4d; --g-positive: #1c8a3a; --g-negative: #d92d20;
+    --g-pill: 4px; --g-row: 4px; --g-sheet: 8px;
+    --g-font: "Inter Variable", Inter, system-ui, sans-serif;
+    --g-font-display: "Instrument Serif", Georgia, serif;
+    --g-font-rounded: "Inter Variable", Inter, system-ui, sans-serif;
+  }
+  :root .app-shell { background: #fbfbf9; }
+  .app-shell::before { background: linear-gradient(#fbfbf9 70%, rgb(251 251 249 / 0)) !important; }
+  :root .app-shell .wollie-workspace-page > header h1 { font-family: "Instrument Serif", Georgia, serif !important; font-weight: 400 !important; font-size: 2.75rem !important; letter-spacing: -0.03em !important; line-height: 1 !important; }
+  :root .app-shell .wollie-workspace-page { gap: 2.25rem !important; padding-top: .75rem !important; }
+  :root .app-shell .wollie-workspace-page h2 { font: 500 .6875rem/1 "Inter Variable", Inter, sans-serif !important; letter-spacing: .1em !important; text-transform: uppercase; padding-bottom: .6rem; border-bottom: 1px solid #111; color: #111 !important; }
+  :root .app-shell .wollie-workspace-page ul > li { padding-block: 1rem; border-bottom: 1px solid rgb(17 17 17 / .14); }
+  :root .app-shell .wollie-workspace-page ul > li:last-child { border-bottom: 0; }
+  :root .app-shell .wollie-workspace-page section > div:first-child svg { display: none; }
+  :root .app-shell .wollie-workspace-page .text-zinc-500, :root .app-shell .wollie-workspace-page p.text-sm { color: rgb(17 17 17 / .62); }
+  :root .app-shell .wollie-workspace-page button, :root .app-shell .wollie-workspace-page a[class*="rounded"] { border-radius: 4px !important; }
+}
+@media (max-width: 63.99rem) {
+  :root .app-shell .wollie-workspace-page { padding-top: 1.5rem !important; }
+  :root .app-shell .wollie-workspace-page h2[class*="clamp(2.5rem"], :root .app-shell .wollie-workspace-page .text-4xl, :root .app-shell .wollie-workspace-page .tabular-nums.text-4xl { font-family: "Instrument Serif", Georgia, serif !important; font-weight: 400 !important; font-size: 4rem !important; letter-spacing: -0.03em !important; border: 0 !important; padding: 0 !important; text-transform: none !important; }
+  :root .app-shell .wollie-workspace-page p.uppercase, :root .app-shell .wollie-workspace-page p.text-sm.font-medium:has(+ .text-4xl) { font: 500 .6875rem/1 "Inter Variable", Inter, sans-serif !important; letter-spacing: .1em; text-transform: uppercase; color: rgb(17 17 17 / .62) !important; }
+}

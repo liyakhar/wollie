@@ -233,3 +233,70 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .phone .phone__title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 2.1em; letter-spacing: -0.03em; }
 .phone__row { grid-template-columns: auto 1fr !important; gap: .9em !important; }
 .phone .ds-money, .phone__money { font-size: 3.9em !important; }
+
+/* ═══ Global sweep: every page, web and mobile ═══════════════════════
+ * Re-map the older palettes (Tailwind zinc, brand-*) to Editorial Mono so
+ * pages that were never restyled follow the design system automatically.
+ */
+:root, html, html[data-accent] {
+  --color-zinc-50: #f6f6f4; --color-zinc-100: #f1f1ed; --color-zinc-200: #e0e0da; --color-zinc-300: #c9c9c2;
+  --color-zinc-400: #9a9a94; --color-zinc-500: #6b6b66; --color-zinc-600: #55554f; --color-zinc-700: #3a3a36;
+  --color-zinc-800: #222220; --color-zinc-900: #161615; --color-zinc-950: #111111;
+  --color-brand-ink: #111111; --color-brand-ink-soft: rgb(17 17 17 / .62);
+  --color-brand-blue: #111111; --color-brand-blue-deep: #111111; --color-brand-blue-light: #f1f1ed;
+  --color-brand-orange: #111111; --color-brand-orange-deep: #111111; --color-brand-orange-soft: #e4ff4d;
+  --color-brand-sage: #1c8a3a; --color-brand-focus: #111111;
+  --color-brand-cream: #fbfbf9; --color-brand-cream-deep: #f1f1ed; --color-brand-paper: #fbfbf9; --color-brand-rule: rgb(17 17 17 / .14);
+  --color-brand-on-blue: #fbfbf9; --color-brand-on-orange: #111111;
+  --radius-sm: 2px; --radius-md: 4px; --radius-lg: 4px; --radius-xl: 6px; --radius-2xl: 8px; --radius-3xl: 8px;
+  --radius-card: 4px; --radius-input: 4px; --radius-brand-sm: 4px; --radius-brand-md: 4px; --radius-brand-lg: 6px; --radius-brand-xl: 8px;
+  --radius: 4px;
+}
+:root .wollie-workspace-page { color: #111 !important; font-family: "Inter Variable", Inter, system-ui, sans-serif; }
+:root .wollie-workspace-page h1, :root .wollie-workspace-page h2, :root .wollie-workspace-page h3 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400 !important; color: #111; }
+:root .wollie-workspace-page h1 { font-size: clamp(2.6rem, 6vw, 4rem) !important; letter-spacing: -0.03em !important; line-height: 1 !important; }
+:root .wollie-workspace-page h2 { font-size: 1.5rem; letter-spacing: -0.02em; }
+:root .wollie-workspace-page > header { border-color: #111 !important; border-bottom-width: 1px; }
+:root .wollie-workspace-page > header p { color: rgb(17 17 17 / .62) !important; font-size: 1rem !important; }
+:root .wollie-workspace-page section, :root .wollie-workspace-page [data-slot="card"], :root .money-plan-section { border-radius: 4px !important; border-color: rgb(17 17 17 / .14) !important; box-shadow: none !important; background: #fbfbf9; }
+:root .wollie-workspace-page section > div:first-child, :root .money-plan-section__header { background: transparent; }
+:root .wollie-workspace-page ul.divide-y > li { border-color: rgb(17 17 17 / .14); }
+:root .wollie-workspace-page button, :root .wollie-workspace-page a[class*="rounded"], :root .wollie-workspace-page input, :root .wollie-workspace-page select, :root .wollie-workspace-page textarea { border-radius: 4px !important; }
+:root .wollie-workspace-page .bg-zinc-950, :root .wollie-workspace-page button.bg-zinc-950 { background: #111 !important; color: #fbfbf9 !important; }
+:root .wollie-workspace-page .bg-zinc-950:hover { background: #e4ff4d !important; color: #111 !important; }
+:root .wollie-workspace-page input:focus, :root .wollie-workspace-page select:focus, :root .wollie-workspace-page textarea:focus { outline: 0; border-color: #111; box-shadow: 0 0 0 3px #e4ff4d; }
+:root .wollie-workspace-page .rounded-full { border-radius: 4px !important; }
+/* Focus rings everywhere: ink with a neon halo */
+:focus-visible { outline: 2px solid #111; outline-offset: 2px; box-shadow: 0 0 0 4px #e4ff4d; }
+/* Public pages (about, pricing, legal) */
+.press-page h1, .press-page h2, main h1 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; letter-spacing: -0.03em; }
+
+/* Landing phone: Budgets page with a real hierarchy */
+.phone__page { display: block; }
+.phone__summary { padding: 1.1em 1.1em 1em; background: #e4ff4d; border: 1px solid #111; border-radius: 4px; box-shadow: .25em .25em 0 #111; margin-bottom: 2em; }
+.phone__sumlabel { font: 500 .62em/1 "Inter Variable", Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; opacity: .72; margin: 0 0 .7em; }
+.phone__sumnum { font: 400 3em/1 "Instrument Serif", Georgia, serif; letter-spacing: -0.03em; margin: 0 0 .5em; }
+.phone__sumnum small { font: 400 .3em "Inter Variable", Inter, sans-serif; letter-spacing: 0; opacity: .6; }
+.phone__summary .ds-bar { background: rgb(17 17 17 / .12); box-shadow: inset 0 0 0 1px #111; margin-bottom: .8em; }
+.phone__sumfoot { display: flex; justify-content: space-between; font-size: .72em; margin: 0; }
+.phone__cta { margin: 1.4em 0 0; padding: .95em; text-align: center; border: 1px solid #111; border-radius: 4px; font-size: .85em; font-weight: 600; }
+.phone__page .phone__h:first-of-type { margin-top: 0; }
+
+/* ═══ One page frame on desktop: every app and demo page ═══
+ * Same gutter, same max width, left-aligned next to the sidebar.
+ */
+@media (min-width: 64rem) {
+  :root .app-shell .app-shell__main .m-screen,
+  :root .app-shell .app-shell__main .wollie-workspace-page {
+    width: 100% !important;
+    max-width: 56rem !important;
+    margin-inline: 0 !important;
+    padding: 2.5rem 2.5rem 6rem !important;
+    min-height: 0;
+  }
+  :root .app-shell .app-shell__main .m-screen { gap: 2.25rem; }
+}
+@media (min-width: 64rem) {
+  :root .app-shell > aside.app-nav { min-height: 100vh; height: auto; align-self: stretch; }
+  :root .app-shell .app-shell__main .wollie-workspace-page h1 { font-size: 2.75rem !important; }
+}

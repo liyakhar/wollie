@@ -325,10 +325,13 @@ function PhoneHome() {
             <div className="phone__head">
               <p className="phone__title">Budgets</p>
             </div>
-            <p className="phone__total">
-              <b>€750</b> <i>left of €1,150</i>
-            </p>
-            <p className="phone__reset">Resets on payday</p>
+            <div className="phone__summary">
+              <p className="phone__sumlabel">Left this month</p>
+              <p className="phone__sumnum">€750<small> of €1,150</small></p>
+              <div className="ds-bar phone__bar"><span style={{ width: "65%" }} /></div>
+              <p className="phone__sumfoot"><span>€400 spent</span><span>Resets on payday</span></p>
+            </div>
+            <p className="phone__h">Categories</p>
             <div className="phone__rows">
               <div className="phone__row">
                 <Groceries className="phone__icon" />
@@ -359,6 +362,7 @@ function PhoneHome() {
                 </div>
               </div>
             </div>
+            <p className="phone__cta">+ Add budget</p>
           </section>
 
           <section className={pageClass(2)} aria-hidden={screen !== 2}>
