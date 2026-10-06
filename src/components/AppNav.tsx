@@ -27,7 +27,7 @@ export default function AppNav({
       <div className="app-nav__inner">
         <Link to={demo ? "/demo" : "/app"} className="app-nav__brand" aria-label="Wollie home">
           <strong>Wollie</strong>
-          <span>{demo ? "Interactive demo" : "Shared money"}</span>
+          <span>{demo ? "Sample data" : "Shared money"}</span>
         </Link>
 
         {!locked && demo ? (

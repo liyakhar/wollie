@@ -161,3 +161,5 @@ body { background-color: #fbfbf9; }
   :root .app-shell .wollie-workspace-page h2[class*="clamp(2.5rem"], :root .app-shell .wollie-workspace-page .text-4xl, :root .app-shell .wollie-workspace-page .tabular-nums.text-4xl { font-family: "Instrument Serif", Georgia, serif !important; font-weight: 400 !important; font-size: 4rem !important; letter-spacing: -0.03em !important; border: 0 !important; padding: 0 !important; text-transform: none !important; }
   :root .app-shell .wollie-workspace-page p.uppercase, :root .app-shell .wollie-workspace-page p.text-sm.font-medium:has(+ .text-4xl) { font: 500 .6875rem/1 "Inter Variable", Inter, sans-serif !important; letter-spacing: .1em; text-transform: uppercase; color: rgb(17 17 17 / .62) !important; }
 }
+.m-summary--card .m-summary__number { margin-bottom: 1.25rem; }
+.m-row__amount { font-family: "Inter Variable", Inter, sans-serif; }

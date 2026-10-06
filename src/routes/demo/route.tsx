@@ -4,7 +4,7 @@ import { AppShell } from "#/components/AppShell";
 export const Route = createFileRoute("/demo")({
   head: () => ({
     meta: [
-      { title: "Interactive demo · Wollie" },
+      { title: "Try Wollie with sample data" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
