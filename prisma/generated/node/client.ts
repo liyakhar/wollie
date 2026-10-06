@@ -201,3 +201,13 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type Follow = Prisma.FollowModel
+/**
+ * Model PushDevice
+ * A phone that agreed to alerts. Removing the row turns alerts off for that device.
+ */
+export type PushDevice = Prisma.PushDeviceModel
+/**
+ * Model PushLog
+ * One row per alert already sent, so the same alert never goes out twice.
+ */
+export type PushLog = Prisma.PushLogModel

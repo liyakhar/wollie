@@ -5,12 +5,14 @@ import { buildCyclePlan, payCycle, detectPayday, type Goal } from '#/lib/money-c
 import { toMoneyOverview } from '#/lib/money-overview'
 import { getDb } from '#/server/db-access.server'
 import { ensureDevSampleData } from '#/server/dev-sample.server'
+import { ensurePushScheduler } from '#/server/push.server'
 import { loadMoneySnapshot } from '#/server/finance'
 import { requireFinanceHousehold } from '#/server/household-access.server'
 
 async function requireHousehold() {
   const context = await requireFinanceHousehold()
   await ensureDevSampleData(context.userId, context.workspaceId)
+  ensurePushScheduler()
   setResponseHeader('Cache-Control', 'private, no-store, max-age=0')
   return context
 }
@@ -40,13 +42,12 @@ async function currentCycleStart(workspaceId: string, paydayDay: number | null) 
 
 /* ------------------------------ Read ------------------------------ */
 
-export const getMoneyOverview = createServerFn({ method: 'GET' }).handler(async () => {
-  const context = await requireHousehold()
+export async function buildMoneyOverview(workspaceId: string) {
   const prisma = await getDb()
   const [snapshot, workspace] = await Promise.all([
-    loadMoneySnapshot(context.workspaceId),
+    loadMoneySnapshot(workspaceId),
     prisma.budgetWorkspace.findUnique({
-      where: { id: context.workspaceId },
+      where: { id: workspaceId },
       select: {
         paydayDay: true,
         categories: { select: { name: true } },
@@ -112,6 +113,11 @@ export const getMoneyOverview = createServerFn({ method: 'GET' }).handler(async 
     transactions: snapshot.transactions,
     categories,
   })
+}
+
+export const getMoneyOverview = createServerFn({ method: 'GET' }).handler(async () => {
+  const context = await requireHousehold()
+  return buildMoneyOverview(context.workspaceId)
 })
 
 /* ------------------------------ Budgets ------------------------------ */

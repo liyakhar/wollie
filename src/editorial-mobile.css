@@ -310,3 +310,9 @@ body { background-color: #fbfbf9; }
 .m-step:active { transform: translate(2px, 2px); }
 /* Loading */
 .app-loading { display: grid; place-items: center; min-height: 60vh; font: 500 .75rem "Inter Variable", Inter, sans-serif !important; letter-spacing: .1em !important; text-transform: uppercase; color: rgb(17 17 17 / .45); }
+
+/* Alerts opt-in */
+.m-alertcard { display: grid; gap: .75rem; padding: 1.25rem; border: 1px solid #111; border-radius: 4px; background: #fbfbf9; }
+.m-alertcard__title { font: 400 1.6rem "Instrument Serif", Georgia, serif; letter-spacing: -0.02em; margin: 0; }
+.m-alertcard__body { color: var(--m-ink-2); font-size: .9375rem; line-height: 1.45; margin: 0; }
+.m-alertcard .m-button { justify-self: start; }

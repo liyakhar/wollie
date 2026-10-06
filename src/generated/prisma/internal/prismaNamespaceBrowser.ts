@@ -82,7 +82,9 @@ export const ModelName = {
   Like: 'Like',
   Comment: 'Comment',
   Notification: 'Notification',
-  Follow: 'Follow'
+  Follow: 'Follow',
+  PushDevice: 'PushDevice',
+  PushLog: 'PushLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -555,6 +557,28 @@ export const FollowScalarFieldEnum = {
 } as const
 
 export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof FollowScalarFieldEnum]
+
+
+export const PushDeviceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  platform: 'platform',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PushDeviceScalarFieldEnum = (typeof PushDeviceScalarFieldEnum)[keyof typeof PushDeviceScalarFieldEnum]
+
+
+export const PushLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  key: 'key',
+  sentAt: 'sentAt'
+} as const
+
+export type PushLogScalarFieldEnum = (typeof PushLogScalarFieldEnum)[keyof typeof PushLogScalarFieldEnum]
 
 
 export const SortOrder = {

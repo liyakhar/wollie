@@ -54,6 +54,7 @@ import { Route as AppBillingRouteImport } from './routes/app/billing'
 import { Route as AppAccountsRouteImport } from './routes/app/accounts'
 import { Route as AppReportsHouseholdRouteImport } from './routes/app/reports/household'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe/webhook'
+import { Route as ApiPushRunRouteImport } from './routes/api/push/run'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as PPostIdEditRouteRouteImport } from './routes/p/$postId/edit/route'
 import { Route as PPostIdEditIndexRouteImport } from './routes/p/$postId/edit/index'
@@ -283,6 +284,11 @@ const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
   path: '/api/stripe/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPushRunRoute = ApiPushRunRouteImport.update({
+  id: '/api/push/run',
+  path: '/api/push/run',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -345,6 +351,7 @@ export interface FileRoutesByFullPath {
   '/welcome/': typeof WelcomeIndexRoute
   '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/push/run': typeof ApiPushRunRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/app/reports/household': typeof AppReportsHouseholdRoute
   '/p/$postId/edit/': typeof PPostIdEditIndexRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsIndexRoute
   '/welcome': typeof WelcomeIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/push/run': typeof ApiPushRunRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/app/reports/household': typeof AppReportsHouseholdRoute
   '/p/$postId/edit': typeof PPostIdEditIndexRoute
@@ -437,6 +445,7 @@ export interface FileRoutesById {
   '/welcome/': typeof WelcomeIndexRoute
   '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/push/run': typeof ApiPushRunRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/app/reports/household': typeof AppReportsHouseholdRoute
   '/p/$postId/edit/': typeof PPostIdEditIndexRoute
@@ -489,6 +498,7 @@ export interface FileRouteTypes {
     | '/welcome/'
     | '/p/$postId/edit'
     | '/api/auth/$'
+    | '/api/push/run'
     | '/api/stripe/webhook'
     | '/app/reports/household'
     | '/p/$postId/edit/'
@@ -530,6 +540,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/welcome'
     | '/api/auth/$'
+    | '/api/push/run'
     | '/api/stripe/webhook'
     | '/app/reports/household'
     | '/p/$postId/edit'
@@ -580,6 +591,7 @@ export interface FileRouteTypes {
     | '/welcome/'
     | '/p/$postId/edit'
     | '/api/auth/$'
+    | '/api/push/run'
     | '/api/stripe/webhook'
     | '/app/reports/household'
     | '/p/$postId/edit/'
@@ -609,6 +621,7 @@ export interface RootRouteChildren {
   InviteTokenRoute: typeof InviteTokenRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiPushRunRoute: typeof ApiPushRunRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
@@ -929,6 +942,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiStripeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/push/run': {
+      id: '/api/push/run'
+      path: '/api/push/run'
+      fullPath: '/api/push/run'
+      preLoaderRoute: typeof ApiPushRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -1140,6 +1160,7 @@ const rootRouteChildren: RootRouteChildren = {
   InviteTokenRoute: InviteTokenRoute,
   BlogIndexRoute: BlogIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiPushRunRoute: ApiPushRunRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport

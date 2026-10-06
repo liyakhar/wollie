@@ -415,7 +415,9 @@ export const ModelName = {
   Like: 'Like',
   Comment: 'Comment',
   Notification: 'Notification',
-  Follow: 'Follow'
+  Follow: 'Follow',
+  PushDevice: 'PushDevice',
+  PushLog: 'PushLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -431,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "billingSubscription" | "budgetWorkspace" | "bankConnection" | "financialAccount" | "workspaceMember" | "householdInvitation" | "accountOwnership" | "transactionCategory" | "merchant" | "financeTransaction" | "budgetMonth" | "budgetAllocation" | "categoryBudget" | "savingsGoal" | "goalContribution" | "budgetBucket" | "budgetBucketCategory" | "budgetAllocationRule" | "recurringPayment" | "syncRun" | "moneyInsight" | "categoryRule" | "session" | "account" | "verification" | "profile" | "post" | "like" | "comment" | "notification" | "follow"
+    modelProps: "user" | "billingSubscription" | "budgetWorkspace" | "bankConnection" | "financialAccount" | "workspaceMember" | "householdInvitation" | "accountOwnership" | "transactionCategory" | "merchant" | "financeTransaction" | "budgetMonth" | "budgetAllocation" | "categoryBudget" | "savingsGoal" | "goalContribution" | "budgetBucket" | "budgetBucketCategory" | "budgetAllocationRule" | "recurringPayment" | "syncRun" | "moneyInsight" | "categoryRule" | "session" | "account" | "verification" | "profile" | "post" | "like" | "comment" | "notification" | "follow" | "pushDevice" | "pushLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2803,6 +2805,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PushDevice: {
+      payload: Prisma.$PushDevicePayload<ExtArgs>
+      fields: Prisma.PushDeviceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PushDeviceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PushDeviceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload>
+        }
+        findFirst: {
+          args: Prisma.PushDeviceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PushDeviceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload>
+        }
+        findMany: {
+          args: Prisma.PushDeviceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload>[]
+        }
+        create: {
+          args: Prisma.PushDeviceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload>
+        }
+        createMany: {
+          args: Prisma.PushDeviceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PushDeviceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload>[]
+        }
+        delete: {
+          args: Prisma.PushDeviceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload>
+        }
+        update: {
+          args: Prisma.PushDeviceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload>
+        }
+        deleteMany: {
+          args: Prisma.PushDeviceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PushDeviceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PushDeviceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload>[]
+        }
+        upsert: {
+          args: Prisma.PushDeviceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushDevicePayload>
+        }
+        aggregate: {
+          args: Prisma.PushDeviceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePushDevice>
+        }
+        groupBy: {
+          args: Prisma.PushDeviceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PushDeviceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PushDeviceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PushDeviceCountAggregateOutputType> | number
+        }
+      }
+    }
+    PushLog: {
+      payload: Prisma.$PushLogPayload<ExtArgs>
+      fields: Prisma.PushLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PushLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PushLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload>
+        }
+        findFirst: {
+          args: Prisma.PushLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PushLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload>
+        }
+        findMany: {
+          args: Prisma.PushLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload>[]
+        }
+        create: {
+          args: Prisma.PushLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload>
+        }
+        createMany: {
+          args: Prisma.PushLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PushLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload>[]
+        }
+        delete: {
+          args: Prisma.PushLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload>
+        }
+        update: {
+          args: Prisma.PushLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.PushLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PushLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PushLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.PushLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushLogPayload>
+        }
+        aggregate: {
+          args: Prisma.PushLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePushLog>
+        }
+        groupBy: {
+          args: Prisma.PushLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PushLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PushLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PushLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3298,6 +3448,28 @@ export const FollowScalarFieldEnum = {
 export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof FollowScalarFieldEnum]
 
 
+export const PushDeviceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  platform: 'platform',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PushDeviceScalarFieldEnum = (typeof PushDeviceScalarFieldEnum)[keyof typeof PushDeviceScalarFieldEnum]
+
+
+export const PushLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  key: 'key',
+  sentAt: 'sentAt'
+} as const
+
+export type PushLogScalarFieldEnum = (typeof PushLogScalarFieldEnum)[keyof typeof PushLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3728,6 +3900,8 @@ export type GlobalOmitConfig = {
   comment?: Prisma.CommentOmit
   notification?: Prisma.NotificationOmit
   follow?: Prisma.FollowOmit
+  pushDevice?: Prisma.PushDeviceOmit
+  pushLog?: Prisma.PushLogOmit
 }
 
 /* Types for Logging */

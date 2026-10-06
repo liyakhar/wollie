@@ -7,6 +7,7 @@ import { saveBudget, setPayday } from '#/server/money'
 import { BudgetRow, paydayLabel } from './HomeScreen'
 import { categoryIcon, categoryLabel } from './icons'
 import { Sheet } from './Sheet'
+import { AlertsCard } from './AlertsCard'
 
 type Editing =
   | { mode: 'add'; category: string; limit: string }
@@ -81,6 +82,8 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
               </span>
             </p>
           )}
+
+          <AlertsCard />
 
           <section className="m-section">
           <div className="m-section__head m-section__head--static"><h2>Categories</h2><span className="m-section__count">{overview.budgets.length}</span></div>

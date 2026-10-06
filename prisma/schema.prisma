@@ -78,6 +78,8 @@ model User {
   householdInvitationsCreated HouseholdInvitation[] @relation("HouseholdInvitationCreator")
   bankConnections             BankConnection[]
   billingSubscription         BillingSubscription?
+  pushDevices                 PushDevice[]
+  pushLogs                    PushLog[]
 
   @@unique([email])
   @@map("user")
@@ -703,4 +705,28 @@ model Follow {
   @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
+}
+
+/// A phone that agreed to alerts. Removing the row turns alerts off for that device.
+model PushDevice {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  platform  String   @default("ios")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+/// One row per alert already sent, so the same alert never goes out twice.
+model PushLog {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key    String
+  sentAt DateTime @default(now())
+
+  @@unique([userId, key])
 }
