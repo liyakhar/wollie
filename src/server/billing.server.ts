@@ -1,3 +1,4 @@
+import { devLoginEnabled } from '#/server/dev-login'
 import type Stripe from 'stripe'
 import { getSiteUrl } from '#/lib/site'
 import { getDb } from '#/server/db-access.server'
@@ -67,7 +68,7 @@ export async function loadBillingAccess(userId: string): Promise<BillingAccess> 
   const subscribed = ACCESS_STATUSES.has(status)
   const founder = isFounderEmail(user.email)
   const isDevelopmentAccount =
-    process.env.NODE_ENV === 'development' && user.email === 'dev@wollie.local'
+    devLoginEnabled() && user.email === 'dev@wollie.local'
   const billingMode = getBillingMode()
 
   const state = isDevelopmentAccount

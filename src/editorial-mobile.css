@@ -283,3 +283,12 @@ body { background-color: #fbfbf9; }
 .m-intro__skip, .m-intro .m-link { color: #111 !important; font-weight: 500; }
 .m-intro__dots span, .m-intro__track span { border-radius: 2px !important; }
 .m-intro__wordmark * { color: #111 !important; background: none !important; }
+
+/* Plan chooser on first run */
+.m-plan__card { border: 1px solid var(--m-line); border-radius: 4px !important; background: #fbfbf9 !important; box-shadow: none !important; padding: 1.5rem !important; }
+.m-plan__card--free { background: #e4ff4d !important; border-color: #111; box-shadow: 4px 4px 0 #111 !important; }
+.m-plan__head h2, .m-plan__head h3, .m-plan__head strong { font: 400 1.9rem "Instrument Serif", Georgia, serif !important; letter-spacing: -0.02em; }
+.m-plan__card li::marker { color: #111; }
+.m-plan__card li::before, .m-plan__card [class*="dot"] { background: #111 !important; }
+.m-plan__lede { color: var(--m-ink-2); }
+.m-error { color: #d92d20; border: 1px solid #d92d20; border-left-width: 4px; border-radius: 4px; padding: .75rem 1rem; }

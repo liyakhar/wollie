@@ -11,6 +11,7 @@ import { buildPageMeta } from '#/lib/seo'
 import { PRIVACY_VERSION, TERMS_VERSION } from '#/lib/legal-versions'
 import { site } from '#/lib/site'
 import { getTransactionalEmailReadiness } from '#/server/email-readiness'
+import { devLoginEnabled, devLoginNeedsCode, getDevLoginPassword } from '#/server/dev-login'
 
 const loginMeta = buildPageMeta({
   path: '/login',
@@ -32,7 +33,6 @@ function safeAppRedirect(value: unknown) {
 
 const DEV_LOGIN = {
   email: 'dev@wollie.local',
-  password: 'wollie-dev-password',
   name: 'Wollie Dev',
   termsAcceptedAt: new Date(),
   termsVersion: TERMS_VERSION,
@@ -52,7 +52,8 @@ export const Route = createFileRoute('/login/')({
     links: loginMeta.links,
   }),
   loader: async () => ({
-    isDev: process.env.NODE_ENV === 'development',
+    isDev: devLoginEnabled(),
+    devNeedsCode: devLoginNeedsCode(),
     emailReadiness: await getTransactionalEmailReadiness(),
   }),
   validateSearch: (search: Record<string, unknown>): LoginSearch => ({
@@ -102,7 +103,7 @@ function LoginPage() {
   const router = useRouter()
   const { redirect, signup } = useSearch({ from: '/login/' })
   const redirectTo = redirect ?? '/app'
-  const { isDev, emailReadiness } = Route.useLoaderData()
+  const { isDev, devNeedsCode, emailReadiness } = Route.useLoaderData()
   const { data: session, isPending } = authClient.useSession()
   const [mode, setMode] = useState<AuthMode>(
     signup === '1' ? 'signup' : 'signin',
@@ -115,6 +116,8 @@ function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [devLoading, setDevLoading] = useState(false)
+  const [devOpen, setDevOpen] = useState(false)
+  const [devCode, setDevCode] = useState('')
   const [acceptedLegal, setAcceptedLegal] = useState(false)
 
   useEffect(() => {
@@ -233,13 +236,14 @@ function LoginPage() {
     setDevLoading(true)
 
     try {
+      const { password } = await getDevLoginPassword({ data: { code: devCode } })
       let result = await authClient.signIn.email({
         email: DEV_LOGIN.email,
-        password: DEV_LOGIN.password,
+        password,
       })
 
       if (result.error) {
-        const signup = await authClient.signUp.email(DEV_LOGIN)
+        const signup = await authClient.signUp.email({ ...DEV_LOGIN, password })
         if (signup.error) {
           setError(signup.error.message || 'Dev sign in failed')
           return
@@ -247,7 +251,7 @@ function LoginPage() {
 
         result = await authClient.signIn.email({
           email: DEV_LOGIN.email,
-          password: DEV_LOGIN.password,
+          password,
         })
       }
 
@@ -257,8 +261,8 @@ function LoginPage() {
       }
 
       void router.navigate({ to: '/app' })
-    } catch {
-      setError('Dev sign in failed. Try again.')
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Dev sign in failed. Try again.')
     } finally {
       setDevLoading(false)
     }
@@ -508,14 +512,34 @@ function LoginPage() {
             {isSignUp ? 'Already have an account? Sign in' : 'Create account'}
           </button>
           {isDev && !isSignUp && (
-            <button
-              type="button"
-              className="login-switch"
-              disabled={devLoading || loading}
-              onClick={() => void handleDevSignIn()}
-            >
-              {devLoading ? 'Opening dev account...' : 'Dev sign in'}
-            </button>
+            <>
+              {devNeedsCode && devOpen && (
+                <input
+                  className="app-form__input"
+                  type="password"
+                  inputMode="text"
+                  autoComplete="off"
+                  placeholder="Dev access code"
+                  aria-label="Dev access code"
+                  value={devCode}
+                  onChange={(event) => setDevCode(event.target.value)}
+                />
+              )}
+              <button
+                type="button"
+                className="login-switch"
+                disabled={devLoading || loading}
+                onClick={() => {
+                  if (devNeedsCode && !devOpen) {
+                    setDevOpen(true)
+                    return
+                  }
+                  void handleDevSignIn()
+                }}
+              >
+                {devLoading ? 'Opening dev account...' : 'Dev sign in'}
+              </button>
+            </>
           )}
         </footer>
       </div>

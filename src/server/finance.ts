@@ -1,3 +1,4 @@
+import { devLoginEnabled } from '#/server/dev-login'
 import { createServerFn, createServerOnlyFn } from '@tanstack/react-start'
 import { setResponseHeader } from '@tanstack/react-start/server'
 import {
@@ -619,7 +620,7 @@ async function getDevFinanceDashboard(workspaceId: string) {
 }
 
 function isDevUser(email?: string | null) {
-  return process.env.NODE_ENV === 'development' && email === 'dev@wollie.local'
+  return devLoginEnabled() && email === 'dev@wollie.local'
 }
 
 async function loadFinancePlanningData(transactions: FinanceTransaction[], workspaceId: string) {

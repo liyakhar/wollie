@@ -4,11 +4,13 @@ import { FINANCE_CATEGORIES } from '#/lib/finance-demo'
 import { buildCyclePlan, payCycle, detectPayday, type Goal } from '#/lib/money-cycle'
 import { toMoneyOverview } from '#/lib/money-overview'
 import { getDb } from '#/server/db-access.server'
+import { ensureDevSampleData } from '#/server/dev-sample.server'
 import { loadMoneySnapshot } from '#/server/finance'
 import { requireFinanceHousehold } from '#/server/household-access.server'
 
 async function requireHousehold() {
   const context = await requireFinanceHousehold()
+  await ensureDevSampleData(context.userId, context.workspaceId)
   setResponseHeader('Cache-Control', 'private, no-store, max-age=0')
   return context
 }
