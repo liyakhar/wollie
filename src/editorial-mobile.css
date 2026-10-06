@@ -163,3 +163,88 @@ body { background-color: #fbfbf9; }
 }
 .m-summary--card .m-summary__number { margin-bottom: 1.25rem; }
 .m-row__amount { font-family: "Inter Variable", Inter, sans-serif; }
+
+/* ═══ QA pass 1 ═══ */
+/* Serif has one weight: never let headings fake a bold */
+.m-screen h1, .m-screen h2, .m-screen h3, .m-sheet h2, .m-empty h2, .m-connect h1, .m-connect h2, .m-intro h1 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400 !important; letter-spacing: -0.02em; }
+.m-empty h2, .m-connect h2, .m-connect h1 { font-size: 2rem; line-height: 1.05; }
+/* Space under the status strip */
+.m-screen { padding-top: calc(1.25rem + env(safe-area-inset-top)); }
+/* Tab bar stays a pill */
+@media (max-width: 63.99rem) {
+  :root .app-shell .app-mobile-nav, :root .app-shell .app-mobile-nav__indicator, :root .app-shell .app-mobile-nav__item { border-radius: 9999px !important; }
+}
+/* Empty states: quiet panel with a hairline, not a dashed box */
+.m-empty { border: 1px solid var(--m-line); border-radius: 4px; padding: 1.75rem 1.5rem; display: grid; gap: .9rem; background: transparent; }
+.m-empty p { color: var(--m-ink-2); line-height: 1.5; }
+.m-empty .m-button { justify-self: start; }
+/* Groups (profile, settings): flat hairline lists */
+.m-group { background: transparent !important; box-shadow: none !important; border: 0 !important; border-radius: 0 !important; padding: 0 !important; }
+.m-group > h2 { font: 500 .6875rem/1 "Inter Variable", Inter, sans-serif !important; letter-spacing: .1em; text-transform: uppercase; color: #111 !important; padding: 0 0 .6rem !important; border-bottom: 1px solid #111; margin: 0 !important; }
+.m-group__label { font: 500 1rem "Inter Variable", Inter, sans-serif; color: #111; text-transform: none; letter-spacing: 0; border: 0; padding: 0; }
+.m-group__value { color: var(--m-ink-2); }
+.m-group__row { background: transparent !important; border-radius: 0 !important; border-bottom: 1px solid var(--m-line); min-height: 3.5rem; padding-inline: 0 !important; }
+.m-group__row:last-child { border-bottom: 0; }
+/* Share / household identity */
+.m-identity { background: #f1f1ed !important; border: 1px solid var(--m-line); border-radius: 4px !important; padding: 1.25rem !important; }
+.m-identity__avatar, .m-avatar { border-radius: 4px !important; background: #e4ff4d; border: 1px solid #111; color: #111; width: 2.75rem; height: 2.75rem; display: inline-grid; place-items: center; font-family: "Instrument Serif", Georgia, serif; font-size: 1.25rem; }
+.m-identity { display: grid; gap: 1rem; }
+.m-identity > :first-child { display: flex; gap: .5rem; }
+.m-identity__avatar + .m-identity__avatar, .m-avatar + .m-avatar { margin-left: 0 !important; }
+.m-button[disabled], .m-button:disabled { background: #e4e4df; color: rgb(17 17 17 / .4); border-color: transparent; }
+
+.m-identity { border-radius: 4px !important; }
+.m-share-hero { background: #f1f1ed !important; border: 1px solid var(--m-line); border-radius: 4px !important; box-shadow: none !important; padding: 1.5rem !important; display: grid; gap: 1.25rem; }
+.m-share-hero__faces { display: flex; gap: .6rem; }
+.m-avatar--add { background: transparent; border-style: dashed; }
+.m-avatar--small { width: 2.25rem; height: 2.25rem; font-size: 1rem; }
+.m-identity { background: #e4ff4d !important; border-color: #111 !important; box-shadow: 4px 4px 0 #111; }
+.m-identity__avatar { background: #fbfbf9; }
+.m-text-button { color: #111; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ═══ QA pass 2 ═══ */
+.m-screen .m-section__head h2, .m-screen .m-group > h2 { font: 500 .6875rem/1 "Inter Variable", Inter, sans-serif !important; letter-spacing: .1em !important; text-transform: uppercase; color: #111; }
+.m-group ul { background: transparent !important; border-radius: 0 !important; overflow: visible; }
+.m-group li + li { border-top: 1px solid var(--m-line); }
+.m-group__row { padding: 0 !important; min-height: 3.5rem; }
+@media (max-width: 63.99rem) {
+  /* label style only for section headings inside cards, never the page's lead statement */
+  :root .app-shell .wollie-workspace-page > header + section h2 { font: 400 1.9rem/1.05 "Instrument Serif", Georgia, serif !important; letter-spacing: -0.02em !important; text-transform: none !important; border: 0 !important; padding: 0 !important; }
+  :root .app-shell .wollie-workspace-page > section:first-of-type > h2:first-child, :root .app-shell .wollie-workspace-page h2.text-lg { font: 400 1.9rem/1.05 "Instrument Serif", Georgia, serif !important; text-transform: none !important; border: 0 !important; padding: 0 !important; letter-spacing: -0.02em !important; }
+}
+
+/* ═══ QA pass 3: cards on account pages (billing, insights, money plan, data) ═══ */
+@media (max-width: 63.99rem) {
+  :root .app-shell .wollie-workspace-page [data-slot="card"],
+  :root .app-shell .wollie-workspace-page .rounded-lg.border {
+    border: 1px solid rgb(17 17 17 / .14) !important; border-radius: 4px !important;
+    background: #fbfbf9 !important; padding: 1.5rem !important; gap: 1.25rem !important; overflow: hidden !important;
+  }
+  :root .app-shell .wollie-workspace-page [data-slot="card-content"],
+  :root .app-shell .wollie-workspace-page [data-slot="card-header"] { padding: 0 !important; }
+  :root .app-shell .wollie-workspace-page [data-slot="card"] h2,
+  :root .app-shell .wollie-workspace-page [data-slot="card-title"],
+  :root .app-shell .wollie-workspace-page [data-slot="card"] h3 {
+    font: 400 1.9rem/1.05 "Instrument Serif", Georgia, serif !important; letter-spacing: -0.02em !important;
+    text-transform: none !important; border: 0 !important; padding: 0 !important; color: #111 !important;
+  }
+  :root .app-shell .wollie-workspace-page [data-slot="card"] p { color: rgb(17 17 17 / .62); line-height: 1.5; }
+  :root .app-shell .wollie-workspace-page [data-slot="badge"] { background: #e4ff4d !important; color: #111 !important; border: 1px solid #111 !important; border-radius: 4px !important; font-weight: 500; margin-bottom: .25rem; }
+  :root .app-shell .wollie-workspace-page [data-slot="card"] .grid > p { display: flex; gap: .6rem; align-items: center; padding: .6rem 0; border-bottom: 1px solid rgb(17 17 17 / .14); color: #111; }
+  :root .app-shell .wollie-workspace-page [data-slot="card"] .grid > p:last-child { border-bottom: 0; }
+  :root .app-shell .wollie-workspace-page [data-slot="button"], :root .app-shell .wollie-workspace-page a[data-slot="button"] { border-radius: 4px !important; min-height: 3rem; font-weight: 600; }
+  :root .app-shell .wollie-workspace-page [data-slot="button"][class*="outline"], :root .app-shell .wollie-workspace-page .border-zinc-300 { background: transparent; border: 1px solid #111; color: #111; }
+  :root .app-shell .wollie-workspace-page label, :root .app-shell .wollie-workspace-page [data-slot="label"] { font: 500 .8125rem "Inter Variable", Inter, sans-serif !important; letter-spacing: 0 !important; color: #111 !important; }
+  :root .app-shell .wollie-workspace-page input, :root .app-shell .wollie-workspace-page [data-slot="input"] { background: #fbfbf9; border: 1px solid rgb(17 17 17 / .22); min-height: 3rem; font-size: 1rem; letter-spacing: 0; }
+  :root .app-shell .wollie-workspace-page { padding-bottom: 8rem !important; gap: 1.75rem !important; }
+  :root .app-shell .wollie-workspace-page > header { padding-top: .5rem; }
+}
+
+/* QA pass 4: money plan and sheets */
+@media (max-width: 63.99rem) {
+  :root .app-shell .wollie-workspace-page section > div:first-child svg { display: inline-block !important; }
+  :root .app-shell .wollie-workspace-page .wollie-sheet { border: 1px solid rgb(17 17 17 / .14) !important; border-radius: 4px !important; background: #fbfbf9 !important; padding: 1.5rem !important; gap: 1.25rem !important; }
+  :root .app-shell .wollie-workspace-page .wollie-sheet h2 { font: 400 1.9rem/1.05 "Instrument Serif", Georgia, serif !important; letter-spacing: -0.02em !important; text-transform: none !important; border: 0 !important; padding: 0 !important; color: #111 !important; margin-top: .9rem; }
+  :root .app-shell .wollie-workspace-page .wollie-sheet span.size-11 { background: #e4ff4d !important; border: 1px solid #111 !important; border-radius: 4px !important; color: #111 !important; }
+  :root .app-shell .wollie-workspace-page .wollie-sheet p { color: rgb(17 17 17 / .62); }
+}
