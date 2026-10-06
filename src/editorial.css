@@ -356,3 +356,29 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 @media (min-width: 48rem) { .landing-story__item { grid-template-columns: 5rem minmax(0, 1fr) 22rem; } .landing-story__frame { max-width: 22rem !important; } }
 /* Transparent artwork: no blend trick needed, so animation never flashes a box */
 .landing-story__frame img { mix-blend-mode: normal !important; }
+
+/* ═══ Auth pages (sign in, sign up, reset): web and phone ═══ */
+:root .auth-page, :root .auth-page--split { background: #fbfbf9 !important; color: #111 !important; font-family: "Inter Variable", Inter, sans-serif !important; }
+:root .auth-page .auth-page__brand { font-family: "Instrument Serif", Georgia, serif !important; font-weight: 400 !important; font-size: 2rem !important; letter-spacing: -0.02em !important; color: #111 !important; text-decoration: none; }
+:root .auth-page .auth-page__brand::after { content: ""; display: inline-block; width: .5rem; height: .5rem; border-radius: 50%; background: #e4ff4d !important; border: 1px solid #111; margin-left: .2rem; vertical-align: baseline; }
+:root .auth-page .app-page__title, :root .auth-page h1 { font-family: "Instrument Serif", Georgia, serif !important; font-weight: 400 !important; font-size: clamp(2.8rem, 9vw, 4rem) !important; letter-spacing: -0.03em !important; line-height: 1 !important; color: #111 !important; }
+:root .auth-page .auth-page__intro, :root .auth-page .app-page__lede { color: rgb(17 17 17 / .62) !important; font-size: 1.0625rem !important; }
+:root .auth-page .app-form__label, :root .auth-page label { font: 500 .8125rem "Inter Variable", Inter, sans-serif !important; letter-spacing: 0 !important; text-transform: none !important; color: #111 !important; }
+:root .auth-page .app-form__input, :root .auth-page input:not([type="checkbox"]) { border-radius: 4px !important; border: 1px solid rgb(17 17 17 / .22) !important; background: #fbfbf9 !important; min-height: 3.25rem; font-size: 1rem !important; box-shadow: none !important; color: #111 !important; }
+:root .auth-page .app-form__input:focus, :root .auth-page input:focus { border-color: #111 !important; box-shadow: 0 0 0 3px #e4ff4d !important; outline: 0; }
+:root .auth-page .btn, :root .auth-page button[type="submit"] { border-radius: 4px !important; background: #111 !important; color: #fbfbf9 !important; border: 1px solid #111 !important; min-height: 3.25rem; font: 600 1rem "Inter Variable", Inter, sans-serif !important; letter-spacing: 0 !important; box-shadow: none !important; }
+:root .auth-page .btn:hover, :root .auth-page button[type="submit"]:hover { background: #e4ff4d !important; color: #111 !important; }
+:root .auth-page a:not(.auth-page__brand), :root .auth-page .login-switch { color: #111 !important; font-weight: 500 !important; text-decoration: underline !important; text-underline-offset: 3px; font-size: .9375rem !important; }
+:root .auth-page .login-switch, :root .auth-page a:not(.auth-page__brand) { background: none !important; border: 0 !important; }
+:root .auth-page [role="alert"], :root .auth-page .app-form__error { color: #d92d20 !important; border: 1px solid #d92d20; border-left-width: 4px; border-radius: 4px; padding: .75rem 1rem; background: #fbfbf9; }
+/* the right-hand panel: neon, serif statement, floating art */
+.auth-visual { background: #e4ff4d !important; border-left: 1px solid #111 !important; display: grid; place-items: center; }
+.auth-visual__inner { display: grid; gap: 1.5rem; padding: 3rem; max-width: 34rem; position: relative; }
+.auth-visual__kicker { font: 500 .75rem "Inter Variable", Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #111; margin: 0; }
+.auth-visual__statement { font: 400 clamp(3rem, 5vw, 4.75rem)/.98 "Instrument Serif", Georgia, serif; letter-spacing: -0.035em; color: #111; margin: 0; }
+.auth-visual__statement em { font-style: italic; text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: .1em; }
+.auth-visual__art { width: min(100%, 22rem); height: auto; justify-self: end; mix-blend-mode: multiply; animation: ill-float 7s ease-in-out infinite; }
+@media (max-width: 63.99rem) { .auth-visual { display: none !important; } }
+@media (prefers-reduced-motion: reduce) { .auth-visual__art { animation: none; } }
+:root .auth-page .login-forgot, :root .auth-page a[href*="reset"], :root .auth-page .auth-page__forgot, :root .auth-page .app-form a { color: #111 !important; font-weight: 500 !important; }
+:root .auth-page label a { font-size: inherit !important; }

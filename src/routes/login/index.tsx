@@ -67,20 +67,19 @@ type AuthMode = 'signin' | 'signup' | 'forgot' | 'forgot-sent'
 function AuthVisual() {
   return (
     <aside className="auth-visual" aria-label="A shared money plan for couples">
-      <picture className="auth-visual__picture">
-        <source
-          srcSet="/brand/wollie-auth-illustration-v1.webp"
-          type="image/webp"
-        />
+      <div className="auth-visual__inner">
+        <p className="auth-visual__kicker">Wollie</p>
+        <p className="auth-visual__statement">
+          Know what you can <em>spend.</em>
+        </p>
         <img
-          className="auth-visual__image"
-          src="/brand/wollie-auth-illustration-v1.png"
-          alt="A couple bringing their accounts, everyday spending, and future goals into one plan"
-          width="1536"
-          height="1024"
-          fetchPriority="high"
+          className="auth-visual__art"
+          src="/onboarding/intro-1-clear.webp"
+          alt=""
+          width="900"
+          height="900"
         />
-      </picture>
+      </div>
     </aside>
   )
 }
