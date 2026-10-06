@@ -200,3 +200,36 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .landing-header__link ~ .ds-btn:not(.landing-header__link) { position: relative; }
 .landing-header__link + a.ds-btn:not(.landing-header__link) { margin-inline-start: .75rem; }
 .landing-header__link + a.ds-btn:not(.landing-header__link)::before { content: ""; position: absolute; left: -1.25rem; top: 50%; height: 1.25rem; width: 1px; background: rgb(17 17 17 / .14); transform: translateY(-50%); }
+
+/* ═══ App sidebar (design system: .app-sidebar) ═══ */
+@media (min-width: 64rem) {
+  :root .app-shell > aside.app-nav { background: #fbfbf9; border-right: 1px solid rgb(17 17 17 / .14); border-bottom: 0; box-shadow: none; padding-inline: 1rem; }
+  :root .app-shell .app-nav__brand, :root .app-shell .app-nav__brand strong { font-family: "Instrument Serif", Georgia, serif; }
+  :root .app-shell .app-nav__brand strong { font-weight: 400; font-size: 1.75rem; letter-spacing: -0.02em; }
+  :root .app-shell .app-nav__brand strong::after { color: #e4ff4d; text-shadow: 0 0 0 #111; -webkit-text-stroke: 1px #111; }
+  :root .app-shell .app-nav__brand span { font: 400 .8125rem "Inter Variable", Inter, sans-serif; color: rgb(17 17 17 / .55); }
+  :root .app-shell .app-nav__section-label { font: 500 .6875rem/1 "Inter Variable", Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: rgb(17 17 17 / .55); padding-bottom: .6rem; border-bottom: 1px solid #111; }
+  :root .app-shell .app-nav__tab, :root .app-shell .app-nav__account-link { border-radius: 4px; font: 500 .9rem "Inter Variable", Inter, sans-serif; color: rgb(17 17 17 / .62); }
+  :root .app-shell .app-nav__tab:hover, :root .app-shell .app-nav__account-link:hover { background: #f1f1ed; color: #111; }
+  :root .app-shell .app-nav__tab.is-active, :root .app-shell .app-nav__account-link.is-active { background: #111; color: #fbfbf9; }
+  :root .app-shell .app-nav__tab.is-active svg, :root .app-shell .app-nav__account-link.is-active svg { color: #e4ff4d; }
+  :root .app-shell .app-nav__actions { border-top: 1px solid rgb(17 17 17 / .14); }
+}
+
+/* ═══ Landing phone mock: same look as the app ═══ */
+.phone .ds-balance { background: #e4ff4d !important; background-image: none !important; border: 1px solid #111; border-radius: 4px !important; box-shadow: .25em .25em 0 #111 !important; }
+.phone .ds-balance::before, .phone .ds-balance::after { display: none !important; }
+.phone .ds-balance__label { font: 500 .62em/1 "Inter Variable", Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; opacity: .72; }
+.phone .ds-money, .phone__money { font-family: "Instrument Serif", Georgia, serif !important; font-weight: 400 !important; letter-spacing: -0.035em; }
+.phone .ds-chip { background: transparent !important; border: 1px solid #111 !important; border-radius: 4px !important; color: #111; }
+.phone .phone__avatar { border-radius: 4px; background: #e4ff4d; border: 1px solid #111; box-shadow: none; }
+.landing .phone__h { font: 500 .62em/1 "Inter Variable", Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; padding-bottom: .8em; border-bottom: 1px solid #111; margin: 2.2em 0 .4em; }
+.phone__row { padding: .7em 0; margin: 0; border-bottom: 1px solid rgb(17 17 17 / .12); align-items: center !important; }
+.phone__icon { box-sizing: content-box; width: 1.2em !important; height: 1.2em !important; padding: .5em; border: 1px solid rgb(17 17 17 / .14); border-radius: 4px; background: #f1f1ed; align-self: center !important; margin: 0 !important; }
+.phone .ds-bar { height: .45em; border-radius: 2px; background: #f1f1ed; box-shadow: inset 0 0 0 1px rgb(17 17 17 / .14); }
+.phone .ds-bar > span { background: #111 !important; border-radius: 0; }
+.phone .ds-bar.is-over > span { background: #d92d20 !important; }
+.phone__save { color: #111; background: linear-gradient(transparent 62%, #e4ff4d 62%); }
+.phone .phone__title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 2.1em; letter-spacing: -0.03em; }
+.phone__row { grid-template-columns: auto 1fr !important; gap: .9em !important; }
+.phone .ds-money, .phone__money { font-size: 3.9em !important; }
