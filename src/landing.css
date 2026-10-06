@@ -1,0 +1,427 @@
+/* Web landing page. Built from Court design-system tokens and parts. */
+
+/* The phone app never shows the landing page (see nativeFlagScript). */
+html[data-native] .landing { display: none; }
+
+.landing {
+  --lp-head: "Geist Variable", var(--ds-font-display);
+  --lp-gap: var(--ds-space-16); /* space between sections */
+  overflow-x: clip;
+}
+@media (min-width: 60rem) { .landing { --lp-gap: var(--ds-space-24); } }
+.landing p { margin: 0; }
+.landing a:not(.ds-btn):not(.ds-wordmark) { color: inherit; }
+
+/* Wordmark: 44px tall hit area, visible focus. */
+.landing .ds-wordmark { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.landing .ds-wordmark:focus-visible { outline: 2px solid var(--ds-ink); outline-offset: 2px; border-radius: 0.5rem; }
+
+/* ── Header ─────────────────────────────────────────────── */
+.landing-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgb(255 255 255 / 0.88);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
+}
+.landing-header__row { display: flex; align-items: center; justify-content: space-between; min-height: 4rem; }
+.landing-header__nav { display: flex; align-items: center; gap: var(--ds-space-1); }
+.landing-header__link { display: none; font-size: 0.9375rem; }
+@media (min-width: 40rem) { .landing-header__link { display: inline-flex; } }
+@media (max-width: 26rem) { .landing-header__start { display: none; } }
+
+/* ── Hero ───────────────────────────────────────────────── */
+.landing-hero { position: relative; }
+.landing-hero__grid {
+  display: grid;
+  gap: var(--ds-space-8);
+  align-items: center;
+  padding-block: var(--ds-space-8) var(--ds-space-12);
+}
+@media (min-width: 60rem) {
+  .landing-hero__grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    padding-block: var(--ds-space-6) var(--ds-space-8);
+  }
+}
+.landing-hero__title {
+  margin: 0 0 var(--ds-space-5);
+  font-family: var(--lp-head);
+  font-size: clamp(2.9rem, 12.2vw, 4.75rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 0.96;
+}
+@media (min-width: 60rem) { .landing-hero__title { font-size: clamp(3.75rem, 5.2vw, 5.75rem); } }
+
+/* The highlighter: lime is money you still have. */
+.landing-hero__mark {
+  padding-inline: 0.06em;
+  margin-inline: -0.06em;
+  background: linear-gradient(transparent 58%, var(--ds-lime) 58%, var(--ds-lime) 94%, transparent 94%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.landing-hero__lede {
+  max-width: 28rem;
+  font-size: var(--ds-text-lede);
+  line-height: 1.5;
+  color: var(--ds-ink-2);
+}
+.landing-hero__actions { display: flex; flex-wrap: wrap; gap: var(--ds-space-3); margin-top: var(--ds-space-6); }
+.landing .landing-hero__fine { margin-top: var(--ds-space-4); font-size: 0.875rem; color: var(--ds-ink-3); }
+@media (max-width: 29.99rem) { .landing-hero__actions .ds-btn { flex: 1 1 100%; } }
+
+/* Stage: lime disc with the tennis-ball seam, phone on top */
+.landing-hero__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 34rem;
+}
+.landing-hero__disc {
+  position: absolute;
+  z-index: 0;
+  width: min(30rem, 92vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(80% 80% at 78% 18%, var(--ds-lime-glow) 0%, transparent 62%),
+    var(--ds-lime);
+}
+.landing-hero__disc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 128% 50%, transparent 56%, rgb(255 255 255 / 0.7) 56.4%, rgb(255 255 255 / 0.7) 57.4%, transparent 57.8%);
+}
+@media (min-width: 60rem) {
+  .landing-hero__stage { min-height: 40rem; }
+  .landing-hero__disc { width: 33rem; transform: translateX(6%); }
+}
+
+/* ── Phone: real iPhone proportions (1206 x 2622) ──────── */
+.phone {
+  --u: 17.5rem;
+  position: relative;
+  z-index: 1;
+  width: var(--u);
+  margin: 0;
+  font-size: calc(var(--u) / 22.5); /* 1em is a bit under one real 16px of the app */
+  color: var(--ds-ink);
+  animation: phone-in 700ms var(--ds-ease) both;
+}
+@media (min-width: 60rem) { .phone { --u: 19.5rem; } }
+
+.phone__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  aspect-ratio: 1206 / 2622;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--ds-canvas);
+  border: 0.7em solid var(--ds-ink);
+  border-radius: 3.4em;
+  box-shadow:
+    0 0 0 0.1em rgb(11 11 12 / 0.5),
+    0 2.5em 4em -1.5em rgb(11 11 12 / 0.38);
+}
+.phone__island {
+  position: absolute;
+  z-index: 2;
+  top: 0.75em;
+  left: 50%;
+  width: 7.2em;
+  height: 2.1em;
+  border-radius: 1.05em;
+  background: var(--ds-ink);
+  transform: translateX(-50%);
+}
+.phone__status {
+  display: flex;
+  align-items: center;
+  height: 3.4em;
+  padding: 0.35em 1.9em 0;
+  font-size: 0.95em;
+  font-weight: 600;
+}
+.phone__screen { flex: 1; min-height: 0; padding: 0.5em 1.15em 0; }
+.phone__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.95em; }
+.landing .phone__title {
+  font-family: var(--ds-font-display);
+  font-size: 2.125em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.phone__avatar {
+  display: grid;
+  place-items: center;
+  width: 2.3em;
+  height: 2.3em;
+  border-radius: 50%;
+  box-shadow: 0 0.08em 0.5em rgb(11 11 12 / 0.14);
+  color: var(--ds-clay-text);
+  font-size: 0.9em;
+  font-weight: 700;
+}
+.phone .ds-balance { padding: 1.35em 1.35em 1.25em; border-radius: 1.75em; }
+.phone .ds-balance__label { font-size: 0.9375em; }
+.phone__money { margin-top: 0.15em; font-size: 3.4em; }
+.phone .ds-balance__chips { gap: 0.5em; margin-top: 0.9em; }
+.phone .ds-chip { min-height: 2em; padding: 0 0.75em; font-size: 0.8125em; }
+.landing .phone__todo { display: flex; align-items: center; gap: 0.8em; margin: 1.2em 0 0.3em; font-size: 0.95em; }
+.phone__todo .ds-dot { width: 0.6em; height: 0.6em; }
+.phone__todo svg { width: 1.1em; height: 1.1em; margin-left: auto; color: var(--ds-ink-3); }
+.landing .phone__h { margin: 2.3em 0 1em; font-size: 1.1em; font-weight: 700; letter-spacing: -0.01em; }
+.phone__row { display: grid; grid-template-columns: 1.6em 1fr; gap: 0.8em; align-items: start; margin-bottom: 1.45em; }
+.phone__icon { width: 1.4em; height: 1.4em; margin-top: 0.05em; }
+.landing .phone__line { display: flex; justify-content: space-between; gap: 0.5em; margin-bottom: 0.4em; font-size: 0.92em; }
+.phone__line b { font-family: var(--ds-font-number); font-weight: 600; }
+.phone__line i { font-style: normal; color: var(--ds-ink-2); }
+.phone__over { color: var(--ds-negative); }
+.phone__save { color: var(--ds-clay-text); }
+.phone .ds-bar { height: 0.5em; }
+.phone__bar > span { transform-origin: left; animation: bar-in 900ms 350ms var(--ds-ease) both; }
+.phone__tabs { margin: 0 1.15em 0.4em; padding: 0.3em; gap: 0.2em; }
+.phone .ds-tabbar__item { min-height: 3em; font-size: 0.68em; }
+.phone .ds-tabbar__item svg { width: 1.85em; height: 1.85em; }
+.phone__home-bar {
+  align-self: center;
+  width: 9em;
+  height: 0.32em;
+  margin-bottom: 0.55em;
+  border-radius: 1em;
+  background: var(--ds-ink);
+}
+
+@keyframes phone-in { from { opacity: 0; transform: translateY(1.5rem); } }
+@keyframes bar-in { from { transform: scaleX(0); } }
+
+/* ── Story: three drawings, each centred by its ink ────── */
+.landing-story { padding-block: var(--ds-space-8) var(--lp-gap); }
+.landing-story__list {
+  display: grid;
+  gap: var(--ds-space-12) var(--ds-space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 48rem) { .landing-story__list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.landing-story__item { display: grid; align-content: start; gap: var(--ds-space-1); }
+/* Phone: a small picture beside the words, so the page stays short. */
+@media (max-width: 47.99rem) {
+  .landing-story__list { gap: var(--ds-space-8); }
+  .landing-story__item { grid-template-columns: 8.5rem minmax(0, 1fr); column-gap: var(--ds-space-5); align-content: center; align-items: center; }
+  .landing-story__frame { grid-row: 1 / span 2; margin-bottom: 0; border-radius: 1.25rem; }
+  .landing-story__title { align-self: end; }
+  .landing-story__item p { align-self: start; }
+}
+/* Square panel. The img is placed by inline left/top/width (see index.tsx). */
+.landing-story__frame {
+  position: relative;
+  aspect-ratio: 1;
+  margin-bottom: var(--ds-space-5);
+  overflow: hidden;
+  border-radius: var(--ds-radius-card);
+  background: var(--ds-fill);
+}
+.landing-story__frame img { position: absolute; height: auto; mix-blend-mode: multiply; }
+.landing-story__title { margin: 0; font-family: var(--lp-head); font-size: 1.375rem; font-weight: 650; letter-spacing: -0.03em; line-height: 1.15; text-wrap: balance; }
+.landing-story__item p { max-width: 22rem; line-height: 1.45; text-wrap: pretty; }
+
+/* ── Headings ───────────────────────────────────────────── */
+.landing-h2 {
+  margin: 0;
+  font-family: var(--lp-head);
+  font-size: clamp(1.75rem, 2.2vw + 1rem, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+/* ── Banks ──────────────────────────────────────────────── */
+.landing-banks { display: grid; gap: var(--ds-space-6); padding-bottom: var(--lp-gap); align-items: start; }
+@media (min-width: 60rem) { .landing-banks { grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: var(--ds-space-12); } }
+.landing-finder { display: grid; gap: var(--ds-space-4); padding: var(--ds-space-5); }
+.landing-finder__fields { display: grid; gap: var(--ds-space-2); }
+@media (min-width: 40rem) { .landing-finder__fields { grid-template-columns: 1fr 1fr; } }
+.landing-finder .ds-input { background: var(--ds-canvas); }
+.landing-finder .ds-input::placeholder { color: var(--ds-ink-2); opacity: 1; }
+.landing-finder select.ds-input {
+  padding-right: 2.75rem;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ds-ink) 50%), linear-gradient(135deg, var(--ds-ink) 50%, transparent 50%);
+  background-position: calc(100% - 1.4rem) 50%, calc(100% - 1.1rem) 50%;
+  background-size: 0.3rem 0.3rem;
+  background-repeat: no-repeat;
+}
+.landing-finder__chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.landing-bank {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 0.85rem;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-canvas);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+.landing .landing-finder__foot { display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-4); margin-top: calc(var(--ds-space-2) * -1); font-size: 0.875rem; }
+.landing-finder__toggle { min-height: 2.75rem; padding: 0; border: 0; background: none; font: 600 0.875rem var(--ds-font); color: var(--ds-ink); cursor: pointer; text-decoration: underline; text-underline-offset: 0.2em; }
+.landing-finder__link { display: inline-flex; align-items: center; min-height: 2.75rem; gap: 0.35rem; font-weight: 600; text-decoration: none; }
+.landing-finder__link svg { width: 0.875rem; height: 0.875rem; }
+
+/* ── FAQ ────────────────────────────────────────────────── */
+.landing-faq { display: grid; gap: var(--ds-space-5); padding-bottom: var(--lp-gap); align-items: start; }
+@media (min-width: 60rem) { .landing-faq { grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: var(--ds-space-12); } }
+.landing-faq__list { border-top: 1px solid var(--ds-track); }
+.landing-faq__item { border-bottom: 1px solid var(--ds-track); }
+.landing-faq__item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+  min-height: 3.5rem;
+  padding-block: var(--ds-space-3);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+.landing-faq__item summary::-webkit-details-marker { display: none; }
+.landing-faq__item summary:focus-visible { outline: 2px solid var(--ds-ink); outline-offset: 2px; border-radius: 0.5rem; }
+.landing-faq__item p { max-width: 36rem; padding-bottom: var(--ds-space-5); line-height: 1.5; }
+.landing-faq__plus { position: relative; flex: none; width: 1.25rem; height: 1.25rem; }
+.landing-faq__plus::before,
+.landing-faq__plus::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1rem;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--ds-ink);
+  transform: translate(-50%, -50%);
+  transition: transform var(--ds-dur) var(--ds-ease);
+}
+.landing-faq__plus::after { transform: translate(-50%, -50%) rotate(90deg); }
+.landing-faq__item[open] .landing-faq__plus::after { transform: translate(-50%, -50%) rotate(0deg); }
+
+/* ── Final: the lime balance card ───────────────────────── */
+.landing-final { padding-bottom: var(--ds-space-12); }
+.landing-final__card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-6);
+  padding: var(--ds-space-8) var(--ds-space-6);
+}
+@media (min-width: 60rem) { .landing-final__card { padding: var(--ds-space-12); } }
+.landing-final__title { margin: 0; font-family: var(--lp-head); font-size: clamp(1.75rem, 2.6vw + 1rem, 3rem); font-weight: 700; letter-spacing: -0.045em; line-height: 1; }
+
+/* ── Footer: wordmark left, links and year right ───────── */
+.landing-footer { padding-block: var(--ds-space-4) var(--ds-space-8); font-size: 0.9375rem; }
+.landing-footer__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-2) var(--ds-space-8); }
+.landing-footer__nav { display: flex; flex-wrap: wrap; gap: 0 var(--ds-space-2); margin-left: auto; }
+.landing-footer__nav a { display: inline-flex; align-items: center; min-height: 2.75rem; padding-inline: var(--ds-space-2); font-weight: 500; text-decoration: none; }
+.landing-footer__nav a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+.landing-footer__nav a:focus-visible { outline: 2px solid var(--ds-ink); outline-offset: -2px; border-radius: 0.5rem; }
+@media (max-width: 39.99rem) {
+  .landing-footer__nav { order: 3; flex-basis: 100%; margin: 0 calc(var(--ds-space-2) * -1); }
+  .landing-footer__row > .ds-muted { order: 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone,
+  .phone__bar > span { animation: none; }
+  .landing-faq__plus::before,
+  .landing-faq__plus::after { transition: none; }
+}
+
+/* ── Motion ─────────────────────────────────────────────────
+ * One entrance for the hero, one live moment in the phone, soft rises on
+ * scroll. All of it is off under prefers-reduced-motion (block at the end). */
+
+/* Hero: headline slides up line by line, the highlighter sweeps across */
+.landing-hero__title .line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
+.landing-hero__title .line > span {
+  display: block;
+  animation: line-up 900ms var(--ds-ease) both;
+}
+.landing-hero__title .line:nth-child(2) > span { animation-delay: 110ms; }
+.landing-hero__mark {
+  background-repeat: no-repeat;
+  animation: mark-in 800ms 800ms var(--ds-ease) both;
+}
+.landing .rise { animation: rise 800ms var(--ds-ease) both; animation-delay: var(--d, 0ms); }
+
+@keyframes line-up { from { transform: translateY(105%); } }
+@keyframes mark-in { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+@keyframes rise { from { opacity: 0; transform: translateY(1rem); } }
+
+/* Phone: a purchase arrives, the pill drops in, numbers tick */
+.phone__bar > span { transition: width 900ms var(--ds-ease); }
+.phone__toast {
+  position: absolute;
+  z-index: 3;
+  bottom: 6.6em;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.55em 0.95em;
+  border-radius: 9999px;
+  background: var(--ds-ink);
+  color: #fff;
+  font-size: 0.82em;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 0.8em 1.6em -0.6em rgb(11 11 12 / 0.45);
+  opacity: 0;
+  transform: translate(-50%, 1.4em) scale(0.92);
+  transition: opacity 320ms var(--ds-ease), transform 520ms var(--ds-ease);
+  pointer-events: none;
+}
+.phone__toast.is-on { opacity: 1; transform: translate(-50%, 0) scale(1); }
+.phone__toast b { font-family: var(--ds-font-number); font-weight: 600; color: var(--ds-lime); }
+.phone__toast .ds-dot { width: 0.5em; height: 0.5em; }
+
+/* The lime card's seam drifts slowly */
+.landing-final__card::after { animation: seam-drift 14s ease-in-out infinite alternate; }
+@keyframes seam-drift { to { transform: translate(-7%, 9%); } }
+
+/* Scroll: sections rise into view (class set by useReveal) */
+.landing--motion [data-reveal] {
+  transition: opacity 800ms var(--ds-ease), transform 800ms var(--ds-ease);
+  transition-delay: calc(var(--i, 0) * 110ms);
+}
+.landing--motion [data-reveal]:not(.is-in) { opacity: 0; transform: translateY(1.5rem); }
+
+/* Hover: panels lift, arrows nudge */
+.landing-story__item .landing-story__frame { transition: transform 450ms var(--ds-ease); }
+.landing-story__item:hover .landing-story__frame { transform: translateY(-0.35rem); }
+.landing .ds-btn svg { transition: transform 260ms var(--ds-ease); }
+.landing .ds-btn:hover svg:last-child { transform: translateX(0.2rem); }
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-hero__title .line > span,
+  .landing-hero__mark,
+  .landing .rise,
+  .landing-final__card::after { animation: none; }
+  .phone__toast,
+  .phone__bar > span,
+  .landing--motion [data-reveal],
+  .landing-story__item .landing-story__frame,
+  .landing .ds-btn svg { transition: none; }
+}

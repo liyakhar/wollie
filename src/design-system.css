@@ -1,0 +1,256 @@
+/*
+ * Wollie design system: "Court"
+ * Source of truth: the phone app (src/money-ui.css, src/phone.css).
+ * White court, black ink, tennis-ball lime for money you still have,
+ * clay orange for action. Web pages use these tokens and parts.
+ * Docs: docs/design-system.md
+ */
+
+:root {
+  /* ── Color ─────────────────────────────────────────────── */
+  --ds-canvas:     #ffffff;
+  --ds-ink:        #0b0b0c;
+  --ds-ink-2:      rgb(11 11 12 / 0.55);   /* secondary text */
+  --ds-ink-3:      rgb(11 11 12 / 0.32);   /* hints, inactive icons */
+  --ds-track:      rgb(11 11 12 / 0.07);   /* bar tracks, dividers */
+  --ds-fill:       #f3f3f1;                /* inputs, chips, quiet buttons */
+
+  --ds-lime:       #d6f53d;                /* money you still have */
+  --ds-lime-deep:  #b8dc1a;                /* bars */
+  --ds-lime-glow:  #ecff8a;                /* card highlight */
+  --ds-clay:       #ff5f1f;                /* action dot, low bars */
+  --ds-clay-text:  #d9460a;                /* clay as text (AA on white) */
+  --ds-positive:   #2c8a2c;
+  --ds-negative:   #e5383b;
+
+  /* ── Type ──────────────────────────────────────────────── */
+  --ds-font:         -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Helvetica Neue", sans-serif;
+  --ds-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, "Helvetica Neue", sans-serif;
+  --ds-font-number:  "Geist Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  --ds-text-small:   0.8125rem;  /* 13: chips */
+  --ds-text-label:   0.9375rem;  /* 15: card labels */
+  --ds-text-body:    1rem;       /* 16 */
+  --ds-text-lede:    clamp(1.0625rem, 0.4vw + 1rem, 1.25rem);
+  --ds-text-title:   2.125rem;   /* 34: screen titles */
+  --ds-text-h2:      clamp(2rem, 2.6vw + 1.2rem, 3.25rem);
+  --ds-text-display: clamp(3rem, 7vw + 0.5rem, 6.5rem);
+  --ds-text-money:   clamp(2.75rem, 4vw + 1.5rem, 3.4rem); /* 55: balance */
+
+  --ds-track-title:   -0.028em;
+  --ds-track-display: -0.045em;
+  --ds-track-money:   -0.045em;
+
+  /* ── Space ─────────────────────────────────────────────── */
+  --ds-space-1: 0.25rem;
+  --ds-space-2: 0.5rem;
+  --ds-space-3: 0.75rem;
+  --ds-space-4: 1rem;
+  --ds-space-5: 1.25rem;
+  --ds-space-6: 1.5rem;
+  --ds-space-8: 2rem;
+  --ds-space-12: 3rem;
+  --ds-space-16: 4rem;
+  --ds-space-24: 6rem;
+
+  /* ── Shape ─────────────────────────────────────────────── */
+  --ds-radius-card: 1.75rem;   /* 28: balance card, panels */
+  --ds-radius-pill: 9999px;    /* buttons, chips, inputs, tab bar */
+  --ds-control-h:   2.75rem;   /* 44: touch target */
+  --ds-control-h-lg: 3.25rem;  /* 52: main call to action */
+
+  /* ── Layout ────────────────────────────────────────────── */
+  --ds-page-max: 74rem;
+  --ds-gutter: clamp(1.25rem, 4vw, 2.5rem);
+
+  /* ── Motion ────────────────────────────────────────────── */
+  --ds-ease: cubic-bezier(0.25, 1, 0.5, 1);
+  --ds-dur: 180ms;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+
+.ds-page {
+  min-height: 100vh;
+  background: var(--ds-canvas);
+  color: var(--ds-ink);
+  font-family: var(--ds-font);
+  font-size: var(--ds-text-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ds-container {
+  width: 100%;
+  max-width: var(--ds-page-max);
+  margin-inline: auto;
+  padding-inline: var(--ds-gutter);
+}
+
+/* Wordmark: "Wollie" with a clay full stop */
+.ds-wordmark {
+  font-family: var(--ds-font-display);
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--ds-ink);
+  text-decoration: none;
+}
+.ds-wordmark::after { content: "."; color: var(--ds-clay); }
+
+.ds-title {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-title);
+  font-weight: 700;
+  letter-spacing: var(--ds-track-title);
+  line-height: 1.05;
+}
+
+.ds-muted { color: var(--ds-ink-2); }
+
+/* Money: Geist, tabular, cents at half size */
+.ds-money {
+  font-family: var(--ds-font-number);
+  font-size: var(--ds-text-money);
+  font-weight: 600;
+  letter-spacing: var(--ds-track-money);
+  line-height: 1.05;
+  font-feature-settings: "tnum", "ss01";
+}
+.ds-money small {
+  font-size: 0.5em;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* ── Buttons: pills. Primary is black with a lime label. ─── */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  min-height: var(--ds-control-h);
+  padding: 0 var(--ds-space-5);
+  border: 0;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-fill);
+  color: var(--ds-ink);
+  font: 600 var(--ds-text-body) / 1 var(--ds-font);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--ds-dur) var(--ds-ease), transform var(--ds-dur) var(--ds-ease);
+}
+.ds-btn:hover { background: #e9e9e6; }
+.ds-btn:active { transform: scale(0.98); }
+.ds-btn:focus-visible { outline: 2px solid var(--ds-ink); outline-offset: 2px; }
+.ds-btn svg { width: 1.125rem; height: 1.125rem; flex: none; stroke-width: 1.75; }
+
+.ds-btn--primary { background: var(--ds-ink); color: var(--ds-lime); }
+.ds-btn--primary:hover { background: #24242a; }
+
+.ds-btn--lime { background: var(--ds-lime); color: var(--ds-ink); }
+.ds-btn--lime:hover { background: var(--ds-lime-glow); }
+
+.ds-btn--ghost { background: transparent; }
+.ds-btn--ghost:hover { background: var(--ds-fill); }
+
+.ds-btn--lg { min-height: var(--ds-control-h-lg); padding-inline: var(--ds-space-6); }
+.ds-btn--block { width: 100%; }
+
+/* ── Chips ──────────────────────────────────────────────── */
+.ds-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 var(--ds-space-3);
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-fill);
+  font-size: var(--ds-text-small);
+  font-weight: 600;
+}
+.ds-chip--on-lime { background: rgb(11 11 12 / 0.08); }
+.ds-chip--on { background: var(--ds-ink); color: var(--ds-lime); }
+
+/* ── Inputs ─────────────────────────────────────────────── */
+.ds-field { display: grid; gap: var(--ds-space-2); font-size: var(--ds-text-small); font-weight: 600; color: var(--ds-ink-2); }
+.ds-input {
+  width: 100%;
+  min-height: var(--ds-control-h);
+  padding: 0 var(--ds-space-5);
+  border: 0;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-fill);
+  color: var(--ds-ink);
+  font: 400 var(--ds-text-body) var(--ds-font);
+  appearance: none;
+}
+.ds-input:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--ds-ink); }
+
+/* ── Balance card: a tennis ball on a white court ───────── */
+.ds-balance {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 1.375rem;
+  border-radius: var(--ds-radius-card);
+  background:
+    radial-gradient(90% 120% at 100% 0%, var(--ds-lime-glow) 0%, transparent 60%),
+    var(--ds-lime);
+  color: var(--ds-ink);
+}
+.ds-balance::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -40%;
+  right: -28%;
+  width: 70%;
+  aspect-ratio: 1;
+  border: 2px solid rgb(255 255 255 / 0.55);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.ds-balance__label { margin: 0; font-size: var(--ds-text-label); font-weight: 500; color: rgb(11 11 12 / 0.62); }
+.ds-balance__chips { display: flex; flex-wrap: wrap; gap: var(--ds-space-2); margin-top: var(--ds-space-4); }
+
+/* ── Panel: a quiet fill block ──────────────────────────── */
+.ds-panel { border-radius: var(--ds-radius-card); background: var(--ds-fill); }
+
+/* ── Bars: lime while money is left, clay when low, red when over ── */
+.ds-bar { height: 0.5rem; border-radius: var(--ds-radius-pill); background: var(--ds-track); overflow: hidden; }
+.ds-bar > span { display: block; height: 100%; border-radius: inherit; background: var(--ds-lime-deep); }
+.ds-bar.is-low > span { background: var(--ds-clay); }
+.ds-bar.is-over > span { background: var(--ds-negative); }
+
+/* ── Action dot ─────────────────────────────────────────── */
+.ds-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--ds-clay); flex: none; }
+
+/* ── Tab bar: floating fill pill, black active lens ─────── */
+.ds-tabbar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--ds-space-1);
+  padding: 0.3rem;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-fill);
+}
+.ds-tabbar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: 2.9rem;
+  border-radius: var(--ds-radius-pill);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ds-ink-2);
+}
+.ds-tabbar__item svg { width: 1.25rem; height: 1.25rem; stroke-width: 1.5; }
+.ds-tabbar__item.is-active { background: var(--ds-ink); color: var(--ds-lime); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-btn { transition: none; }
+  .ds-btn:active { transform: none; }
+}

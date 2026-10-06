@@ -1,0 +1,63 @@
+/*
+ * Desktop frame for the web app and the demo, in the Court design system.
+ * Only applies at desktop width, where the sidebar shows. The phone app
+ * hides this sidebar and keeps its own styles (phone.css, money-ui.css).
+ */
+@media (min-width: 64rem) {
+  :root .app-shell > aside.app-nav {
+    border-right: 0;
+    background: var(--ds-fill);
+    color: var(--ds-ink);
+  }
+
+  :root .app-shell .app-shell__main {
+    background: var(--ds-canvas);
+    color: var(--ds-ink);
+  }
+
+  :root .app-shell .app-nav__brand,
+  :root .app-shell .app-nav__brand strong {
+    color: var(--ds-ink);
+    font-family: var(--ds-font-display);
+  }
+  :root .app-shell .app-nav__brand strong {
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+  :root .app-shell .app-nav__brand strong::after { content: "."; color: var(--ds-clay); }
+  :root .app-shell .app-nav__brand span,
+  :root .app-shell .app-nav__section-label {
+    color: var(--ds-ink-2);
+    font-family: var(--ds-font);
+  }
+  :root .app-shell .app-nav__section-label {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  :root .app-shell .app-nav__tab,
+  :root .app-shell .app-nav__account-link {
+    border-radius: var(--ds-radius-pill);
+    color: var(--ds-ink-2);
+    font-family: var(--ds-font);
+    font-weight: 600;
+  }
+  :root .app-shell .app-nav__tab:hover,
+  :root .app-shell .app-nav__tab:focus-visible,
+  :root .app-shell .app-nav__account-link:hover,
+  :root .app-shell .app-nav__account-link:focus-visible {
+    background: rgb(11 11 12 / 0.06);
+    color: var(--ds-ink);
+  }
+  :root .app-shell .app-nav__tab.is-active,
+  :root .app-shell .app-nav__account-link.is-active {
+    background: var(--ds-ink);
+    color: var(--ds-lime);
+  }
+
+  :root .app-shell .app-nav__actions {
+    border-top-color: var(--ds-track);
+  }
+}
