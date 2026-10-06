@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { IconChevronRight, IconBank } from './icons'
+import { IconChevronRight } from './icons'
 import { ProfileButton } from '#/components/ProfileButton'
 import { formatMoney } from '#/lib/finance-demo'
 import type { MoneyOverview } from '#/lib/money-overview'
@@ -24,17 +24,34 @@ export function paydayLabel(overview: MoneyOverview) {
 }
 
 export function ConnectBank() {
+  const steps = [
+    { to: '/app/accounts', title: 'Connect your bank', body: 'Read-only. Wollie never sees your bank password.', primary: true },
+    { to: '/app/budgets', title: 'Set a budget', body: 'Pick what you want to spend each month.', primary: false },
+    { to: '/app/goals', title: 'Add a goal', body: 'A trip, a safety cushion, your pension.', primary: false },
+  ] as const
+
   return (
-    <main id="main" className="m-screen m-connect">
-      <div className="m-connect__art" aria-hidden="true">
-        <IconBank />
-        <span className="m-connect__dot" />
-      </div>
-      <h1>Connect your bank</h1>
-      <p>Wollie reads your transactions to show what you can spend. Read-only, bank-grade security.</p>
-      <Link to="/app/accounts" className="m-button m-button--primary m-button--wide">
-        Connect bank
-      </Link>
+    <main id="main" className="m-screen m-setup">
+      <header className="m-setup__head">
+        <p className="m-setup__kicker">Get set up</p>
+        <h1>Three steps to your number.</h1>
+        <p>Do them in any order. Connecting your bank is what makes the numbers real.</p>
+      </header>
+      <ol className="m-steps">
+        {steps.map((step, index) => (
+          <li key={step.title}>
+            <Link to={step.to} className={`m-step${step.primary ? ' m-step--primary' : ''}`}>
+              <span className="m-step__num" aria-hidden="true">{index + 1}</span>
+              <span className="m-step__text">
+                <span className="m-step__title">{step.title}</span>
+                <span className="m-step__body">{step.body}</span>
+              </span>
+              <IconChevronRight className="m-step__chevron" aria-hidden="true" />
+            </Link>
+          </li>
+        ))}
+      </ol>
+      <p className="m-footnote">0 of 3 done</p>
     </main>
   )
 }

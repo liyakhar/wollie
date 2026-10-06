@@ -292,3 +292,21 @@ body { background-color: #fbfbf9; }
 .m-plan__card li::before, .m-plan__card [class*="dot"] { background: #111 !important; }
 .m-plan__lede { color: var(--m-ink-2); }
 .m-error { color: #d92d20; border: 1px solid #d92d20; border-left-width: 4px; border-radius: 4px; padding: .75rem 1rem; }
+
+/* ═══ First-run checklist ═══ */
+.m-setup { align-content: start; gap: 2rem; }
+.m-setup__kicker { font: 500 .6875rem/1 "Inter Variable", Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 1rem !important; }
+.m-setup__head h1 { font-size: 3rem; line-height: 1; margin-bottom: 1rem; }
+.m-setup__head p:last-child { color: var(--m-ink-2); line-height: 1.5; max-width: 26rem; }
+.m-steps { list-style: none; padding: 0; margin: 0; display: grid; gap: .75rem; }
+.m-step { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.1rem; border: 1px solid var(--m-line); border-radius: 4px; background: #fbfbf9; color: #111; text-decoration: none; min-height: 4.5rem; }
+.m-step--primary { background: #e4ff4d; border-color: #111; box-shadow: 4px 4px 0 #111; }
+.m-step__num { flex: 0 0 auto; width: 2.25rem; height: 2.25rem; display: grid; place-items: center; border: 1px solid #111; border-radius: 4px; font: 400 1.25rem "Instrument Serif", Georgia, serif; background: #fbfbf9; }
+.m-step__text { display: grid; gap: .2rem; flex: 1; min-width: 0; }
+.m-step__title { font: 600 1rem "Inter Variable", Inter, sans-serif; }
+.m-step__body { font-size: .8125rem; color: rgb(17 17 17 / .62); line-height: 1.35; }
+.m-step--primary .m-step__body { color: rgb(17 17 17 / .75); }
+.m-step__chevron { width: 1.1rem; height: 1.1rem; flex: 0 0 auto; }
+.m-step:active { transform: translate(2px, 2px); }
+/* Loading */
+.app-loading { display: grid; place-items: center; min-height: 60vh; font: 500 .75rem "Inter Variable", Inter, sans-serif !important; letter-spacing: .1em !important; text-transform: uppercase; color: rgb(17 17 17 / .45); }

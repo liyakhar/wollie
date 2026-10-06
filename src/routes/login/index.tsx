@@ -110,9 +110,8 @@ function LoginPage() {
   )
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [devLoading, setDevLoading] = useState(false)
@@ -143,18 +142,10 @@ function LoginPage() {
 
     try {
       if (isSignUp) {
-        const trimmedFirstName = firstName.trim()
-        const trimmedLastName = lastName.trim()
-        const fullName = [trimmedFirstName, trimmedLastName]
-          .filter(Boolean)
-          .join(' ')
+        const fullName = firstName.trim()
 
-        if (!trimmedFirstName || !trimmedLastName) {
-          setError('Enter your first and last name to create an account.')
-          return
-        }
-        if (password !== confirmPassword) {
-          setError('Passwords do not match.')
+        if (!fullName) {
+          setError('Enter your name to create an account.')
           return
         }
         if (!acceptedLegal) {
@@ -366,33 +357,20 @@ function LoginPage() {
       <div className="auth-stack">
         <form onSubmit={handleSubmit} className="auth-form">
           {isSignUp && (
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="app-form__field">
-                <label className="app-form__label" htmlFor="first-name">
-                  First name
-                </label>
-                <input
-                  id="first-name"
-                  className="app-form__input"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  required
-                  autoComplete="given-name"
-                />
-              </div>
-              <div className="app-form__field">
-                <label className="app-form__label" htmlFor="last-name">
-                  Last name
-                </label>
-                <input
-                  id="last-name"
-                  className="app-form__input"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  required
-                  autoComplete="family-name"
-                />
-              </div>
+            <div className="app-form__field">
+              <label className="app-form__label" htmlFor="first-name">
+                Your name
+              </label>
+              <input
+                id="first-name"
+                className="app-form__input"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+                autoComplete="name"
+                autoCapitalize="words"
+                enterKeyHint="next"
+              />
             </div>
           )}
           <div className="app-form__field">
@@ -407,6 +385,11 @@ function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
+              inputMode="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              enterKeyHint="next"
             />
           </div>
           {isSignUp && (
@@ -418,7 +401,7 @@ function LoginPage() {
                   setAcceptedLegal(event.currentTarget.checked)
                 }
                 required
-                className="mt-1 size-4"
+                className="mt-0.5 size-6 shrink-0"
               />
               <span>
                 I accept the{' '}
@@ -451,34 +434,30 @@ function LoginPage() {
                 </button>
               )}
             </div>
-            <input
-              id="password"
-              type="password"
-              className="app-form__input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={8}
-              autoComplete={isSignUp ? 'new-password' : 'current-password'}
-            />
-          </div>
-          {isSignUp && (
-            <div className="app-form__field">
-              <label className="app-form__label" htmlFor="confirm-password">
-                Confirm password
-              </label>
+            <div className="auth-password">
               <input
-                id="confirm-password"
-                type="password"
+                id="password"
+                type={showPassword ? 'text' : 'password'}
                 className="app-form__input"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={8}
-                autoComplete="new-password"
+                autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                autoCapitalize="none"
+                enterKeyHint="go"
               />
+              <button
+                type="button"
+                className="auth-password__toggle"
+                aria-pressed={showPassword}
+                onClick={() => setShowPassword((current) => !current)}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
             </div>
-          )}
+            {isSignUp && <p className="auth-hint">At least 8 characters.</p>}
+          </div>
           {error && <p className="post-detail__error">{error}</p>}
           <div className="app-form__actions">
             <button type="submit" className="btn" disabled={loading}>
