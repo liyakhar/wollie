@@ -197,6 +197,7 @@ function PhoneHome() {
   const Transport = categoryIcon("transport");
   const Shopping = categoryIcon("shopping");
   const Travel = goalIcon("plane");
+  const Rent = categoryIcon("rent");
   const Safety = goalIcon("shield");
   const Future = goalIcon("sprout");
   const tabs = [
@@ -317,6 +318,14 @@ function PhoneHome() {
                   <span className="phone__save">€200 to save</span>
                 </p>
                 <div className="ds-bar phone__bar"><span style={{ width: "40%" }} /></div>
+              </div>
+            </div>
+            <p className="phone__h">Bills</p>
+            <div className="phone__row">
+              <Rent className="phone__icon" />
+              <div>
+                <p className="phone__line"><span>Rent</span><span><b>€300</b></span></p>
+                <p className="phone__meta">Monthly · due 20 Nov</p>
               </div>
             </div>
           </section>
