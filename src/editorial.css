@@ -382,3 +382,5 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 @media (prefers-reduced-motion: reduce) { .auth-visual__art { animation: none; } }
 :root .auth-page .login-forgot, :root .auth-page a[href*="reset"], :root .auth-page .auth-page__forgot, :root .auth-page .app-form a { color: #111 !important; font-weight: 500 !important; }
 :root .auth-page label a { font-size: inherit !important; }
+:root .auth-page .auth-link, :root .auth-page button.auth-link { color: #111 !important; background: none !important; border: 0 !important; min-height: 0 !important; font: 500 .875rem "Inter Variable", Inter, sans-serif !important; text-decoration: underline !important; text-underline-offset: 3px; padding: 0; }
+:root .auth-page .auth-link:hover { background: none !important; color: #111 !important; }
