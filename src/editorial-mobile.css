@@ -248,3 +248,12 @@ body { background-color: #fbfbf9; }
   :root .app-shell .wollie-workspace-page .wollie-sheet span.size-11 { background: #e4ff4d !important; border: 1px solid #111 !important; border-radius: 4px !important; color: #111 !important; }
   :root .app-shell .wollie-workspace-page .wollie-sheet p { color: rgb(17 17 17 / .62); }
 }
+
+/* First-run "Connect your bank": centred, calm, one clear action */
+.m-connect { align-content: center; justify-items: start; min-height: calc(100dvh - 9rem); gap: 1.25rem; }
+.m-connect__art { width: 4.5rem; height: 4.5rem; display: grid; place-items: center; border: 1px solid #111; border-radius: 4px; background: #e4ff4d; box-shadow: 4px 4px 0 #111; position: relative; margin-bottom: .75rem; }
+.m-connect__art svg { width: 2.25rem; height: 2.25rem; }
+.m-connect__dot { display: none; }
+.m-connect h1 { font-size: 2.75rem; line-height: 1; margin: 0; }
+.m-connect p { max-width: 24rem; color: var(--m-ink-2); line-height: 1.55; }
+.m-connect .m-button { margin-top: .75rem; }
