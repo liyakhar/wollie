@@ -187,3 +187,16 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 /* Phone rows: icons sit on the bottom edge, level with the progress bar */
 .phone__row { align-items: end; }
 .phone__icon { align-self: end; margin-top: 0; margin-bottom: 0; }
+
+/* Header (design system: .site-header) */
+.landing-header__row { min-height: 4rem; height: 4rem; }
+.landing-header__nav { gap: 1.75rem; }
+.landing-header__link, .landing-header__link.ds-btn { padding: 0; min-height: 0; background: none !important; border: 0 !important; font: 400 .875rem var(--font-body); color: rgb(17 17 17 / .62); }
+.landing-header__link:hover { color: #111; }
+@media (min-width: 40rem) { .landing-header__link:last-of-type, a[href="/pricing"].landing-header__link { margin-inline-end: 0; } }
+.landing-header__nav .ds-btn:not(.landing-header__link) { min-height: 2.25rem; height: 2.25rem; padding-inline: .9rem; font: 500 .8125rem var(--font-body); }
+.landing-header__nav a[href="/login"]:not(.landing-header__start) { margin-left: .75rem; }
+.landing-header__nav a[href^="/login"]:first-of-type:not(.landing-header__link) { margin-left: 0; }
+.landing-header__link ~ .ds-btn:not(.landing-header__link) { position: relative; }
+.landing-header__link + a.ds-btn:not(.landing-header__link) { margin-inline-start: .75rem; }
+.landing-header__link + a.ds-btn:not(.landing-header__link)::before { content: ""; position: absolute; left: -1.25rem; top: 50%; height: 1.25rem; width: 1px; background: rgb(17 17 17 / .14); transform: translateY(-50%); }
