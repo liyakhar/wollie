@@ -20,6 +20,7 @@
 @import "./web-shell.css";
 @import "./landing.css";
 @import "./editorial.css";
+@import "./editorial-mobile.css";
 
 @custom-variant dark (&:is(.dark *));
 
