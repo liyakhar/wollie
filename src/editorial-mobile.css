@@ -269,3 +269,7 @@ body { background-color: #fbfbf9; }
 .m-bar { box-shadow: none !important; border: 1px solid #111; box-sizing: border-box; }
 .m-bar.is-over { border-color: #d92d20; }
 .m-summary--card .m-bar { border-color: #111; }
+/* "to save" is plain ink: no highlight */
+.m-accent { background: none !important; color: #111 !important; font-weight: 600; }
+.m-screen .m-button.m-button--ghost { background: transparent !important; color: #111; border: 1px solid #111; }
+.m-screen .m-button.m-button--ghost:hover { background: #e4ff4d !important; }
