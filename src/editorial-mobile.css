@@ -169,7 +169,7 @@ body { background-color: #fbfbf9; }
 .m-screen h1, .m-screen h2, .m-screen h3, .m-sheet h2, .m-empty h2, .m-connect h1, .m-connect h2, .m-intro h1 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400 !important; letter-spacing: -0.02em; }
 .m-empty h2, .m-connect h2, .m-connect h1 { font-size: 2rem; line-height: 1.05; }
 /* Space under the status strip */
-.m-screen { padding-top: calc(1.25rem + env(safe-area-inset-top)); }
+.m-screen { padding-top: 1.25rem; }
 /* Tab bar stays a pill */
 @media (max-width: 63.99rem) {
   :root .app-shell .app-mobile-nav, :root .app-shell .app-mobile-nav__indicator, :root .app-shell .app-mobile-nav__item { border-radius: 9999px !important; }
