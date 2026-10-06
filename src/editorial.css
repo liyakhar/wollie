@@ -177,11 +177,13 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .phone__home-bar { position: relative; z-index: 2; }
 .phone__body { padding-bottom: 0; background: #fff; }
 
-/* Tab bar: roomy active tab, square-ish corners */
-.ds-tabbar { padding: .35rem; gap: .25rem; border-radius: 14px; }
-.ds-tabbar__item { padding: .6rem .5rem .5rem; gap: .3rem; min-height: 3.25rem; border-radius: 10px; }
-.ds-tabbar__item.is-active { background: #111; color: #fbfbf9; }
-.ds-tabbar__item.is-active svg { color: #e4ff4d; }
-.phone .phone__tabs { padding: .4em; border-radius: 1.3em; }
-.phone .ds-tabbar__item { padding: .75em .3em .65em; gap: .45em; min-height: 0; border-radius: .95em; font-size: .68em; }
-.phone .ds-tabbar__item svg { width: 2.1em; height: 2.1em; }
+/* Tab bar: original pill style, with room inside the active tab */
+.ds-tabbar { border-radius: 9999px; }
+.ds-tabbar__item { border-radius: 9999px; }
+.ds-tabbar__item.is-active { background: #111; color: #e4ff4d; }
+.phone .phone__tabs { padding: .3em; border-radius: 9999px; }
+.phone .ds-tabbar__item { padding: .5em .4em; min-height: 3.2em; border-radius: 9999px; font-size: .68em; }
+.phone .ds-tabbar__item svg { width: 1.85em; height: 1.85em; }
+/* Phone rows: icons sit on the bottom edge, level with the progress bar */
+.phone__row { align-items: end; }
+.phone__icon { align-self: end; margin-top: 0; margin-bottom: 0; }
