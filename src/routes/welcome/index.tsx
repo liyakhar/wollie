@@ -4,6 +4,7 @@ import type { Category } from '#/generated/prisma/client'
 import { completeOnboarding, getMyProfile } from '#/server/profiles'
 import { buildPageMeta } from '#/lib/seo'
 import { WOLLIE_PLANS } from '#/lib/billing-plans'
+import { useIsNativeApp } from '#/lib/native-app'
 
 const welcomeMeta = buildPageMeta({
   path: '/welcome',
@@ -32,6 +33,7 @@ export const Route = createFileRoute('/welcome/')({
 
 function WelcomePage() {
   const router = useRouter()
+  const native = useIsNativeApp()
   const { redirect: redirectTo } = Route.useSearch()
   const { profile } = Route.useLoaderData()
   const [field] = useState<Category>(profile?.field ?? 'FINANCE')
@@ -78,6 +80,7 @@ function WelcomePage() {
             </ul>
           </div>
 
+          {!native && (
           <div className="m-plan__card">
             <div className="m-plan__head">
               <strong>Household</strong>
@@ -90,6 +93,7 @@ function WelcomePage() {
             </ul>
             <p className="m-plan__note">Upgrade any time from your profile.</p>
           </div>
+          )}
         </section>
         <div className="m-intro__bottom">
           {error && <p className="m-error" role="alert">{error}</p>}

@@ -1,6 +1,7 @@
 import { Link, useRouter } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { authClient } from '#/lib/auth-client'
+import { useIsNativeApp } from '#/lib/native-app'
 import { IconChevronLeft, IconChevronRight } from './icons'
 
 function Row({ to, label, value }: { to: string; label: string; value?: ReactNode }) {
@@ -26,6 +27,7 @@ export function ProfileScreen({
   billCount?: number
 }) {
   const router = useRouter()
+  const native = useIsNativeApp()
   const { data: session } = authClient.useSession()
   const user = session?.user
   const initial = user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'W'
@@ -65,7 +67,7 @@ export function ProfileScreen({
       <section className="m-group" aria-label="Plan">
         <h2>Plan</h2>
         <ul>
-          <Row to="/app/billing" label="Your plan" value={planName} />
+          {!native && <Row to="/app/billing" label="Your plan" value={planName} />}
         </ul>
       </section>
 
