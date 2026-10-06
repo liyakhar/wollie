@@ -308,3 +308,7 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .phone__pos { color: #1c8a3a; }
 .phone__tabs { position: relative; z-index: 3; }
 .phone__dots { display: none; }
+/* Landing phone Home: room under the balance card and its hard shadow */
+.phone .ds-balance { margin-bottom: 1.6em; }
+.landing .phone__page:first-of-type .phone__h:first-of-type, .landing .phone__h { margin-top: 2.4em; }
+.landing .phone__page .phone__head + .phone__h, .landing .phone__page .phone__head + .phone__summary + .phone__h { margin-top: 0; }

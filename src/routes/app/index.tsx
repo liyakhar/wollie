@@ -426,7 +426,7 @@ export function MoneyDashboardContent({
               <CardAction>
                 {demo ? (
                   <Link
-                    to="/demo/transactions"
+                    to="/app/transactions"
                     className="text-sm font-medium underline-offset-4 hover:underline focus-visible:underline"
                   >
                     View all

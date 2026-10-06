@@ -598,9 +598,9 @@ function LandingPage() {
               </p>
               <div className="landing-hero__actions rise" style={{ "--d": "560ms" } as CSSProperties}>
                 {primaryAction}
-                <Link to="/demo" className="ds-btn ds-btn--lg">
-                  Try with sample data
-                </Link>
+                <a href="#how" className="ds-btn ds-btn--lg">
+                  See how it works
+                </a>
               </div>
               <ul className="landing-hero__proof rise" style={{ "--d": "700ms" } as CSSProperties}>
                 <li>Read-only bank link</li>
@@ -648,7 +648,7 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="landing-how" aria-label="How it works">
+        <section id="how" className="landing-how" aria-label="How it works">
           <div className="ds-container">
             <p className="landing-kicker">How it works</p>
             <h2 className="landing-h2 landing-h2--xl">Start in <em>two minutes.</em></h2>
@@ -775,7 +775,6 @@ function LandingPage() {
             <h2 className="landing-final__title">Know what is <em>yours</em> to spend.</h2>
             <div className="landing-final__actions">
               {primaryAction}
-              <Link to="/demo" className="ds-btn ds-btn--lg landing-final__demo">Try with sample data</Link>
             </div>
           </div>
         </section>

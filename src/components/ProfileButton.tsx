@@ -10,7 +10,7 @@ export function ProfileButton({ demo = false }: { demo?: boolean }) {
 
   return (
     <Link
-      to={demo ? "/demo/accounts" : "/settings"}
+      to="/settings"
       className="wollie-profile-button"
       aria-label={demo ? "Accounts" : "Profile and settings"}
     >

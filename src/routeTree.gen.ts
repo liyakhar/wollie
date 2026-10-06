@@ -24,7 +24,6 @@ import { Route as PrivacyRouteRouteImport } from './routes/privacy/route'
 import { Route as PRouteRouteImport } from './routes/p/route'
 import { Route as NewRouteRouteImport } from './routes/new/route'
 import { Route as LoginRouteRouteImport } from './routes/login/route'
-import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as AboutRouteRouteImport } from './routes/about/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -34,7 +33,6 @@ import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
 import { Route as PrivacyIndexRouteImport } from './routes/privacy/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
-import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
@@ -42,14 +40,6 @@ import { Route as UUsernameRouteImport } from './routes/u/$username'
 import { Route as SettingsDataRouteImport } from './routes/settings/data'
 import { Route as PPostIdRouteImport } from './routes/p/$postId'
 import { Route as InviteTokenRouteImport } from './routes/invite/$token'
-import { Route as DemoUpcomingRouteImport } from './routes/demo/upcoming'
-import { Route as DemoTransactionsRouteImport } from './routes/demo/transactions'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
-import { Route as DemoPrismaRouteImport } from './routes/demo/prisma'
-import { Route as DemoGoalsRouteImport } from './routes/demo/goals'
-import { Route as DemoBudgetsRouteImport } from './routes/demo/budgets'
-import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
-import { Route as DemoAccountsRouteImport } from './routes/demo/accounts'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as BillingSuccessRouteImport } from './routes/billing/success'
 import { Route as AppTransactionsRouteImport } from './routes/app/transactions'
@@ -143,11 +133,6 @@ const LoginRouteRoute = LoginRouteRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoRouteRoute = DemoRouteRouteImport.update({
-  id: '/demo',
-  path: '/demo',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/app',
   path: '/app',
@@ -193,11 +178,6 @@ const LoginIndexRoute = LoginIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LoginRouteRoute,
 } as any)
-const DemoIndexRoute = DemoIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -232,46 +212,6 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
-} as any)
-const DemoUpcomingRoute = DemoUpcomingRouteImport.update({
-  id: '/upcoming',
-  path: '/upcoming',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoTransactionsRoute = DemoTransactionsRouteImport.update({
-  id: '/transactions',
-  path: '/transactions',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/tanstack-query',
-  path: '/tanstack-query',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoPrismaRoute = DemoPrismaRouteImport.update({
-  id: '/prisma',
-  path: '/prisma',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoGoalsRoute = DemoGoalsRouteImport.update({
-  id: '/goals',
-  path: '/goals',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoBudgetsRoute = DemoBudgetsRouteImport.update({
-  id: '/budgets',
-  path: '/budgets',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoBetterAuthRoute = DemoBetterAuthRouteImport.update({
-  id: '/better-auth',
-  path: '/better-auth',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoAccountsRoute = DemoAccountsRouteImport.update({
-  id: '/accounts',
-  path: '/accounts',
-  getParentRoute: () => DemoRouteRoute,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
@@ -363,7 +303,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteRouteWithChildren
   '/app': typeof AppRouteRouteWithChildren
-  '/demo': typeof DemoRouteRouteWithChildren
   '/login': typeof LoginRouteRouteWithChildren
   '/new': typeof NewRouteRoute
   '/p': typeof PRouteRouteWithChildren
@@ -391,14 +330,6 @@ export interface FileRoutesByFullPath {
   '/app/transactions': typeof AppTransactionsRoute
   '/billing/success': typeof BillingSuccessRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/demo/accounts': typeof DemoAccountsRoute
-  '/demo/better-auth': typeof DemoBetterAuthRoute
-  '/demo/budgets': typeof DemoBudgetsRoute
-  '/demo/goals': typeof DemoGoalsRoute
-  '/demo/prisma': typeof DemoPrismaRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/demo/transactions': typeof DemoTransactionsRoute
-  '/demo/upcoming': typeof DemoUpcomingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
   '/settings/data': typeof SettingsDataRoute
@@ -406,7 +337,6 @@ export interface FileRoutesByFullPath {
   '/about/': typeof AboutIndexRoute
   '/app/': typeof AppIndexRoute
   '/blog/': typeof BlogIndexRoute
-  '/demo/': typeof DemoIndexRoute
   '/login/': typeof LoginIndexRoute
   '/privacy/': typeof PrivacyIndexRoute
   '/reset-password/': typeof ResetPasswordIndexRoute
@@ -442,14 +372,6 @@ export interface FileRoutesByTo {
   '/app/transactions': typeof AppTransactionsRoute
   '/billing/success': typeof BillingSuccessRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/demo/accounts': typeof DemoAccountsRoute
-  '/demo/better-auth': typeof DemoBetterAuthRoute
-  '/demo/budgets': typeof DemoBudgetsRoute
-  '/demo/goals': typeof DemoGoalsRoute
-  '/demo/prisma': typeof DemoPrismaRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/demo/transactions': typeof DemoTransactionsRoute
-  '/demo/upcoming': typeof DemoUpcomingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
   '/settings/data': typeof SettingsDataRoute
@@ -457,7 +379,6 @@ export interface FileRoutesByTo {
   '/about': typeof AboutIndexRoute
   '/app': typeof AppIndexRoute
   '/blog': typeof BlogIndexRoute
-  '/demo': typeof DemoIndexRoute
   '/login': typeof LoginIndexRoute
   '/privacy': typeof PrivacyIndexRoute
   '/reset-password': typeof ResetPasswordIndexRoute
@@ -474,7 +395,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteRouteWithChildren
   '/app': typeof AppRouteRouteWithChildren
-  '/demo': typeof DemoRouteRouteWithChildren
   '/login': typeof LoginRouteRouteWithChildren
   '/new': typeof NewRouteRoute
   '/p': typeof PRouteRouteWithChildren
@@ -502,14 +422,6 @@ export interface FileRoutesById {
   '/app/transactions': typeof AppTransactionsRoute
   '/billing/success': typeof BillingSuccessRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/demo/accounts': typeof DemoAccountsRoute
-  '/demo/better-auth': typeof DemoBetterAuthRoute
-  '/demo/budgets': typeof DemoBudgetsRoute
-  '/demo/goals': typeof DemoGoalsRoute
-  '/demo/prisma': typeof DemoPrismaRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/demo/transactions': typeof DemoTransactionsRoute
-  '/demo/upcoming': typeof DemoUpcomingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
   '/settings/data': typeof SettingsDataRoute
@@ -517,7 +429,6 @@ export interface FileRoutesById {
   '/about/': typeof AboutIndexRoute
   '/app/': typeof AppIndexRoute
   '/blog/': typeof BlogIndexRoute
-  '/demo/': typeof DemoIndexRoute
   '/login/': typeof LoginIndexRoute
   '/privacy/': typeof PrivacyIndexRoute
   '/reset-password/': typeof ResetPasswordIndexRoute
@@ -536,7 +447,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/app'
-    | '/demo'
     | '/login'
     | '/new'
     | '/p'
@@ -564,14 +474,6 @@ export interface FileRouteTypes {
     | '/app/transactions'
     | '/billing/success'
     | '/blog/$slug'
-    | '/demo/accounts'
-    | '/demo/better-auth'
-    | '/demo/budgets'
-    | '/demo/goals'
-    | '/demo/prisma'
-    | '/demo/tanstack-query'
-    | '/demo/transactions'
-    | '/demo/upcoming'
     | '/invite/$token'
     | '/p/$postId'
     | '/settings/data'
@@ -579,7 +481,6 @@ export interface FileRouteTypes {
     | '/about/'
     | '/app/'
     | '/blog/'
-    | '/demo/'
     | '/login/'
     | '/privacy/'
     | '/reset-password/'
@@ -615,14 +516,6 @@ export interface FileRouteTypes {
     | '/app/transactions'
     | '/billing/success'
     | '/blog/$slug'
-    | '/demo/accounts'
-    | '/demo/better-auth'
-    | '/demo/budgets'
-    | '/demo/goals'
-    | '/demo/prisma'
-    | '/demo/tanstack-query'
-    | '/demo/transactions'
-    | '/demo/upcoming'
     | '/invite/$token'
     | '/p/$postId'
     | '/settings/data'
@@ -630,7 +523,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/app'
     | '/blog'
-    | '/demo'
     | '/login'
     | '/privacy'
     | '/reset-password'
@@ -646,7 +538,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/app'
-    | '/demo'
     | '/login'
     | '/new'
     | '/p'
@@ -674,14 +565,6 @@ export interface FileRouteTypes {
     | '/app/transactions'
     | '/billing/success'
     | '/blog/$slug'
-    | '/demo/accounts'
-    | '/demo/better-auth'
-    | '/demo/budgets'
-    | '/demo/goals'
-    | '/demo/prisma'
-    | '/demo/tanstack-query'
-    | '/demo/transactions'
-    | '/demo/upcoming'
     | '/invite/$token'
     | '/p/$postId'
     | '/settings/data'
@@ -689,7 +572,6 @@ export interface FileRouteTypes {
     | '/about/'
     | '/app/'
     | '/blog/'
-    | '/demo/'
     | '/login/'
     | '/privacy/'
     | '/reset-password/'
@@ -707,7 +589,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRouteRoute: typeof AboutRouteRouteWithChildren
   AppRouteRoute: typeof AppRouteRouteWithChildren
-  DemoRouteRoute: typeof DemoRouteRouteWithChildren
   LoginRouteRoute: typeof LoginRouteRouteWithChildren
   NewRouteRoute: typeof NewRouteRoute
   PRouteRoute: typeof PRouteRouteWithChildren
@@ -838,13 +719,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo': {
-      id: '/demo'
-      path: '/demo'
-      fullPath: '/demo'
-      preLoaderRoute: typeof DemoRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -908,13 +782,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof LoginRouteRoute
     }
-    '/demo/': {
-      id: '/demo/'
-      path: '/'
-      fullPath: '/demo/'
-      preLoaderRoute: typeof DemoIndexRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -963,62 +830,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/demo/upcoming': {
-      id: '/demo/upcoming'
-      path: '/upcoming'
-      fullPath: '/demo/upcoming'
-      preLoaderRoute: typeof DemoUpcomingRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/transactions': {
-      id: '/demo/transactions'
-      path: '/transactions'
-      fullPath: '/demo/transactions'
-      preLoaderRoute: typeof DemoTransactionsRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/prisma': {
-      id: '/demo/prisma'
-      path: '/prisma'
-      fullPath: '/demo/prisma'
-      preLoaderRoute: typeof DemoPrismaRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/goals': {
-      id: '/demo/goals'
-      path: '/goals'
-      fullPath: '/demo/goals'
-      preLoaderRoute: typeof DemoGoalsRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/budgets': {
-      id: '/demo/budgets'
-      path: '/budgets'
-      fullPath: '/demo/budgets'
-      preLoaderRoute: typeof DemoBudgetsRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/better-auth': {
-      id: '/demo/better-auth'
-      path: '/better-auth'
-      fullPath: '/demo/better-auth'
-      preLoaderRoute: typeof DemoBetterAuthRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/accounts': {
-      id: '/demo/accounts'
-      path: '/accounts'
-      fullPath: '/demo/accounts'
-      preLoaderRoute: typeof DemoAccountsRouteImport
-      parentRoute: typeof DemoRouteRoute
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -1188,34 +999,6 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
   AppRouteRouteChildren,
 )
 
-interface DemoRouteRouteChildren {
-  DemoAccountsRoute: typeof DemoAccountsRoute
-  DemoBetterAuthRoute: typeof DemoBetterAuthRoute
-  DemoBudgetsRoute: typeof DemoBudgetsRoute
-  DemoGoalsRoute: typeof DemoGoalsRoute
-  DemoPrismaRoute: typeof DemoPrismaRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
-  DemoTransactionsRoute: typeof DemoTransactionsRoute
-  DemoUpcomingRoute: typeof DemoUpcomingRoute
-  DemoIndexRoute: typeof DemoIndexRoute
-}
-
-const DemoRouteRouteChildren: DemoRouteRouteChildren = {
-  DemoAccountsRoute: DemoAccountsRoute,
-  DemoBetterAuthRoute: DemoBetterAuthRoute,
-  DemoBudgetsRoute: DemoBudgetsRoute,
-  DemoGoalsRoute: DemoGoalsRoute,
-  DemoPrismaRoute: DemoPrismaRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
-  DemoTransactionsRoute: DemoTransactionsRoute,
-  DemoUpcomingRoute: DemoUpcomingRoute,
-  DemoIndexRoute: DemoIndexRoute,
-}
-
-const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(
-  DemoRouteRouteChildren,
-)
-
 interface LoginRouteRouteChildren {
   LoginIndexRoute: typeof LoginIndexRoute
 }
@@ -1337,7 +1120,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRouteRoute: AboutRouteRouteWithChildren,
   AppRouteRoute: AppRouteRouteWithChildren,
-  DemoRouteRoute: DemoRouteRouteWithChildren,
   LoginRouteRoute: LoginRouteRouteWithChildren,
   NewRouteRoute: NewRouteRoute,
   PRouteRoute: PRouteRouteWithChildren,

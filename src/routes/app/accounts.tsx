@@ -434,13 +434,8 @@ function AccountsPage() {
           <p>
             {canConnect
               ? "Wollie reads your balances and transactions. It can never move money, and never sees your bank password."
-              : "We're finishing the secure bank setup. You can explore Wollie with sample data meanwhile."}
+              : "We're finishing the secure bank setup. Check back soon."}
           </p>
-          {!canConnect && (
-            <Link to="/demo" className="m-button m-button--wide">
-              Explore with sample data
-            </Link>
-          )}
         </section>
       )}
 

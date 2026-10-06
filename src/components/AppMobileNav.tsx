@@ -9,13 +9,6 @@ const appTabs = [
   { to: "/app/goals", label: "Goals", icon: IconGoals },
 ] as const;
 
-const demoTabs = [
-  { to: "/demo", label: "Home", icon: IconHome },
-  { to: "/demo/transactions", label: "Activity", icon: IconActivity },
-  { to: "/demo/budgets", label: "Budgets", icon: IconBudgets },
-  { to: "/demo/goals", label: "Goals", icon: IconGoals },
-] as const;
-
 function activeTabIndex(pathname: string, tabs: ReadonlyArray<{ to: string }>) {
   const path = pathname.replace(/\/+$/, "") || "/";
   const [home, ...rest] = tabs;
@@ -34,7 +27,7 @@ export function AppMobileNav({
   demo?: boolean;
 }) {
   const pathname = useLocation({ select: (location) => location.pathname });
-  const tabs = demo ? demoTabs : appTabs;
+  const tabs = appTabs;
   const active = activeTabIndex(pathname, tabs);
 
   // The glass lens stretches while it travels to the new tab.

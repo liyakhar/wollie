@@ -23,7 +23,7 @@ export function paydayLabel(overview: MoneyOverview) {
   return new Date(y, m - 1, d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
 
-export function ConnectBank({ demo = false }: { demo?: boolean }) {
+export function ConnectBank() {
   return (
     <main id="main" className="m-screen m-connect">
       <div className="m-connect__art" aria-hidden="true">
@@ -32,27 +32,22 @@ export function ConnectBank({ demo = false }: { demo?: boolean }) {
       </div>
       <h1>Connect your bank</h1>
       <p>Wollie reads your transactions to show what you can spend. Read-only, bank-grade security.</p>
-      <Link to={demo ? '/demo/accounts' : '/app/accounts'} className="m-button m-button--primary m-button--wide">
+      <Link to="/app/accounts" className="m-button m-button--primary m-button--wide">
         Connect bank
       </Link>
-      {!demo && (
-        <Link to="/demo" className="m-link m-link--center">
-          Explore with sample data
-        </Link>
-      )}
     </main>
   )
 }
 
 export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview; demo?: boolean }) {
-  if (!overview.hasAccounts) return <ConnectBank demo={demo} />
+  if (!overview.hasAccounts) return <ConnectBank />
 
   const { currency } = overview
   const money = (value: number) => formatMoney(value, currency)
   const tightest = [...overview.budgets].sort((a, b) => a.leftShare - b.leftShare).slice(0, 2)
   const goalsToDo = overview.goals.filter((goal) => goal.due > 0)
   const goalsShown = (goalsToDo.length ? goalsToDo : overview.goals).slice(0, 2)
-  const base = demo ? '/demo' : '/app'
+  const base = '/app'
 
   return (
     <main id="main" className="m-screen">
@@ -95,7 +90,7 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
 
       {overview.bills.length > 0 && (
         <section className="m-section">
-          <Link to={demo ? '/demo/upcoming' : '/app/recurring'} className="m-section__head">
+          <Link to="/app/recurring" className="m-section__head">
             <h2>Up next</h2>
             <IconChevronRight aria-hidden="true" />
           </Link>
