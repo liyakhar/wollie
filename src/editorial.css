@@ -151,3 +151,28 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .landing-hero__stage::before { content: ""; position: absolute; width: min(22rem, 76vw); height: 33rem; background: #e4ff4d; border: 1px solid #111; border-radius: 4px; transform: translate(12%, 5%); z-index: 0; }
 .landing-hero__stage .phone { z-index: 1; }
 .landing-hero__stage::before { width: 19rem; height: 33rem; transform: translate(2.25rem, 1.5rem); }
+
+/* ── Review fixes ── */
+/* story pictures: the inline offsets assume a square frame */
+.landing-story__frame { aspect-ratio: 1 / 1 !important; max-width: 18rem; justify-self: end; }
+/* hero badge: quiet */
+.landing-eyebrow { gap: .6rem; font-size: .75rem; margin-bottom: 2.5rem; }
+.landing-eyebrow b { background: none; border: 0; padding: 0; color: #111; letter-spacing: .1em; display: inline-flex; align-items: center; gap: .5rem; }
+.landing-eyebrow b::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: #e4ff4d; border: 1px solid #111; }
+.landing-eyebrow b::after { content: "·"; margin-left: .35rem; color: rgb(17 17 17 / .4); }
+/* hero: no stray block behind the phone */
+.landing-hero__stage::before { display: none; }
+/* header spacing */
+.landing-header__row { min-height: 4.75rem; }
+.landing-header__nav { gap: .5rem; }
+.landing-header__link { padding-inline: 1rem; }
+@media (min-width: 40rem) { .landing-header__link:last-of-type, a[href="/pricing"].landing-header__link { margin-inline-end: 2.5rem; } }
+.landing-header__nav .ds-btn:not(.landing-header__link) { min-height: 2.75rem; padding-inline: 1.25rem; }
+/* phone: one screen at a time, clean bottom dock */
+.phone__screen { position: relative; overflow: hidden; }
+.phone__page { position: absolute; inset: .5em 1.15em 0; opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+.phone__page.is-active { opacity: 1; }
+.phone__screen::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3.5em; background: linear-gradient(to bottom, transparent, var(--ds-canvas, #fff) 85%); pointer-events: none; }
+.phone__tabs { position: relative; z-index: 2; background: #f3f3f1; }
+.phone__home-bar { position: relative; z-index: 2; }
+.phone__body { padding-bottom: 0; background: #fff; }
