@@ -312,3 +312,16 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .phone .ds-balance { margin-bottom: 1.6em; }
 .landing .phone__page:first-of-type .phone__h:first-of-type, .landing .phone__h { margin-top: 2.4em; }
 .landing .phone__page .phone__head + .phone__h, .landing .phone__page .phone__head + .phone__summary + .phone__h { margin-top: 0; }
+
+/* Landing phone: same bars as the app */
+.phone .ds-bar { height: .45em; border-radius: 2px; background: #fbfbf9; box-shadow: inset 0 0 0 1px #111; }
+.phone .ds-bar > span { background: #e4ff4d !important; border-radius: 0; border-right: 1px solid #111; }
+.phone .ds-bar.is-over { box-shadow: inset 0 0 0 1px #d92d20; }
+.phone .ds-bar.is-over > span { background: repeating-linear-gradient(135deg, #d92d20 0 4px, #fbfbf9 4px 7px) !important; border-right: 0; }
+.phone__summary .ds-bar { background: rgb(17 17 17 / .12); box-shadow: inset 0 0 0 1px #111; }
+.phone__summary .ds-bar > span { background: #111 !important; border-right: 0; }
+.phone__cta { margin-top: 2em; }
+.phone__rows { margin-bottom: .25em; }
+.phone .ds-bar { box-shadow: none !important; border: 1px solid #111; box-sizing: border-box; overflow: hidden; }
+.phone .ds-bar.is-over { border-color: #d92d20; }
+.phone__summary .ds-bar { box-shadow: none !important; }
