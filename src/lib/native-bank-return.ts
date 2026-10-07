@@ -1,5 +1,7 @@
 const callbackHosts = new Set([
   'wollie.pages.dev',
+  'getwollie.com',
+  'www.getwollie.com',
   'onie-web-production.up.railway.app',
 ])
 

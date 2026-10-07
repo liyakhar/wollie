@@ -51,7 +51,9 @@ function createAuth() {
           'http://localhost:*',
           'http://127.0.0.1:*',
         ]
-      : undefined
+      : [process.env.BETTER_AUTH_URL, process.env.SITE_URL, 'https://getwollie.com', 'https://www.getwollie.com']
+          .filter((origin): origin is string => Boolean(origin))
+          .map((origin) => origin.replace(/\/$/, ''))
   const canSendAccountEmail = isTransactionalEmailConfigured()
 
   return betterAuth({
