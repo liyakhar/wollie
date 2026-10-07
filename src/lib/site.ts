@@ -5,7 +5,7 @@ export const site = {
     'A personal finance dashboard that connects accounts, organizes spending, tracks bills, and shows what you can safely spend each month.',
   locale: 'en_US',
   twitterHandle: '@wollie',
-  email: 'hello@wollie.app',
+  email: 'hello@getwollie.com',
 } as const
 
 export function getSiteUrl(): string {

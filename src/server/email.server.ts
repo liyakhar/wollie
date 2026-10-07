@@ -6,14 +6,15 @@ type AccountEmail = {
 }
 
 export function isTransactionalEmailConfigured(
-  env: { BREVO_API_KEY?: string; RESEND_API_KEY?: string; EMAIL_FROM?: string } = process.env,
+  env: { BREVO_API_KEY?: string; RESEND_API_KEY?: string; CLOUDFLARE_EMAIL_TOKEN?: string; CLOUDFLARE_ACCOUNT_ID?: string; EMAIL_FROM?: string } = process.env,
 ) {
   return Boolean(getTransactionalEmailProvider(env) && env.EMAIL_FROM?.trim())
 }
 
 export function getTransactionalEmailProvider(
-  env: { BREVO_API_KEY?: string; RESEND_API_KEY?: string } = process.env,
+  env: { BREVO_API_KEY?: string; RESEND_API_KEY?: string; CLOUDFLARE_EMAIL_TOKEN?: string; CLOUDFLARE_ACCOUNT_ID?: string } = process.env,
 ) {
+  if (env.CLOUDFLARE_EMAIL_TOKEN?.trim() && env.CLOUDFLARE_ACCOUNT_ID?.trim()) return 'cloudflare'
   if (env.BREVO_API_KEY?.trim()) return 'brevo'
   if (env.RESEND_API_KEY?.trim()) return 'resend'
   return null
@@ -31,13 +32,36 @@ export async function sendAccountEmail(message: AccountEmail) {
     throw new Error('Transactional email is not configured.')
   }
 
-  const response = provider === 'brevo'
-    ? await sendViaBrevo({ ...message, from: from! })
-    : await sendViaResend({ ...message, from: from! })
+  const response = provider === 'cloudflare'
+    ? await sendViaCloudflare({ ...message, from: from! })
+    : provider === 'brevo'
+      ? await sendViaBrevo({ ...message, from: from! })
+      : await sendViaResend({ ...message, from: from! })
 
   if (!response.ok) {
     throw new Error(`Transactional email provider rejected the request (${response.status}).`)
   }
+}
+
+async function sendViaCloudflare(message: AccountEmail & { from: string }) {
+  const token = process.env.CLOUDFLARE_EMAIL_TOKEN?.trim()
+  const account = process.env.CLOUDFLARE_ACCOUNT_ID?.trim()
+
+  return fetch(`https://api.cloudflare.com/client/v4/accounts/${account}/email/sending/send`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: message.from,
+      to: message.to,
+      subject: message.subject,
+      text: message.text,
+      html: message.html,
+    }),
+    signal: AbortSignal.timeout(15_000),
+  })
 }
 
 async function sendViaBrevo(message: AccountEmail & { from: string }) {
