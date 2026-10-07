@@ -385,3 +385,8 @@ body { background-color: #fbfbf9; }
 .m-glass-chip { background: rgb(255 255 255 / .35) !important; border-color: rgb(17 17 17 / .2) !important; }
 .m-balance, .m-summary--card, .m-identity, .m-step--primary, .m-plan__card--free { border-color: rgb(17 17 17 / .1) !important; }
 .m-title-row > a, .m-title-row > button, .m-title-row .m-icon-button, .m-connect__art { background: #e4ff4d !important; }
+/* One neon everywhere: bars and tab pill use the same #e4ff4d as the cards */
+.m-bar > span { background: #e4ff4d !important; box-shadow: inset 0 0 0 1px rgb(17 17 17 / .06) !important; }
+.m-bar.is-low > span { background: #e4ff4d !important; }
+.m-summary--card .m-bar > span { background: #111 !important; box-shadow: none !important; }
+@media (max-width: 63.99rem) { .app-shell .app-mobile-nav__indicator { background: #e4ff4d !important; } }
