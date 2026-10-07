@@ -322,7 +322,7 @@ body { background-color: #fbfbf9; }
 
 /* Big cards: pale neon, hairline grey, round */
 .m-balance, .m-summary--card, .m-identity {
-  background: #f1fcb8 !important;
+  background: #e4ff4d !important;
   border: 1px solid rgb(17 17 17 / 0.08) !important;
   border-radius: 22px !important;
   box-shadow: none !important;
@@ -339,9 +339,9 @@ body { background-color: #fbfbf9; }
   box-shadow: none !important;
 }
 .m-alert { border-left-width: 1px !important; }
-.m-step--primary, .m-plan__card--free { background: #f1fcb8 !important; border-color: rgb(17 17 17 / .08) !important; box-shadow: none !important; }
+.m-step--primary, .m-plan__card--free { background: #e4ff4d !important; border-color: rgb(17 17 17 / .08) !important; box-shadow: none !important; }
 .m-step__num { border: 1px solid var(--m-line); border-radius: 10px; background: #fff; }
-.m-connect__art { border: 1px solid rgb(17 17 17 / .08); border-radius: 18px; background: #f1fcb8; box-shadow: none; }
+.m-connect__art { border: 1px solid rgb(17 17 17 / .08); border-radius: 18px; background: #e4ff4d; box-shadow: none; }
 
 /* Section heads: grey hairline */
 .m-section__head, .m-section__head--static, .m-group > h2 { border-bottom: 1px solid var(--m-line) !important; }
@@ -367,7 +367,7 @@ body { background-color: #fbfbf9; }
 .m-field input, .m-field select, .m-field textarea, .m-search { border-radius: 14px !important; border-color: rgb(17 17 17 / .14) !important; }
 .m-field input:focus, .m-search:focus-within { box-shadow: 0 0 0 3px rgb(228 255 77 / .55) !important; border-color: rgb(17 17 17 / .4) !important; }
 .m-avatar, .m-identity__avatar, .m-title-row > a, .m-title-row > button, .m-title-row .m-icon-button { border-radius: 14px !important; border: 1px solid rgb(17 17 17 / .1) !important; box-shadow: none !important; }
-.m-title-row .m-icon-button { background: #f1fcb8 !important; color: #111 !important; }
+.m-title-row .m-icon-button { background: #e4ff4d !important; color: #111 !important; }
 .m-avatar--add { border-style: dashed !important; }
 .m-sheet__panel { border: 0 !important; border-radius: 24px 24px 0 0 !important; box-shadow: 0 -8px 40px rgb(17 17 17 / .12) !important; }
 .m-sheet__grip { border-radius: 999px !important; background: rgb(17 17 17 / .2) !important; height: 4px !important; }
@@ -379,5 +379,9 @@ body { background-color: #fbfbf9; }
   .app-shell .app-mobile-nav__item { color: rgb(17 17 17 / .45) !important; }
   .app-shell .app-mobile-nav__item.is-active { color: #111 !important; }
 }
-.m-title-row > a, .m-title-row > button { background: #f1fcb8 !important; width: 2.75rem; height: 2.75rem; display: inline-grid; place-items: center; padding: 0 !important; }
+.m-title-row > a, .m-title-row > button { background: #e4ff4d !important; width: 2.75rem; height: 2.75rem; display: inline-grid; place-items: center; padding: 0 !important; }
 .m-title-row > a *, .m-title-row > button * { background: transparent !important; border: 0 !important; box-shadow: none !important; }
+/* Big cards keep the bright neon; softer chips and a pale tint only for small buttons */
+.m-glass-chip { background: rgb(255 255 255 / .35) !important; border-color: rgb(17 17 17 / .2) !important; }
+.m-balance, .m-summary--card, .m-identity, .m-step--primary, .m-plan__card--free { border-color: rgb(17 17 17 / .1) !important; }
+.m-title-row > a, .m-title-row > button, .m-title-row .m-icon-button, .m-connect__art { background: #e4ff4d !important; }
