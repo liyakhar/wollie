@@ -18,3 +18,5 @@ ios/App/App/config.xml
 __unconfig*
 todos.json
 outreach/queue/*.jsonl
+.dev*.log
+.prod*.log

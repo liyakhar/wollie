@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset=utf-8><title>Wollie Mobile Design System</title><link rel=stylesheet href=wollie-editorial.css>
+<style>
+.phones{display:grid;grid-template-columns:repeat(3,390px);gap:28px;justify-content:center;padding:20px 0}
+.frame{width:390px;height:780px;border:1px solid var(--ink);border-radius:36px;overflow:hidden;background:var(--canvas);padding:22px 20px;position:relative}
+.frame h1{font:400 44px/1 var(--serif);letter-spacing:-.03em;margin:8px 0 22px}
+.bal{background:var(--neon);border:1px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:22px;border-radius:4px;margin-bottom:28px}
+.bal .n{font:400 76px/1 var(--serif);letter-spacing:-.035em;margin:10px 0 16px}.bal .n small{font-size:.45em;opacity:.55}
+.sec{border-bottom:1px solid var(--ink);padding-bottom:9px;margin:26px 0 4px;display:flex;justify-content:space-between}
+.rw{display:flex;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}.rw .ic{width:40px;height:40px;border:1px solid var(--line);background:var(--surface);border-radius:4px;display:grid;place-items:center;font-size:18px}.rw .m{flex:1}.rw .t{display:flex;justify-content:space-between;font-weight:500;margin-bottom:7px}.rw .t b{font-weight:600}
+.pb{height:8px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);border-radius:2px}.pb i{display:block;height:100%;background:var(--ink)}.pb.o i{background:var(--neg)}
+.dock{position:absolute;left:20px;right:20px;bottom:18px;border-radius:99px;background:var(--surface);box-shadow:0 0 0 1px var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:5px}.dock span{text-align:center;padding:9px 0;font-size:11px;color:var(--ink-2);border-radius:99px}.dock .on{background:var(--ink);color:var(--neon)}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--canvas);border-top:1px solid var(--ink);border-radius:8px 8px 0 0;padding:14px 20px 24px}.grip{width:40px;height:3px;background:var(--ink);margin:0 auto 18px}
+</style></head><body><div class=wrap>
+<nav class=top><div class=logo>wollie<i></i></div><div class=label>Mobile design system · Editorial Mono</div></nav>
+<section style="border:0;padding-bottom:20px"><div class=display style="font-size:64px">Mobile, <em class=mark>quiet.</em></div><p style="color:var(--ink-2);margin-top:16px;max-width:560px">Same tokens as the web. Serif titles, hairline rows, outlined icon squares, flat neon balance card with a hard ink shadow, square corners, pill tab bar.</p></section>
+</div><div class=phones>
+<div class=frame><div class=row style="justify-content:space-between"><h1>Home</h1><span class=avatar>W</span></div>
+<div class=bal><div class=label style="color:var(--ink)">Safe to spend</div><div class=n>€5,214<small>.08</small></div><span class=chip style="background:none;border-color:var(--ink)">€200.54 a day</span> <span class=chip style="background:none;border-color:var(--ink)">26 days to payday</span></div>
+<div class=sec><span class=label style="color:var(--ink)">Budgets</span><span>›</span></div>
+<div class=rw><span class=ic>🚆</span><div class=m><div class=t><span>Transport</span><b class=neg>€106 over</b></div><div class="pb o"><i style="width:100%"></i></div></div></div>
+<div class=rw><span class=ic>🛒</span><div class=m><div class=t><span>Groceries</span><b>€200 <span style="color:var(--ink-2);font-weight:400">left of €400</span></b></div><div class=pb><i style="width:50%"></i></div></div></div>
+<div class=dock><span class=on>Home</span><span>Activity</span><span>Budgets</span><span>Goals</span></div></div>
+<div class=frame><h1>Activity</h1><div class=input style="margin-bottom:14px;padding-top:11px;color:var(--ink-3)">Search transactions</div><div class=seg style="width:100%;display:flex"><span class=on style="flex:1;text-align:center">By date</span><span style="flex:1;text-align:center">By category</span></div>
+<div class=label style="margin:26px 0 4px">Today</div><div class=rw><span class=ic>▤</span><div class=m><div class=t><span>Streaming service</span><b>−€6.69</b></div><div class=small>Subscriptions · Pending</div></div></div>
+<div class=label style="margin:22px 0 4px">Yesterday</div><div class=rw><span class=ic>♡</span><div class=m><div class=t><span>Pharmacy</span><b>−€52.89</b></div><div class=small>Health</div></div></div>
+<div class=rw><span class=ic>＋</span><div class=m><div class=t><span>Salary</span><b class=pos>+€3,200</b></div><div class=small>Income</div></div></div>
+<div class=dock><span>Home</span><span class=on>Activity</span><span>Budgets</span><span>Goals</span></div></div>
+<div class=frame><h1>Goals</h1><div class=card style="margin-bottom:18px"><div class=label>Holiday fund</div><div class=num style="font-size:44px;margin:8px 0 12px">68%</div><div class=pb><i style="width:68%;background:var(--neon);box-shadow:inset 0 0 0 1px var(--ink)"></i></div></div><span class="btn neon" style="width:100%;justify-content:center">New goal</span>
+<div class=sheet><div class=grip></div><div class=h2 style="margin-bottom:12px">Add amount</div><div class=input style="padding-top:11px;margin-bottom:14px">€ 120.00</div><div class=row><span class=btn style="flex:1;justify-content:center">Save</span><span class="btn ghost" style="flex:1;justify-content:center">Cancel</span></div></div></div>
+</div></body></html>

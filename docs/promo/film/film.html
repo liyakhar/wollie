@@ -1,0 +1,280 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Wollie film</title>
+<style>
+@font-face{font-family:IS;src:url(instrument-serif-latin-400-normal.woff2)}
+@font-face{font-family:IS;font-style:italic;src:url(instrument-serif-latin-400-italic.woff2)}
+@font-face{font-family:IN;font-weight:100 900;src:url(inter.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;background:#fbfbf9;overflow:hidden}
+#stage{position:absolute;inset:0;overflow:hidden;background:#fbfbf9;color:#111;font-family:IN,sans-serif;transform-origin:50% 50%}
+.abs{position:absolute}
+.serif{font-family:IS,serif;letter-spacing:-.035em;font-weight:400}
+.mask{overflow:hidden;position:absolute}
+#word{position:absolute;white-space:nowrap;font-size:330px;line-height:1;transform-origin:100% 50%}
+#blob{position:absolute;background:#cdea3a;overflow:hidden}
+.lab{font:500 28px IN;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.chip{position:absolute;border:2px solid rgba(17,17,17,.22);background:rgba(255,255,255,.45);border-radius:999px;font:600 32px IN;padding:12px 28px;white-space:nowrap;transform-origin:0 50%}
+#phone{position:absolute;background:#fff;border:18px solid #111;overflow:hidden}
+.row{position:absolute;left:36px;right:36px}
+.ic{position:absolute;left:0;top:0;width:64px;height:64px;border-radius:20px;background:#f1f1ed}
+.track{position:absolute;height:14px;border-radius:99px;background:#ecece6;overflow:hidden}
+.fill{height:100%;border-radius:99px;background:#cdea3a}
+#cursor{position:absolute;width:56px;height:56px;left:0;top:0;transform-origin:6px 3px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.28))}
+</style></head><body>
+<div id="stage">
+  <div id="word" class="serif">Wollie</div>
+  <div id="phone"></div>
+  <div id="left1" class="mask"><div class="serif" id="l1a" style="font-size:120px;line-height:1.02"></div></div>
+  <div id="blob"></div>
+  <div id="cap" class="mask"><div class="serif" id="capi" style="font-size:112px;line-height:1.05;white-space:nowrap">Alerts, before<br>you overspend.</div></div>
+  <div id="final" class="abs" style="left:0;top:0;width:1920px;height:1080px;transform-origin:50% 50%">
+    <div class="mask" id="f1"><div class="serif" style="font-size:230px;line-height:1;white-space:nowrap">Know what</div></div>
+    <div class="mask" id="f2"><div class="serif" style="font-size:230px;line-height:1;white-space:nowrap">you can <i id="sp">spend.</i></div></div>
+  </div>
+  <div id="cta" class="mask"><div style="font:600 46px IN;letter-spacing:.01em" id="ctai">getwollie.com</div></div>
+  <svg id="cursor" viewBox="0 0 24 24"><path d="M5 3l14 8-6 2 4 7-3 1-4-7-5 4z" fill="#111" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>
+</div>
+<script>
+const W=1920,H=1080;
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,k)=>a+(b-a)*k;
+const eOut=x=>1-Math.pow(1-x,3);
+const eIO=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const eExp=x=>x>=1?1:1-Math.pow(2,-10*x);
+const eIOexp=x=>x<=0?0:x>=1?1:(x<.5?Math.pow(2,20*x-10)/2:(2-Math.pow(2,-20*x+10))/2);
+function spring(t,t0,z=.52,w=16){const s=t-t0;if(s<=0)return 0;const wd=w*Math.sqrt(1-z*z);return 1-Math.exp(-z*w*s)*(Math.cos(wd*s)+(z*w/wd)*Math.sin(wd*s))}
+// keyframed rect for the blob
+const K=[]; // [t, cx, cy, w, h, r]
+let dotCx,dotCy,wordLeft,wordW,spRect;
+const phone={cx:1370,cy:540,w:560,h:1000,r:84};
+function key(t,cx,cy,w,h,r){K.push([t,cx,cy,w,h,r])}
+function blobAt(t){
+  let a=K[0],b=K[K.length-1];
+  if(t<=a[0])return a.slice(1);
+  for(let i=0;i<K.length-1;i++){if(t>=K[i][0]&&t<=K[i+1][0]){a=K[i];b=K[i+1];break}}
+  if(t>=K[K.length-1][0])return K[K.length-1].slice(1);
+  const dur=b[0]-a[0];
+  // holds: identical keys = no motion
+  const k=a.slice(1).every((v,i)=>v===b[i+1])?0:eIOexp(clamp((t-a[0])/dur));
+  return [1,2,3,4,5].map(i=>lerp(a[i],b[i],k));
+}
+function build(){
+  const word=$('word');
+  const wW=word.getBoundingClientRect().width;
+  const dotD=34, gap=8;
+  const total=wW+gap+dotD;
+  wordLeft=W/2-total/2; wordW=wW;
+  word.style.left=wordLeft+'px'; word.style.top=(H/2-165-8)+'px';
+  dotCx=wordLeft+wW+gap+dotD/2; dotCy=H/2+110;
+  const sp=$('sp').getBoundingClientRect();
+  // measure final text after layout
+  spRect={cx:sp.left+sp.width/2,cy:sp.top+sp.height*0.74,w:sp.width+24,h:sp.height*0.3};
+  // blob keyframes
+  key(0,dotCx,dotCy,dotD,dotD,17);
+  key(1.1,dotCx,dotCy,dotD,dotD,17);
+  key(1.85,960,540,420,132,66);
+  key(2.0,960,540,420,132,66);
+  key(2.85,960,540,1560,680,56);
+  key(5.0,960,540,1560,680,56);
+  key(5.95,phone.cx,330,486,236,38);
+  key(8.95,phone.cx,330,486,236,38);
+  key(9.0,1370,590,60,60,30);
+  key(9.45,1370,590,4400,4400,2200);
+  key(10.0,1370,590,4400,4400,2200);
+  key(10.85,960,500,1180,200,100);
+  key(11.9,960,500,1180,200,100);
+  key(12.75,960,540,380,380,190);
+  key(13.85,960,540,380,380,190);
+  key(14.7,960,540,1560,640,56);
+  key(15.7,960,540,1560,640,56);
+  key(16.15,960,540,4400,4400,2200);
+  key(16.55,960,540,4400,4400,2200);
+  key(17.45,spRect.cx,spRect.cy,spRect.w,spRect.h,0);
+  key(18.0,spRect.cx,spRect.cy,spRect.w,spRect.h,0);
+  key(18.8,960,540,420,132,66);
+  key(18.95,960,540,420,132,66);
+  key(19.3,dotCx,dotCy,dotD,dotD,17);
+  key(20.0,dotCx,dotCy,dotD,dotD,17);
+  // static layout
+  const ph=$('phone');
+  Object.assign(ph.style,{width:phone.w+'px',height:phone.h+'px'});
+  // phone content
+  ph.innerHTML=`
+   <div class="abs serif" style="left:36px;top:34px;font-size:64px;line-height:1">Home</div>
+   <div class="abs lab" style="left:36px;top:458px;font-size:20px;opacity:.6">Budgets</div>
+   <div class="abs" style="left:36px;right:36px;top:490px;height:2px;background:rgba(17,17,17,.09)"></div>
+   <div class="row" style="top:508px"><div class="ic"></div>
+     <div class="abs" style="left:88px;top:2px;font:500 28px IN">Groceries</div><div class="abs" style="right:0;top:2px;font:600 26px IN"><span>€200</span> <span style="opacity:.5;font-weight:400">left of €400</span></div>
+     <div class="track" style="left:88px;right:0;top:48px"><div class="fill" id="b1" style="width:0"></div></div></div>
+   <div class="row" style="top:592px"><div class="ic"></div>
+     <div class="abs" style="left:88px;top:2px;font:500 28px IN">Transport</div><div class="abs" id="over" style="right:0;top:2px;font:600 26px IN;color:#d92d20">€21.50 over</div>
+     <div class="track" style="left:88px;right:0;top:48px"><div class="fill" id="b2" style="width:0"></div></div></div>
+   <div class="abs lab" style="left:36px;top:690px;font-size:20px;opacity:.6">Goals</div>
+   <div class="abs" style="left:36px;right:36px;top:722px;height:2px;background:rgba(17,17,17,.09)"></div>
+   <div class="row" style="top:742px"><div class="ic"></div>
+     <div class="abs" style="left:88px;top:2px;font:500 28px IN">Travel</div><div class="abs" style="right:0;top:2px;font:600 26px IN">€200 to save</div>
+     <div class="track" style="left:88px;right:0;top:48px"><div class="fill" id="b3" style="width:0;background:#cdea3a"></div></div></div>
+   <div class="abs" style="left:28px;right:28px;bottom:28px;height:92px;border-radius:99px;background:rgba(255,255,255,.95);box-shadow:0 0 0 2px rgba(17,17,17,.08)">
+     <div class="abs" style="left:8px;top:8px;width:112px;height:76px;border-radius:99px;background:#cdea3a"></div>
+     <div class="abs" style="left:8px;top:0;width:112px;height:92px;display:grid;place-items:center;font:500 22px IN">Home</div>
+     <div class="abs" style="left:124px;top:0;width:112px;height:92px;display:grid;place-items:center;font:500 22px IN;opacity:.45">Activity</div>
+     <div class="abs" style="left:240px;top:0;width:112px;height:92px;display:grid;place-items:center;font:500 22px IN;opacity:.45">Budgets</div>
+     <div class="abs" style="left:356px;top:0;width:112px;height:92px;display:grid;place-items:center;font:500 22px IN;opacity:.45">Goals</div></div>`;
+  $('l1a').innerHTML='Budgets that<br>reset on payday.';
+  // blob content
+  $('blob').innerHTML=`
+   <div id="pl" class="lab" style="position:absolute;left:0;right:0;top:0;height:100%;display:grid;place-items:center"><div class="mask" style="position:relative;height:36px;width:300px;text-align:center"><div id="pli" style="position:absolute;left:0;right:0;top:0;line-height:36px;font-size:26px">Safe to spend</div></div></div>
+   <div id="cl" class="lab" style="position:absolute;opacity:.62"></div>
+   <div id="cn" class="serif" style="position:absolute;line-height:1;white-space:nowrap"></div>
+   <div id="c1" class="chip" style="transform:scale(0)">€82.51 a day</div>
+   <div id="c2" class="chip" style="transform:scale(0)">9 days to payday</div>
+   <div id="nt" style="position:absolute;left:0;top:0;white-space:nowrap">
+     <div id="nti" style="position:absolute;width:120px;height:120px;border-radius:34px;background:#111;color:#cdea3a;display:grid;place-items:center;font:400 84px IS"> W</div>
+     <div id="ntl1" style="position:absolute;font:600 46px IN"></div><div id="ntl2" style="position:absolute;font:400 38px IN;opacity:.72"></div></div>
+   <svg id="fid" viewBox="0 0 200 200" style="position:absolute;width:210px;height:210px;overflow:visible" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+     <path id="fc" d="M20 70V45a25 25 0 0 1 25-25h25M130 20h25a25 25 0 0 1 25 25v25M180 130v25a25 25 0 0 1-25 25h-25M70 180H45a25 25 0 0 1-25-25v-25"/>
+     <path id="fe" d="M72 78v18M128 78v18M100 84v26h-8M68 134c18 16 46 16 64 0"/>
+     <path id="fk" d="M64 104l24 24 50-54" stroke="#111" stroke-width="12"/></svg>
+   <div id="bars" style="position:absolute;left:0;top:0"></div>`;
+  const bars=$('bars');
+  const rows=[['Groceries','€353 left of €400',.88,false],['Transport','€21.50 over',1,true],['Travel','€200 to save',.42,false]];
+  bars.innerHTML=rows.map((r,i)=>`<div style="position:absolute;left:90px;top:${70+i*170}px;width:1380px;height:130px">
+    <div style="position:absolute;left:0;top:0;font:500 46px IN">${r[0]}</div><div style="position:absolute;right:0;top:0;font:600 40px IN;${r[3]?'color:#a8180e':''}">${r[1]}</div>
+    <div style="position:absolute;left:0;top:74px;width:100%;height:30px;border-radius:99px;background:rgba(17,17,17,.1);overflow:hidden"><div class="bf" style="height:100%;width:0;border-radius:99px;background:${r[3]?'#e5483b':'#111'}" data-v="${r[2]}"></div></div></div>`).join('');
+  // final text layout
+  const f1=$('f1'),f2=$('f2');
+  f1.style.cssText='left:0;width:1920px;top:318px;height:240px;text-align:center';f2.style.cssText='left:0;width:1920px;top:538px;height:260px;text-align:center';
+  $('cap').style.cssText='left:140px;top:790px;height:250px;width:900px';
+  $('left1').style.cssText='left:120px;top:330px;height:280px;width:760px';
+  $('cta').style.cssText='left:0;width:1920px;top:'+(H/2+190)+'px;height:70px;text-align:center';
+  $('ctai').style.cssText+=';position:absolute;left:0;right:0;top:0';
+  const sp2=$('sp').getBoundingClientRect();
+  spRect={cx:sp2.left+sp2.width/2,cy:sp2.top+sp2.height*0.78,w:sp2.width+28,h:sp2.height*0.26};
+  K.forEach(k=>{if(k[0]===17.45||k[0]===18.0){k[1]=spRect.cx;k[2]=spRect.cy;k[3]=spRect.w;k[4]=spRect.h;k[5]=0}});
+}
+function fmt(v){const s=v.toFixed(2).split('.');return '€'+Number(s[0]).toLocaleString('en')+'<span style="font-size:.5em;opacity:.5;font-family:IS">.'+s[1]+'</span>'}
+const CUR=[[3.3,1900,980,0],[3.9,1330,700,1],[4.6,1290,640,1],[5.4,1330,760,1],[6.2,1330,700,1],[8.0,1370,610,1],[8.75,1372,606,1],[8.95,1372,606,1],[9.4,1380,640,0]];
+function curAt(t){
+  if(t<CUR[0][0]||t>CUR[CUR.length-1][0])return [0,0,0];
+  for(let i=0;i<CUR.length-1;i++){const a=CUR[i],b=CUR[i+1];if(t>=a[0]&&t<=b[0]){const k=eIO((t-a[0])/(b[0]-a[0]));return [lerp(a[1],b[1],k),lerp(a[2],b[2],k),lerp(a[3],b[3],k)]}}
+  return [0,0,0];
+}
+function setRect(el,cx,cy,w,h,r){el.style.left=(cx-w/2)+'px';el.style.top=(cy-h/2)+'px';el.style.width=w+'px';el.style.height=h+'px';el.style.borderRadius=Math.min(r,w/2,h/2)+'px'}
+function riseMask(inner,t,t0,d=.45){const k=eOut(seg(t,t0,t0+d));inner.style.transform=`translateY(${(1-k)*105}%)`}
+function seek(t){
+  const st=$('stage');
+  // gentle push-in per scene
+  const zoom=1+0.035*seg(t,2.0,5.0)-0.035*seg(t,5.0,5.4)+0.03*seg(t,5.6,9.0)-0.03*seg(t,9.0,9.5)+0.025*seg(t,10.0,12)-0.025*seg(t,12,12.4);
+  st.style.transform=`scale(${zoom})`;
+  // word + squeeze
+  const word=$('word');
+  let s=1;
+  if(t<19.3){s=1-eIO(seg(t,0.5,1.3))*0.985}
+  else{s=0.015+0.985*Math.min(1.04,spring(t,19.3,.55,15))}
+  if(t<0.5)s=1;
+  word.style.transform=`scaleX(${s})`;
+  word.style.transformOrigin=`${wordW+8}px 50%`;
+  word.style.visibility=(s<0.02&&t<19.3&&t>1.3)||(t>1.3&&t<19.3)?'hidden':'visible';
+  // blob
+  const b=blobAt(t);const blob=$('blob');
+  setRect(blob,...b);
+  const bw=b[2],bh=b[3];
+  blob.style.visibility=(t>=16.55&&t<17.45&&false)?'hidden':'visible';
+  const bl=b[0]-bw/2, bt=b[1]-bh/2;
+  // pill label
+  $('pl').style.display=(bw<600&&t>1.4&&t<2.6||(t>18.7&&t<19.1&&bw<600))?'grid':'none';
+  riseMask($('pli'),t,1.5,.4);
+  if(t>18.7){ $('pli').style.transform=`translateY(${eIO(seg(t,18.75,18.95))*-105}%)`}
+  // card label + number + chips
+  const showCard=(t>=2.5&&t<9.0);
+  const fs=86+(290-86)*clamp((bw-486)/(1560-486));
+  const cl=$('cl'),cn=$('cn');
+  cl.style.display=showCard?'block':'none';cn.style.display=showCard?'block':'none';
+  if(showCard){
+    const big=bw>900;
+    cl.textContent='Safe to spend';cl.style.fontSize=(big?28:20)+'px';
+    cl.style.left=(big?84:36)+'px';cl.style.top=(big?70:30)+'px';
+    cn.style.fontSize=fs+'px';cn.style.left=(big?78:32)+'px';cn.style.top=(big?150:78)+'px';
+    const v=2549.62*eOut(seg(t,2.75,4.4));cn.innerHTML=fmt(v);
+    const c1=$('c1'),c2=$('c2');
+    const p1=spring(t,3.7),p2=spring(t,3.95);
+    const hide=1-eOut(seg(t,5.0,5.5));
+    c1.style.left='84px';c1.style.top=(bh-110)+'px';c2.style.left='330px';c2.style.top=(bh-110)+'px';
+    c1.style.transform=`scale(${Math.max(0,p1*hide)})`;c2.style.transform=`scale(${Math.max(0,p2*hide)})`;
+  } else {$('c1').style.transform='scale(0)';$('c2').style.transform='scale(0)'}
+  // phone
+  const ph=$('phone');
+  const pk=eIOexp(seg(t,5.0,5.95));
+  const a0={cx:960,cy:540,w:1560,h:680,r:56};
+  if(t<5.0){ph.style.display='none'}else{
+    ph.style.display='block';
+    let slide=eIO(seg(t,9.0,9.9))*1400;
+    setRect(ph,lerp(a0.cx,phone.cx,pk),lerp(a0.cy,phone.cy,pk)+slide,lerp(a0.w,phone.w,pk),lerp(a0.h,phone.h,pk),lerp(a0.r,phone.r,pk));
+    ph.style.borderWidth=(18*pk)+'px';
+    ph.style.visibility=(t>9.5)?'hidden':'visible';
+    ph.firstElementChild.style.opacity=seg(t,5.7,6.0);
+  }
+  // phone bars
+  const dr=eOut(seg(t,6.6,7.6));
+  $('b1').style.width=(50*dr)+'%';$('b2').style.width=(100*eOut(seg(t,6.8,7.8)))+'%';$('b3').style.width=(42*eOut(seg(t,7.0,8.0)))+'%';
+  const red=eIO(seg(t,8.1,8.6));
+  $('b2').style.background=`rgb(${Math.round(lerp(205,229,red))},${Math.round(lerp(234,72,red))},${Math.round(lerp(58,59,red))})`;
+  $('over').style.opacity=seg(t,7.9,8.3);
+  // left copy
+  const l=$('left1');
+  l.style.display=(t>5.9&&t<9.2)?'block':'none';
+  riseMask($('l1a'),t,6.1,.55);
+  if(t>8.8)$('l1a').style.transform=`translateY(${-eIO(seg(t,8.8,9.2))*105}%)`;
+  // notification
+  const nt=$('nt');
+  const showN=t>=10.6&&t<12.5;
+  nt.style.display=showN?'block':'none';
+  if(showN){
+    $('nti').style.left=(70)+'px';$('nti').style.top=(bh/2-60)+'px';
+    $('ntl1').style.left='230px';$('ntl1').style.top=(bh/2-62)+'px';$('ntl2').style.left='230px';$('ntl2').style.top=(bh/2+4)+'px';
+    $('ntl1').textContent='Over budget: Transport';$('ntl2').textContent='€21.50 over your €150 budget.';
+    const ns=spring(t,10.85,.5,16);$('nti').style.transform=`scale(${Math.max(0,ns)})`;
+    $('ntl1').style.clipPath=`inset(0 ${100-100*eOut(seg(t,10.95,11.4))}% 0 0)`;$('ntl2').style.clipPath=`inset(0 ${100-100*eOut(seg(t,11.1,11.6))}% 0 0)`;
+    nt.style.opacity=1-eIO(seg(t,12.2,12.5));
+  }
+  // caption under notification
+  const cap=$('cap');cap.style.display=(t>10.9&&t<12.6)?'block':'none';
+  riseMask($('capi'),t,11.0,.5);if(t>12.1)$('capi').style.transform=`translateY(${-eIO(seg(t,12.1,12.5))*105}%)`;
+  // face id
+  const fid=$('fid');
+  const showF=(t>=12.7&&t<14.4);
+  fid.style.display=showF?'block':'none';
+  if(showF){
+    fid.style.left=(bw/2-105)+'px';fid.style.top=(bh/2-105)+'px';
+    const dash=(el,len,k)=>{el.style.strokeDasharray=len;el.style.strokeDashoffset=len*(1-k)};
+    dash($('fc'),600,eOut(seg(t,12.85,13.35)));dash($('fe'),400,eOut(seg(t,13.15,13.6)));
+    const ck=eOut(seg(t,13.75,14.1));dash($('fk'),200,ck);
+    $('fe').style.opacity=1-eIO(seg(t,13.7,13.9));
+    fid.style.transform=`scale(${1-0.0*ck})`;
+  }
+  // bars card
+  const bars=$('bars');
+  const showB=(t>=14.5&&t<16.0);
+  bars.style.display=showB?'block':'none';
+  if(showB){
+    bars.style.left='0px';bars.style.top=((bh-640)/2)+'px';
+    [...bars.querySelectorAll('.bf')].forEach((el,i)=>{el.style.width=(parseFloat(el.dataset.v)*100*eOut(seg(t,14.9+i*.18,15.55+i*.18)))+'%'});
+  }
+  // final text
+  const fin=$('final');
+  const showFin=t>=16.5&&t<18.9;
+  fin.style.display=showFin?'block':'none';
+  riseMask(f1.firstElementChild,t,16.7,.5);riseMask(f2.firstElementChild,t,16.85,.5);
+  if(t>18.0){const k=eIO(seg(t,18.0,18.85));fin.style.transform=`scale(${1-k})`;}else fin.style.transform='scale(1)';
+  // cta
+  const cta=$('cta');cta.style.display=t>19.4?'block':'none';riseMask($('ctai'),t,19.45,.45);
+  // cursor
+  const c=curAt(t);const cu=$('cursor');
+  const click=1-0.2*(Math.exp(-Math.pow((t-8.8)/.08,2)))-0.0;
+  cu.style.transform=`translate(${c[0]}px,${c[1]}px) scale(${c[2]*click})`;
+  cu.style.display=c[2]>0.01?'block':'none';
+}
+window.__ready=false;
+document.fonts.ready.then(()=>{build();window.seek=seek;window.__ready=true;seek(0);});
+</script></body></html>
