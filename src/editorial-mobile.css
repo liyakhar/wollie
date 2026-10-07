@@ -316,3 +316,68 @@ body { background-color: #fbfbf9; }
 .m-alertcard__title { font: 400 1.6rem "Instrument Serif", Georgia, serif; letter-spacing: -0.02em; margin: 0; }
 .m-alertcard__body { color: var(--m-ink-2); font-size: .9375rem; line-height: 1.45; margin: 0; }
 .m-alertcard .m-button { justify-self: start; }
+
+/* ═══ Light pass: thin grey lines, soft corners, no hard shadows, no black bars ═══ */
+.m-screen, .m-sheet { --m-line: rgb(17 17 17 / 0.09); --m-radius: 20px; }
+
+/* Big cards: pale neon, hairline grey, round */
+.m-balance, .m-summary--card, .m-identity {
+  background: #f1fcb8 !important;
+  border: 1px solid rgb(17 17 17 / 0.08) !important;
+  border-radius: 22px !important;
+  box-shadow: none !important;
+}
+.m-balance__label, .m-summary__label { opacity: .6; }
+.m-glass-chip { border: 1px solid rgb(17 17 17 / 0.14) !important; border-radius: 999px !important; background: rgb(255 255 255 / .55) !important; }
+.m-summary--card .m-bar, .m-balance .m-bar { background: rgb(17 17 17 / .08); }
+.m-summary--card .m-bar > span { background: #111; }
+
+/* Other cards */
+.m-alertcard, .m-alert, .m-empty, .m-step, .m-plan__card, .m-share-hero, .m-group {
+  border: 1px solid var(--m-line) !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+}
+.m-alert { border-left-width: 1px !important; }
+.m-step--primary, .m-plan__card--free { background: #f1fcb8 !important; border-color: rgb(17 17 17 / .08) !important; box-shadow: none !important; }
+.m-step__num { border: 1px solid var(--m-line); border-radius: 10px; background: #fff; }
+.m-connect__art { border: 1px solid rgb(17 17 17 / .08); border-radius: 18px; background: #f1fcb8; box-shadow: none; }
+
+/* Section heads: grey hairline */
+.m-section__head, .m-section__head--static, .m-group > h2 { border-bottom: 1px solid var(--m-line) !important; }
+.m-section__head h2, .m-section__head--static h2 { color: rgb(17 17 17 / .6); }
+.m-list > li, .m-list > a, .m-group li + li { border-color: var(--m-line) !important; }
+
+/* Icons in soft rounded tiles */
+.m-row__icon { border: 0 !important; border-radius: 12px !important; background: #f3f3ef !important; }
+
+/* Bars: round, soft grey track, no outline */
+.m-bar { height: .5rem !important; border: 0 !important; border-radius: 999px !important; background: #ecece6 !important; box-shadow: none !important; }
+.m-bar > span { border-radius: 999px !important; background: #cdea3a !important; box-shadow: none !important; border: 0 !important; }
+.m-bar.is-low > span { background: #e9b949 !important; }
+.m-bar.is-over, .m-bar.is-over > span { background: #ef6a5b !important; border: 0 !important; }
+.m-summary--card .m-bar > span { background: #111 !important; }
+
+/* Buttons, chips, fields, avatars */
+.m-button { border-radius: 14px !important; }
+.m-button--primary { background: #111 !important; border-color: #111 !important; }
+.m-button--primary:hover { background: #2a2a2a !important; color: #fbfbf9 !important; }
+.m-button--ghost { border: 1px solid rgb(17 17 17 / .18) !important; border-radius: 14px !important; }
+.m-chip { border-radius: 999px !important; }
+.m-field input, .m-field select, .m-field textarea, .m-search { border-radius: 14px !important; border-color: rgb(17 17 17 / .14) !important; }
+.m-field input:focus, .m-search:focus-within { box-shadow: 0 0 0 3px rgb(228 255 77 / .55) !important; border-color: rgb(17 17 17 / .4) !important; }
+.m-avatar, .m-identity__avatar, .m-title-row > a, .m-title-row > button, .m-title-row .m-icon-button { border-radius: 14px !important; border: 1px solid rgb(17 17 17 / .1) !important; box-shadow: none !important; }
+.m-title-row .m-icon-button { background: #f1fcb8 !important; color: #111 !important; }
+.m-avatar--add { border-style: dashed !important; }
+.m-sheet__panel { border: 0 !important; border-radius: 24px 24px 0 0 !important; box-shadow: 0 -8px 40px rgb(17 17 17 / .12) !important; }
+.m-sheet__grip { border-radius: 999px !important; background: rgb(17 17 17 / .2) !important; height: 4px !important; }
+
+/* Tab bar: neon pill with dark icon instead of a black block */
+@media (max-width: 63.99rem) {
+  .app-shell .app-mobile-nav { background: rgb(255 255 255 / .9) !important; box-shadow: 0 0 0 1px rgb(17 17 17 / .08), 0 8px 24px rgb(17 17 17 / .06) !important; }
+  .app-shell .app-mobile-nav__indicator { background: #eaff7a !important; }
+  .app-shell .app-mobile-nav__item { color: rgb(17 17 17 / .45) !important; }
+  .app-shell .app-mobile-nav__item.is-active { color: #111 !important; }
+}
+.m-title-row > a, .m-title-row > button { background: #f1fcb8 !important; width: 2.75rem; height: 2.75rem; display: inline-grid; place-items: center; padding: 0 !important; }
+.m-title-row > a *, .m-title-row > button * { background: transparent !important; border: 0 !important; box-shadow: none !important; }
