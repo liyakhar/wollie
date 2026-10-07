@@ -499,7 +499,7 @@ function connectionLabel(status?: string) {
   if (status === "NEEDS_RECONNECT") return "Connection needs attention";
   if (status === "FAILED") return "Connection failed";
   if (status === "SYNCING") return "Updating";
-  return "Not connected";
+  return "Sample account";
 }
 
 function ownershipLabel(

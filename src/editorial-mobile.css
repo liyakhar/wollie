@@ -403,3 +403,46 @@ body { background-color: #fbfbf9; }
 .m-switch-pill::after { content: ""; position: absolute; left: .1875rem; top: .1875rem; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgb(17 17 17 / .25); transition: transform .2s; }
 .m-switch-pill.is-on { background: #cdea3a; }
 .m-switch-pill.is-on::after { transform: translateX(1.125rem); }
+
+/* ═══ Final QA: one look everywhere ═══ */
+/* Big figures are serif, like Home */
+.m-hero__number, .m-hero--compact .m-hero__number { font-family: "Instrument Serif", Georgia, serif !important; font-weight: 400 !important; letter-spacing: -0.03em; font-size: clamp(3.5rem, 18vw, 4.5rem) !important; }
+.m-hero__label, .m-hero__meta { color: rgb(17 17 17 / .6); font-weight: 400; }
+.m-hero { justify-items: start; text-align: left; }
+.m-cents { font-family: "Instrument Serif", Georgia, serif; }
+/* Profile lists: no boxes, just the label and hairlines */
+.m-group, .m-screen .m-group { border: 0 !important; border-radius: 0 !important; background: transparent !important; padding: 0 !important; }
+.m-group ul { border: 0 !important; }
+/* Segmented control: soft grey track, neon thumb */
+.m-switch { background: #f1f1ed !important; border-radius: 999px !important; box-shadow: none !important; padding: 3px; }
+.m-switch::before { background: #cdea3a !important; border-radius: 999px !important; box-shadow: none !important; }
+.m-switch button { border-radius: 999px !important; color: rgb(17 17 17 / .55) !important; background: transparent !important; }
+.m-switch button[aria-selected="true"] { color: #111 !important; background: transparent !important; }
+.m-search { background: #fff !important; }
+/* Cards on account pages: same soft shape as the app */
+@media (max-width: 63.99rem) {
+  :root .app-shell .wollie-workspace-page [data-slot="card"], :root .app-shell .wollie-workspace-page .rounded-lg.border, :root .app-shell .wollie-workspace-page .wollie-sheet { border-radius: 18px !important; border-color: rgb(17 17 17 / .09) !important; }
+  :root .app-shell .wollie-workspace-page [data-slot="button"], :root .app-shell .wollie-workspace-page button, :root .app-shell .wollie-workspace-page a[class*="rounded"] { border-radius: 14px !important; }
+  :root .app-shell .wollie-workspace-page input, :root .app-shell .wollie-workspace-page [data-slot="input"] { border-radius: 14px !important; border-color: rgb(17 17 17 / .14) !important; }
+  :root .app-shell .wollie-workspace-page .wollie-sheet span.size-11 { background: #cdea3a !important; border: 0 !important; border-radius: 12px !important; }
+  :root .app-shell .wollie-workspace-page [data-slot="badge"] { border: 1px solid rgb(17 17 17 / .1) !important; border-radius: 999px !important; }
+  :root .app-shell .wollie-workspace-page [data-slot="button"][class*="outline"], :root .app-shell .wollie-workspace-page .border-zinc-300 { border: 1px solid rgb(17 17 17 / .18) !important; }
+}
+/* Landing + auth + desktop: round the same way */
+.landing .ds-btn, .landing .ds-input, .landing-finder, .ds-panel.landing-finder { border-radius: 14px !important; }
+.landing-finder, .ds-panel.landing-finder { box-shadow: none !important; border: 1px solid rgb(17 17 17 / .1) !important; border-radius: 22px !important; }
+.landing .ds-btn--primary:hover { background: #2a2a2a; color: #fbfbf9; }
+:root .auth-page .app-form__input, :root .auth-page input:not([type="checkbox"]), :root .auth-page .btn, :root .auth-page button[type="submit"] { border-radius: 14px !important; }
+:root .auth-page .btn:hover, :root .auth-page button[type="submit"]:hover { background: #2a2a2a !important; color: #fbfbf9 !important; }
+.landing-final__card, .landing .ds-balance.landing-final__card { border-radius: 28px !important; box-shadow: none !important; border: 1px solid rgb(17 17 17 / .08) !important; }
+.landing-how__steps { border-radius: 22px; overflow: hidden; border-color: rgb(17 17 17 / .1) !important; }
+.landing-how__steps li + li { border-color: rgb(17 17 17 / .1) !important; }
+.landing-how__steps li:hover { background: #f4fadc; }
+.landing-promise { border-radius: 0; }
+.landing-header { border-bottom-color: rgb(17 17 17 / .08); }
+@media (min-width: 64rem) {
+  :root .app-shell > aside.app-nav { border-right-color: rgb(17 17 17 / .09); }
+  :root .app-shell .app-nav__tab, :root .app-shell .app-nav__account-link { border-radius: 12px !important; }
+  :root .app-shell .app-nav__tab.is-active, :root .app-shell .app-nav__account-link.is-active { background: #cdea3a !important; color: #111 !important; }
+  :root .app-shell .app-nav__tab.is-active svg { color: #111 !important; }
+}
