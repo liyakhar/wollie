@@ -1050,7 +1050,7 @@ const deleteUserSimpleFinConnection = createServerOnlyFn(async (userId: string) 
 
 const getOrCreateFinanceWorkspace = createServerOnlyFn(async (userId: string) => {
   const { getOrCreateFinanceHousehold } = await import('#/server/household-access.server')
-  const context = await getOrCreateFinanceHousehold(userId, 'USD')
+  const context = await getOrCreateFinanceHousehold(userId, 'EUR')
   return { id: context.workspaceId }
 })
 

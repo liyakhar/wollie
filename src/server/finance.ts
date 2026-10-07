@@ -112,11 +112,11 @@ export const getFinanceBudget = createServerFn({ method: 'GET' }).handler(async 
       budgetPlan: devDashboard.budgetPlan,
       summary: devDashboard.summary,
       syncStatus: devDashboard.syncStatus,
-      currency: devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'USD',
+      currency: devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'EUR',
       envelopeBudget: devDashboard.envelopeBudget,
       canChangeCurrency: context.role === 'OWNER',
       availableCurrencies: availableCurrenciesFor(
-        devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'USD',
+        devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'EUR',
         devDashboard.accounts,
       ),
     }
@@ -173,7 +173,7 @@ export const getFinanceRecurringPayments = createServerFn({ method: 'GET' }).han
   if (devDashboard) {
     return {
       recurringPayments: devDashboard.recurringPayments,
-      currency: devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'USD',
+      currency: devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'EUR',
       categoryOptions: devDashboard.envelopeBudget?.categoryOptions ?? categoryOptionsFor([]),
     }
   }
@@ -182,7 +182,7 @@ export const getFinanceRecurringPayments = createServerFn({ method: 'GET' }).han
   const planning = await loadFinancePlanningData(syncState.transactions, context.workspaceId)
   return {
     recurringPayments: planning.recurringPayments,
-    currency: planning.currency || syncState.accounts[0]?.currency || 'USD',
+    currency: planning.currency || syncState.accounts[0]?.currency || 'EUR',
     categoryOptions: planning.envelopeBudget?.categoryOptions ?? categoryOptionsFor([]),
   }
 })
@@ -310,7 +310,7 @@ export const updateFinanceRecurringPayment = createServerFn({ method: 'POST' })
         nextDate: data.nextDate,
         cadence: data.cadence,
         category: data.category,
-        currency: current.accounts[0]?.currency || 'USD',
+        currency: current.accounts[0]?.currency || 'EUR',
         confirmed: data.action !== 'dismiss',
         source: 'confirmed',
       }
@@ -516,7 +516,7 @@ export const addDevFinanceTransaction = createServerFn({ method: 'POST' })
       account: account?.name || 'Manual spending',
       category: data.category,
       amount: -Math.abs(data.amount),
-      currency: account?.currency || current.accounts[0]?.currency || 'USD',
+      currency: account?.currency || current.accounts[0]?.currency || 'EUR',
       status: 'cleared',
     }
     current.transactions = [transaction, ...current.transactions]
@@ -641,7 +641,7 @@ async function loadFinancePlanningData(transactions: FinanceTransaction[], works
       budget: [] as BudgetCategory[],
       recurringPayments: detectRecurringPayments(transactions),
       rules: [],
-      currency: transactions.find((transaction) => transaction.currency)?.currency || 'USD',
+      currency: transactions.find((transaction) => transaction.currency)?.currency || 'EUR',
       envelopeBudget: undefined,
     }
   }

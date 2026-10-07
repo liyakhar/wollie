@@ -1,7 +1,8 @@
 import { Link, useRouter } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { authClient } from '#/lib/auth-client'
 import { useIsNativeApp } from '#/lib/native-app'
+import { biometricAvailable, readLockPreference, verifyDevice, writeLockPreference } from '#/lib/app-lock'
 import { IconChevronLeft, IconChevronRight } from './icons'
 
 function Row({ to, label, value }: { to: string; label: string; value?: ReactNode }) {
@@ -28,6 +29,23 @@ export function ProfileScreen({
 }) {
   const router = useRouter()
   const native = useIsNativeApp()
+  const [canLock, setCanLock] = useState(false)
+  const [lockOn, setLockOn] = useState(false)
+  useEffect(() => {
+    setLockOn(readLockPreference())
+    void biometricAvailable().then(setCanLock)
+  }, [])
+  async function toggleLock() {
+    if (lockOn) {
+      writeLockPreference(false)
+      setLockOn(false)
+      return
+    }
+    if (await verifyDevice('Turn on the Face ID lock')) {
+      writeLockPreference(true)
+      setLockOn(true)
+    }
+  }
   const { data: session } = authClient.useSession()
   const user = session?.user
   const initial = user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'W'
@@ -70,6 +88,20 @@ export function ProfileScreen({
           {!native && <Row to="/app/billing" label="Your plan" value={planName} />}
         </ul>
       </section>
+
+      {canLock && (
+        <section className="m-group" aria-label="Security">
+          <h2>Security</h2>
+          <ul>
+            <li>
+              <button type="button" className="m-group__row m-group__row--button" role="switch" aria-checked={lockOn} onClick={() => void toggleLock()}>
+                <span className="m-group__label">Face ID lock</span>
+                <span className={`m-switch-pill${lockOn ? ' is-on' : ''}`} aria-hidden="true" />
+              </button>
+            </li>
+          </ul>
+        </section>
+      )}
 
       <section className="m-group" aria-label="Data">
         <h2>Data</h2>

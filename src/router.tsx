@@ -1,5 +1,6 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
+import { RouteError } from './components/RouteError'
 
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import { getContext } from './integrations/tanstack-query/root-provider'
@@ -11,6 +12,7 @@ export function getRouter() {
     routeTree,
     context,
     scrollRestoration: true,
+    defaultErrorComponent: RouteError,
     defaultPreload: 'intent',
     // Reuse loaded page data for 30 s so tab switches are instant.
     // Edits call router.invalidate(), which refreshes right away.

@@ -1,5 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { tapHaptic } from "#/lib/app-lock";
 import { IconActivity, IconBudgets, IconGoals, IconHome } from "#/components/money/icons";
 
 const appTabs = [
@@ -62,6 +63,7 @@ export function AppMobileNav({
               : "app-mobile-nav__item"
           }
           aria-current={index === active ? "page" : undefined}
+          onClick={() => void tapHaptic()}
         >
           <Icon aria-hidden="true" strokeWidth={index === active ? 2 : 1.6} />
           <span>{label}</span>

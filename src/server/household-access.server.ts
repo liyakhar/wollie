@@ -12,7 +12,7 @@ export type FinanceHouseholdContext = {
 
 export async function getOrCreateFinanceHousehold(
   userId: string,
-  currency = 'USD',
+  currency = 'EUR',
 ): Promise<FinanceHouseholdContext> {
   const prisma = await getDb()
   const existingMembership = await prisma.workspaceMember.findFirst({

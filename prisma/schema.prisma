@@ -183,7 +183,7 @@ model BudgetWorkspace {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name      String   @default("Personal budget")
-  currency  String   @default("USD")
+  currency  String   @default("EUR")
   /// Day of month the pay cycle starts. Null means detect it from income.
   paydayDay Int?
   demo      Boolean  @default(false)
