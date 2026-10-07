@@ -391,3 +391,28 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .auth-hint { margin: .4rem 0 0; font-size: .8125rem; color: rgb(17 17 17 / .55); }
 :root .auth-page input[type="checkbox"] { min-height: 0 !important; width: 1.5rem; height: 1.5rem; accent-color: #111; border-radius: 4px !important; }
 :root .auth-page label a:not(.auth-page__brand) { font-size: inherit !important; }
+
+/* ═══ Landing phone mock: same light style as the real app ═══ */
+.phone .ds-balance, .phone__summary {
+  background: #cdea3a !important;
+  border: 1px solid rgb(17 17 17 / .08) !important;
+  border-radius: 1.6em !important;
+  box-shadow: none !important;
+}
+.phone .ds-balance__label, .phone__sumlabel { opacity: .6; }
+.phone .ds-chip { background: rgb(255 255 255 / .45) !important; border: 1px solid rgb(17 17 17 / .16) !important; border-radius: 999px !important; }
+.phone .phone__avatar { background: #cdea3a !important; border: 1px solid rgb(17 17 17 / .1) !important; border-radius: .9em !important; }
+.landing .phone__h { border-bottom: 1px solid rgb(17 17 17 / .09) !important; color: rgb(17 17 17 / .6); }
+.phone__row { border-bottom-color: rgb(17 17 17 / .08) !important; }
+.phone__icon { border: 0 !important; border-radius: .8em !important; background: #f3f3ef !important; }
+.phone .ds-bar { border: 0 !important; border-radius: 999px !important; background: #ecece6 !important; box-shadow: none !important; }
+.phone .ds-bar > span { background: #cdea3a !important; border: 0 !important; border-radius: 999px !important; }
+.phone .ds-bar.is-over > span { background: #ef6a5b !important; }
+.phone .ds-bar.is-over { border: 0 !important; }
+.phone__summary .ds-bar { background: rgb(17 17 17 / .1) !important; }
+.phone__summary .ds-bar > span { background: #111 !important; }
+.phone__cta { border: 1px solid rgb(17 17 17 / .18) !important; border-radius: 1em !important; }
+.phone .phone__tabs { background: rgb(255 255 255 / .9) !important; box-shadow: 0 0 0 1px rgb(17 17 17 / .08) !important; }
+.phone__tabs button.ds-tabbar__item.is-active { background: #cdea3a !important; color: #111 !important; }
+.phone__tabs button.ds-tabbar__item.is-active svg { color: #111 !important; }
+.phone__tabs button.ds-tabbar__item { color: rgb(17 17 17 / .45); }
