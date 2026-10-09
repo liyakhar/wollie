@@ -20,3 +20,4 @@ todos.json
 outreach/queue/*.jsonl
 .dev*.log
 .prod*.log
+.qa/

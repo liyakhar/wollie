@@ -10,7 +10,9 @@ const base = {
   cycle: { start: '2026-10-01', end: '2026-10-31', daysLeft: 25, paydayDay: 1, source: 'setting' },
   budgets: [],
   bills: [],
+  goals: [],
   short: 0,
+  month: { label: 'October', elapsed: 6, days: 31, pace: 0.2 },
 } as unknown as MoneyOverview
 
 describe('computeAlerts', () => {
@@ -44,6 +46,20 @@ describe('computeAlerts', () => {
     )
     expect(alerts).toHaveLength(1)
     expect(alerts[0].title).toBe('Rent is due in 2 days')
+  })
+
+  it('asks to save after payday and thanks when Wollie sees the money move', () => {
+    const goal = (id: string, due: number, auto: boolean) => ({
+      id, name: id, due, target: 3000, saved: 1200, monthly: 200,
+      thisMonth: { key: '2026-10-01', label: 'Oct', amount: 200 - due, state: due ? 'due' : 'saved', auto },
+    })
+    const alerts = computeAlerts({
+      ...base,
+      month: { label: 'October', elapsed: 2, days: 31, pace: 0.06 },
+      goals: [goal('Travel', 200, false), goal('House', 0, true)],
+    } as unknown as MoneyOverview)
+    expect(alerts.map((a) => a.key)).toEqual(['save:2026-10-01', 'saved:House:2026-10-01'])
+    expect(alerts[0].title).toContain('200')
   })
 
   it('sends nothing when all is fine', () => {

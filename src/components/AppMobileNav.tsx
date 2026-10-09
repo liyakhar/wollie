@@ -1,13 +1,13 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { tapHaptic } from "#/lib/app-lock";
-import { IconActivity, IconBudgets, IconGoals, IconHome } from "#/components/money/icons";
+import { IconBudgets, IconHome, IconSavings, IconSpending } from "#/components/money/icons";
 
 const appTabs = [
   { to: "/app", label: "Home", icon: IconHome },
-  { to: "/app/transactions", label: "Activity", icon: IconActivity },
+  { to: "/app/transactions", label: "Spending", icon: IconSpending },
   { to: "/app/budgets", label: "Budgets", icon: IconBudgets },
-  { to: "/app/goals", label: "Goals", icon: IconGoals },
+  { to: "/app/goals", label: "Savings", icon: IconSavings },
 ] as const;
 
 function activeTabIndex(pathname: string, tabs: ReadonlyArray<{ to: string }>) {

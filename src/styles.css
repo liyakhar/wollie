@@ -21,6 +21,7 @@
 @import "./landing.css";
 @import "./editorial.css";
 @import "./editorial-mobile.css";
+@import "./wollie-app.css";
 
 @custom-variant dark (&:is(.dark *));
 

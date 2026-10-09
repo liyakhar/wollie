@@ -4,7 +4,8 @@ import { IconCheck, IconAdd } from './icons'
 import { formatMoney } from '#/lib/finance-demo'
 import type { MoneyOverview } from '#/lib/money-overview'
 import { archiveGoal, recordGoalCycle, saveGoal } from '#/server/money'
-import { Bar, SplitMoney } from './HomeScreen'
+import { Bar, wholeMoney } from './HomeScreen'
+import { MonthDots } from './charts'
 import { GOAL_ICON_OPTIONS, goalIcon } from './icons'
 import { Sheet } from './Sheet'
 
@@ -26,11 +27,6 @@ function monthsUntil(date: string) {
   const [y, m] = date.split('-').map(Number)
   const now = new Date()
   return Math.max((y - now.getFullYear()) * 12 + (m - 1 - now.getMonth()), 1)
-}
-
-function dateLabel(date: string) {
-  const [y, m, d] = date.split('-').map(Number)
-  return new Date(y, m - 1, d).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
 }
 
 export function GoalsScreen({ overview, demo = false }: { overview: MoneyOverview; demo?: boolean }) {
@@ -61,10 +57,13 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
     ? Math.ceil(Math.max(Number(draft.target) - Number(draft.starting || 0), 0) / monthsUntil(draft.targetDate))
     : 0
 
+  const whole = (value: number) => wholeMoney(value, overview.currency)
+  const { savings } = overview
+
   return (
     <main id="main" className="m-screen">
       <header className="m-title-row">
-        <h1>Goals</h1>
+        <h1>Savings</h1>
         {!demo && (
           <button type="button" className="m-icon-button m-icon-button--glass" aria-label="Add goal" onClick={() => setDraft(EMPTY_DRAFT)}>
             <IconAdd aria-hidden="true" />
@@ -74,42 +73,50 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
 
       {overview.goals.length > 0 ? (
         <>
-          <section className="m-hero m-hero--compact" aria-label="Saved">
-            <p className="m-hero__label">Saved</p>
-            <p className="m-hero__number"><SplitMoney value={overview.goalsSaved} currency={overview.currency} /></p>
-            {overview.goalsDue > 0 && (
-              <p className="m-hero__meta">{money(overview.goalsDue)} to set aside this month</p>
-            )}
+          <section className="w-card w-save-hero" aria-label="Saved">
+            <span className="w-label">Saved so far</span>
+            <span className="w-big">{whole(savings.totalSaved)}</span>
+            <span className="w-save-hero__month">
+              <span>{overview.month.label}</span>
+              <strong>{whole(savings.done)} of {whole(savings.planned)}</strong>
+            </span>
+            <span className="w-meter w-meter--ink" aria-hidden="true">
+              <span style={{ width: `${Math.min(100, (savings.done / Math.max(savings.planned, 1)) * 100)}%` }} />
+            </span>
           </section>
+          <p className="w-howto">On payday, move money to your savings account. Wollie sees it arrive and ticks your goals, in order.</p>
 
-          <ul className="m-list m-list--roomy">
+          <ul className="w-goals">
             {overview.goals.map((goal) => {
               const Icon = goalIcon(goal.icon)
-              const meta = [
-                goal.targetDate ? `by ${dateLabel(goal.targetDate)}` : null,
-                goal.monthly > 0 ? `${money(goal.monthly)} a month` : null,
-                goal.target === null ? 'no end date' : null,
-              ].filter(Boolean).join(' · ')
               const content = (
                 <>
-                  <Icon className="m-row__icon" aria-hidden="true" />
-                  <span className="m-row__main">
-                    <span className="m-row__line">
-                      <span className="m-row__title">{goal.name}</span>
-                      <GoalStatus goal={goal} money={money} />
-                    </span>
-                    <span className="m-row__meta">
-                      {goal.target === null ? money(goal.saved) : <>{money(goal.saved)} of {money(goal.target)}</>}
-                    </span>
-                    {goal.share !== null && <Bar share={goal.share} />}
-                    {meta && <span className="m-row__meta">{meta}</span>}
+                  <span className="w-goal__head">
+                    <Icon className="m-row__icon" aria-hidden="true" />
+                    <span className="w-goal__name">{goal.name}</span>
+                    <span className="w-goal__monthly">{whole(goal.monthly)}<span className="m-quiet"> / month</span></span>
                   </span>
+                  <span className="w-goal__amount">
+                    <strong>{whole(goal.saved)}</strong>
+                    {goal.target !== null && <span className="m-quiet"> of {whole(goal.target)}</span>}
+                    {goal.share !== null && <span className="w-goal__pct">{Math.round(goal.share * 100)}%</span>}
+                  </span>
+                  {goal.share !== null && <Bar share={goal.share} />}
+                  <span className="w-goal__foot">
+                    <GoalStatus goal={goal} money={whole} />
+                    {goal.reached ? null : goal.finish ? (
+                      <span className="m-quiet">Done by {goal.finish}</span>
+                    ) : goal.target === null ? (
+                      <span className="m-quiet">No end date</span>
+                    ) : null}
+                  </span>
+                  {goal.months.length > 0 && <MonthDots months={goal.months} />}
                 </>
               )
               return (
-                <li key={goal.id} className="m-row m-row--stack">
+                <li key={goal.id} className="w-card w-goal">
                   {demo ? content : (
-                    <button type="button" className="m-row__button" onClick={() => { setActive(goal); setAmount(String(goal.due || goal.monthly || '')) }}>
+                    <button type="button" className="w-goal__button" onClick={() => { setActive(goal); setAmount(String(goal.due || goal.monthly || '')) }}>
                       {content}
                     </button>
                   )}
@@ -120,11 +127,11 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
         </>
       ) : (
         <section className="m-empty">
-          <h2>Save for what matters</h2>
-          <p>A trip, a safety cushion, your pension. Set an amount for each month and Wollie keeps count.</p>
+          <h2>Save a little every month</h2>
+          <p>A home, a trip, a safety cushion. Pick an amount for each month. When you move it to savings on payday, Wollie ticks it off.</p>
           {!demo && (
             <button type="button" className="m-button m-button--primary" onClick={() => setDraft(EMPTY_DRAFT)}>
-              Add goal
+              Add a goal
             </button>
           )}
         </section>
@@ -137,12 +144,14 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
             {active.reached ? (
               <p className="m-hint">You reached this goal.</p>
             ) : active.doneThisCycle ? (
-              <p className="m-hint">You saved {money(active.savedThisCycle)} this month.</p>
+              <p className="m-hint">
+                {active.thisMonth.auto ? 'Wollie saw ' : 'You saved '}{money(active.savedThisCycle)}{active.thisMonth.auto ? ' move to savings this month.' : ' this month.'}
+              </p>
             ) : active.skippedThisCycle ? (
               <p className="m-hint">You skipped this month.</p>
             ) : (
               <>
-                <p className="m-hint">Move the money to your savings account, then mark it here.</p>
+                <p className="m-hint">Wollie ticks this by itself when it sees money move to your savings. Moved it another way? Mark it here.</p>
                 <label className="m-field">
                   <span>Saved this month</span>
                   <input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} />
@@ -266,6 +275,7 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
             {suggestedMonthly > 0 && !draft.monthly && (
               <p className="m-hint">{money(suggestedMonthly)} a month reaches the target on time.</p>
             )}
+            <p className="m-hint">On payday, move this amount to your savings account. Wollie sees it and ticks the month off.</p>
             {!draft.id && (
               <label className="m-field">
                 <span>Already saved <em>optional</em></span>
@@ -294,13 +304,15 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
 }
 
 function GoalStatus({ goal, money }: { goal: Goal; money: (value: number) => string }) {
-  if (goal.reached) return <span className="m-row__value m-positive">Reached</span>
-  if (goal.skippedThisCycle) return <span className="m-row__value m-quiet">Skipped</span>
-  if (goal.due > 0) return <span className="m-row__value m-accent">{money(goal.due)} to save</span>
+  if (goal.reached) return <span className="w-state is-on-track">Goal reached</span>
+  if (goal.skippedThisCycle) return <span className="w-state is-skip">Skipped this month</span>
+  if (goal.due > 0) {
+    return <span className="w-state is-fast">{goal.savedThisCycle > 0 ? `${money(goal.due)} more to move` : `${money(goal.due)} to move`}</span>
+  }
   if (goal.monthly > 0) {
     return (
-      <span className="m-row__value m-positive">
-        <IconCheck aria-hidden="true" className="m-inline-icon" /> Saved
+      <span className="w-state is-on-track">
+        <IconCheck aria-hidden="true" className="m-inline-icon" /> {goal.thisMonth.auto ? 'Moved this month' : 'Saved this month'}
       </span>
     )
   }

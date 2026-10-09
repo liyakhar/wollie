@@ -1,7 +1,8 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { type FormEvent, useMemo, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
-import { ActivityScreen } from "#/components/money/ActivityScreen";
+import { SpendingScreen } from "#/components/money/SpendingScreen";
+import { getMoneyOverview } from "#/server/money";
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import { Input } from "#/components/ui/input";
@@ -32,8 +33,14 @@ import {
 } from "#/server/finance";
 
 export const Route = createFileRoute("/app/transactions")({
-  loader: () =>
-    getFinanceTransactions({ data: { status: "all", category: "all" } }),
+  loader: async () => {
+    const [overview, data] = await Promise.all([
+      getMoneyOverview(),
+      getFinanceTransactions({ data: { status: "all", category: "all" } }),
+    ]);
+    return { overview, data };
+  },
+  head: () => ({ meta: [{ title: "Spending · Wollie" }] }),
   component: TransactionsPage,
 });
 
@@ -47,7 +54,8 @@ export type TransactionsScreenData = {
 };
 
 function TransactionsPage() {
-  return <ActivityScreen data={Route.useLoaderData()} />;
+  const { overview, data } = Route.useLoaderData();
+  return <SpendingScreen overview={overview} data={data} />;
 }
 
 export function TransactionsContent({

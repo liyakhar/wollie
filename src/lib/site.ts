@@ -1,6 +1,6 @@
 export const site = {
   name: 'Wollie',
-  tagline: 'Know what you can spend',
+  tagline: 'See where your money goes',
   description:
     'A personal finance dashboard that connects accounts, organizes spending, tracks bills, and shows what you can safely spend each month.',
   locale: 'en_US',

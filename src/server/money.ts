@@ -2,7 +2,7 @@ import { createServerFn, createServerOnlyFn } from '@tanstack/react-start'
 import { setResponseHeader } from '@tanstack/react-start/server'
 import { FINANCE_CATEGORIES } from '#/lib/finance-demo'
 import { buildCyclePlan, payCycle, detectPayday, type Goal } from '#/lib/money-cycle'
-import { toMoneyOverview } from '#/lib/money-overview'
+import { toMoneyOverview, trackGoals, type GoalRecord, type HouseholdMember } from '#/lib/money-overview'
 import { getDb } from '#/server/db-access.server'
 import { ensureDevSampleData } from '#/server/dev-sample.server'
 import { ensurePushScheduler } from '#/server/push.server'
@@ -42,7 +42,7 @@ async function currentCycleStart(workspaceId: string, paydayDay: number | null) 
 
 /* ------------------------------ Read ------------------------------ */
 
-export const buildMoneyOverview = createServerOnlyFn(async (workspaceId: string) => {
+export const buildMoneyOverview = createServerOnlyFn(async (workspaceId: string, userId?: string) => {
   const prisma = await getDb()
   const [snapshot, workspace] = await Promise.all([
     loadMoneySnapshot(workspaceId),
@@ -57,21 +57,31 @@ export const buildMoneyOverview = createServerOnlyFn(async (workspaceId: string)
           orderBy: { createdAt: 'asc' },
           include: { contributions: true },
         },
+        members: {
+          orderBy: { createdAt: 'asc' },
+          include: { user: { select: { id: true, name: true, email: true } }, accountOwnerships: true },
+        },
       },
     }),
   ])
 
   const paydaySetting = workspace?.paydayDay ?? null
   const detected = paydaySetting ? null : detectPayday(snapshot.transactions)
-  const cycle = payCycle(new Date(), { paydayDay: paydaySetting ?? detected })
-  const cycleKey = `${cycle.start.getFullYear()}-${cycle.start.getMonth()}-${cycle.start.getDate()}`
+
+  const utcKey = (date: Date) => date.toISOString().slice(0, 10)
+  const records: GoalRecord[] = (workspace?.savingsGoals ?? []).map((goal) => ({
+    id: goal.id,
+    monthly: goal.monthlyMinor / 100,
+    startedAt: goal.createdAt,
+    manual: Object.fromEntries(goal.contributions.map((item) => [
+      utcKey(item.cycleStart),
+      { amount: item.amountMinor / 100, skipped: item.skipped },
+    ])),
+  }))
+  const tracks = trackGoals(records, snapshot.transactions, paydaySetting ?? detected)
 
   const goals: Goal[] = (workspace?.savingsGoals ?? []).map((goal) => {
-    const current = goal.contributions.find((item) => {
-      const date = item.cycleStart
-      return `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}` === cycleKey
-    })
-    const contributed = goal.contributions.reduce((sum, item) => sum + item.amountMinor, 0)
+    const track = tracks.find((item) => item.id === goal.id)
     return {
       id: goal.id,
       name: goal.name,
@@ -79,11 +89,23 @@ export const buildMoneyOverview = createServerOnlyFn(async (workspaceId: string)
       target: goal.targetMinor === null ? null : goal.targetMinor / 100,
       monthly: goal.monthlyMinor / 100,
       targetDate: goal.targetDate ? goal.targetDate.toISOString().slice(0, 10) : null,
-      saved: (goal.startingMinor + contributed) / 100,
-      savedThisCycle: (current?.amountMinor ?? 0) / 100,
-      skippedThisCycle: current?.skipped ?? false,
+      saved: (goal.startingMinor + Math.round((track?.contributed ?? 0) * 100)) / 100,
+      savedThisCycle: track?.thisMonth.amount ?? 0,
+      skippedThisCycle: track?.thisMonth.state === 'skipped',
     }
   })
+
+  const members: HouseholdMember[] = (workspace?.members ?? []).map((member) => {
+    const you = member.userId === userId
+    const name = you ? 'You' : (member.user.name || member.user.email.split('@')[0])
+    return { id: member.id, name, initial: (member.user.name || member.user.email).trim().charAt(0).toUpperCase(), you }
+  })
+  const accountOwners: Record<string, string> = {}
+  for (const member of workspace?.members ?? []) {
+    for (const share of member.accountOwnerships) {
+      if (!accountOwners[share.accountId] || share.shareBasisPoints >= 5_000) accountOwners[share.accountId] = member.id
+    }
+  }
 
   const plan = buildCyclePlan({
     accounts: snapshot.accounts,
@@ -112,12 +134,15 @@ export const buildMoneyOverview = createServerOnlyFn(async (workspaceId: string)
     paydaySetting,
     transactions: snapshot.transactions,
     categories,
+    goalTracks: tracks,
+    members,
+    accountOwners,
   })
 })
 
 export const getMoneyOverview = createServerFn({ method: 'GET' }).handler(async () => {
   const context = await requireHousehold()
-  return buildMoneyOverview(context.workspaceId)
+  return buildMoneyOverview(context.workspaceId, context.userId)
 })
 
 /* ------------------------------ Budgets ------------------------------ */

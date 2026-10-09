@@ -36,12 +36,24 @@ export function computeAlerts(overview: MoneyOverview, now = new Date()): PushAl
       })
     }
   }
-  if (overview.short > 0) {
+  // Savings: a nudge in the first days after payday, and a thank-you when it lands.
+  const toMove = overview.goals.filter((goal) => goal.due > 0)
+  if (toMove.length && overview.month.elapsed <= 3) {
+    const total = toMove.reduce((sum, goal) => sum + goal.due, 0)
     alerts.push({
-      key: `short:${cycle}`,
-      title: 'Heads up: money is tight before payday',
-      body: `You are ${money(overview.short, overview.currency)} short. Lower a budget or skip a goal this month.`,
+      key: `save:${cycle}`,
+      title: `Time to save ${money(total, overview.currency)}`,
+      body: toMove.map((goal) => `${goal.name} ${money(goal.due, overview.currency)}`).join(', ') + '. Move it to savings and Wollie ticks it off.',
     })
+  }
+  for (const goal of overview.goals) {
+    if (goal.thisMonth.auto && goal.thisMonth.state === 'saved') {
+      alerts.push({
+        key: `saved:${goal.id}:${cycle}`,
+        title: `Saved for ${goal.name}`,
+        body: `${money(goal.thisMonth.amount, overview.currency)} moved this month. ${goal.target ? `${money(goal.saved, overview.currency)} of ${money(goal.target, overview.currency)} so far.` : ''}`.trim(),
+      })
+    }
   }
   return alerts
 }

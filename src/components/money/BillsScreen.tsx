@@ -140,7 +140,7 @@ export function BillsScreen({ data, readOnly = false }: { data: BillsData; readO
         <section className="m-hero m-hero--compact" aria-label="Bills each month">
           <p className="m-hero__label">Each month</p>
           <p className="m-hero__number">{money(Math.round(monthlyTotal))}</p>
-          <p className="m-hero__meta">{confirmed.length} {confirmed.length === 1 ? 'bill' : 'bills'}, taken out of safe to spend before they’re due</p>
+          <p className="m-hero__meta">{confirmed.length} {confirmed.length === 1 ? 'bill' : 'bills'}, kept apart from everyday spending</p>
         </section>
       )}
 

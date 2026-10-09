@@ -13,6 +13,27 @@ import {
   type Goal,
 } from './money-cycle'
 import { getPublicDemoFinanceDashboard } from './public-demo'
+import {
+  isEveryday,
+  isFixed,
+  monthPace,
+  paceState,
+  projectedFinish,
+  spendingSummary,
+  trackGoals,
+  type GoalMonth,
+  type GoalRecord,
+  type PaceState,
+  type SpendingSummary,
+} from './money-insights'
+
+export type HouseholdMember = { id: string; name: string; initial: string; you: boolean }
+
+export type GoalView = CyclePlan['goals'][number] & {
+  months: GoalMonth[]
+  thisMonth: GoalMonth
+  finish: string | null
+}
 
 export type MoneyOverview = {
   currency: string
@@ -36,12 +57,26 @@ export type MoneyOverview = {
   budgets: CyclePlan['budgets']
   budgetsLeft: number
   budgetsLimit: number
-  goals: CyclePlan['goals']
+  goals: GoalView[]
   goalsDue: number
   goalsSaved: number
   /** Categories that can get a budget, with a suggested limit when known. */
   budgetOptions: Array<{ category: string; suggested: number }>
   reviewCount: number
+  /** This month (pay cycle) at a glance. */
+  month: { label: string; elapsed: number; days: number; pace: number }
+  /** Everyday spending: everything except rent, bills and moves to savings. */
+  spending: SpendingSummary
+  /** Rent and repeating bills paid this month. */
+  fixed: { total: number; lastMonthTotal: number }
+  /** Budget id → on track, spending fast, or over. */
+  budgetPace: Record<string, PaceState>
+  /** Spending in categories with no budget this month. */
+  unbudgeted: { total: number; categories: string[] }
+  savings: { planned: number; done: number; totalSaved: number }
+  members: HouseholdMember[]
+  /** Account id → member id of its main owner. */
+  accountOwners: Record<string, string>
 }
 
 /** Categories that are money movement, not spending. */
@@ -55,6 +90,10 @@ export function toMoneyOverview(input: {
   paydaySetting: number | null
   transactions: FinanceTransaction[]
   categories: string[]
+  goalTracks?: ReturnType<typeof trackGoals>
+  members?: HouseholdMember[]
+  accountOwners?: Record<string, string>
+  referenceDate?: Date
 }): MoneyOverview {
   const { plan } = input
   const budgeted = new Set(plan.budgets.map((budget) => budget.category.toLocaleLowerCase()))
@@ -85,7 +124,15 @@ export function toMoneyOverview(input: {
     budgets: plan.budgets,
     budgetsLeft: plan.budgetsLeft,
     budgetsLimit: plan.budgetsLimit,
-    goals: plan.goals,
+    goals: plan.goals.map((goal) => {
+      const track = input.goalTracks?.find((item) => item.id === goal.id)
+      return {
+        ...goal,
+        months: track?.months ?? [],
+        thisMonth: track?.thisMonth ?? { key: '', label: '', amount: goal.savedThisCycle, state: goal.due > 0 ? 'due' : 'saved', auto: false },
+        finish: projectedFinish(goal.saved, goal.target, goal.monthly, input.referenceDate),
+      }
+    }),
     goalsDue: plan.goalsDue,
     goalsSaved: Math.round(plan.goals.reduce((sum, goal) => sum + goal.saved, 0) * 100) / 100,
     // Most-spent categories first; housing is usually a bill, so it goes last.
@@ -96,8 +143,45 @@ export function toMoneyOverview(input: {
         Number(a.category === 'Housing') - Number(b.category === 'Housing') ||
         b.suggested - a.suggested),
     reviewCount: input.transactions.filter((transaction) => transaction.status === 'needs-review').length,
+    ...insights(input),
   }
 }
+
+function insights(input: Parameters<typeof toMoneyOverview>[0]) {
+  const { plan } = input
+  const spending = spendingSummary(input.transactions, plan.cycle.paydayDay, input.referenceDate, 6, isEveryday)
+  const fixed = spendingSummary(input.transactions, plan.cycle.paydayDay, input.referenceDate, 2, isFixed)
+  const pace = monthPace(spending.elapsed, spending.days)
+  const budgeted = new Set(plan.budgets.map((budget) => budget.category.toLocaleLowerCase()))
+  const loose = spending.categories.filter((item) => item.total > 0 && !budgeted.has(item.category.toLocaleLowerCase()) && item.category !== 'Housing')
+  const planned = Math.round(plan.goals.reduce((sum, goal) => sum + (goal.skippedThisCycle || goal.reached ? 0 : goal.monthly), 0) * 100) / 100
+  const done = Math.round(plan.goals.reduce((sum, goal) => sum + goal.savedThisCycle, 0) * 100) / 100
+  const middle = new Date((plan.cycle.start.getTime() + plan.cycle.end.getTime()) / 2)
+  return {
+    month: {
+      label: middle.toLocaleDateString('en-GB', { month: 'long' }),
+      elapsed: spending.elapsed,
+      days: spending.days,
+      pace,
+    },
+    spending,
+    fixed: { total: fixed.total, lastMonthTotal: fixed.lastMonthTotal },
+    budgetPace: Object.fromEntries(plan.budgets.map((budget) => [budget.id, paceState(budget.spent, budget.limit, pace)])),
+    unbudgeted: {
+      total: Math.round(loose.reduce((sum, item) => sum + item.total, 0) * 100) / 100,
+      categories: loose.map((item) => item.category),
+    },
+    savings: {
+      planned,
+      done,
+      totalSaved: Math.round(plan.goals.reduce((sum, goal) => sum + goal.saved, 0) * 100) / 100,
+    },
+    members: input.members ?? [],
+    accountOwners: input.accountOwners ?? {},
+  }
+}
+
+export { trackGoals, type GoalRecord }
 
 /* ------------------------------ Demo ------------------------------ */
 
@@ -134,5 +218,6 @@ export function getDemoMoneyOverview(referenceDate = new Date()): MoneyOverview 
     paydaySetting: null,
     transactions: dashboard.transactions,
     categories: [...new Set(dashboard.transactions.map((transaction) => transaction.category))],
+    referenceDate,
   })
 }

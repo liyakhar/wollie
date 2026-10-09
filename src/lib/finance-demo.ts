@@ -388,7 +388,8 @@ export function detectRecurringPayments(
   const groups = new Map<string, FinanceTransaction[]>()
 
   for (const transaction of transactions) {
-    if (transaction.amount >= 0 || isTransferTransaction(transaction)) continue
+    // Moving money to your own savings is saving, not a bill.
+    if (transaction.amount >= 0 || isTransferTransaction(transaction) || transaction.category === 'Savings') continue
     const key = transaction.merchant.trim().toLowerCase().replace(/\s+/g, ' ')
     const group = groups.get(key) ?? []
     group.push(transaction)

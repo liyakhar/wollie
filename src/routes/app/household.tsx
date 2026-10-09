@@ -111,8 +111,9 @@ function HouseholdPage() {
             <span className="m-avatar m-avatar--add">+</span>
           </div>
           <p>
-            Plan money together. You each keep your own login, and every
-            account shows whose it is: yours, theirs, or joint.
+            Plan money together, even with different banks. You each keep
+            your own login and connect your own bank. Every account shows
+            whose it is: yours, theirs, or joint.
           </p>
         </section>
       )}
@@ -365,8 +366,8 @@ function HouseholdSplitCard({
           style={{ ["--split" as string]: `${ownerPercent}%` }}
         />
         <p className="m-row__meta">
-          Used to split joint bills and budgets, and each person’s safe to
-          spend.
+          How you split joint costs like rent. Wollie uses it in the
+          household report.
         </p>
       </div>
       {editable && ownerPercent !== saved && (
@@ -419,7 +420,7 @@ function AccountOwnershipRow({
   ];
   const custom = !options.some((option) => option.value === myShare);
   return (
-    <li className="m-row m-row--stack">
+    <li className="m-row m-row--stack w-own-row">
       <span className="m-row__line">
         <IconBank className="m-row__icon" aria-hidden="true" />
         <span className="m-row__main">

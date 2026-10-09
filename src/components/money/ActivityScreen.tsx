@@ -55,7 +55,7 @@ function monthLabel(key: string) {
   return new Date(y, m - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
 }
 
-export function ActivityScreen({ data, readOnly = false }: { data: ActivityData; readOnly?: boolean }) {
+export function ActivityScreen({ data, readOnly = false, embedded = false }: { data: ActivityData; readOnly?: boolean; embedded?: boolean }) {
   const router = useRouter()
   // Bank data uses ISO dates, sample data uses "Jul 12". Work in ISO.
   const transactions = useMemo(
@@ -134,11 +134,14 @@ export function ActivityScreen({ data, readOnly = false }: { data: ActivityData;
     }
   }
 
+  const Wrapper = embedded ? 'div' : 'main'
   return (
-    <main id="main" className="m-screen m-screen--tight">
-      <header className="m-title-row">
-        <h1>Activity</h1>
-      </header>
+    <Wrapper {...(embedded ? { className: 'w-embedded' } : { id: 'main', className: 'm-screen m-screen--tight' })}>
+      {!embedded && (
+        <header className="m-title-row">
+          <h1>Payments</h1>
+        </header>
+      )}
 
       <div className="m-toolbar">
         <label className="m-search">
@@ -151,10 +154,12 @@ export function ActivityScreen({ data, readOnly = false }: { data: ActivityData;
             aria-label="Search transactions"
           />
         </label>
-        <div className="m-switch" role="tablist" aria-label="View" data-second={view === 'category' || undefined}>
-          <button type="button" role="tab" aria-selected={view === 'date'} onClick={() => setView('date')}>By date</button>
-          <button type="button" role="tab" aria-selected={view === 'category'} onClick={() => setView('category')}>By category</button>
-        </div>
+        {!embedded && (
+          <div className="m-switch" role="tablist" aria-label="View" data-second={view === 'category' || undefined}>
+            <button type="button" role="tab" aria-selected={view === 'date'} onClick={() => setView('date')}>By date</button>
+            <button type="button" role="tab" aria-selected={view === 'category'} onClick={() => setView('category')}>By category</button>
+          </div>
+        )}
       </div>
 
       {view === 'date' ? (
@@ -312,6 +317,6 @@ export function ActivityScreen({ data, readOnly = false }: { data: ActivityData;
           </div>
         )}
       </Sheet>
-    </main>
+    </Wrapper>
   )
 }

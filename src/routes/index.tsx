@@ -3,10 +3,10 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { Capacitor } from "@capacitor/core";
 import { ArrowRight, Launch } from "@carbon/icons-react";
 import {
-  IconActivity,
   IconBudgets,
-  IconGoals,
   IconHome,
+  IconSavings,
+  IconSpending,
   categoryIcon,
   goalIcon,
 } from "#/components/money/icons";
@@ -29,9 +29,9 @@ import {
 
 const landingMeta = buildPageMeta({
   path: "/",
-  title: "Know What You Can Spend",
+  title: "See Where Your Money Goes",
   description:
-    "Wollie connects to your bank and shows what you can safely spend. Budgets reset on payday, goals keep count, on your own or as a couple.",
+    "Wollie connects to your bank, sorts every payment and shows clear charts. Set monthly budgets, save for what matters, on your own or as a couple with different banks.",
 });
 
 // The phone app has no landing page. The native WebView injects
@@ -48,20 +48,20 @@ const nativeFlagScript = {
 const story = [
   {
     image: "/onboarding/intro-1-clear.webp",
-    title: "Your money, organised.",
-    body: "Safe to spend, after bills and savings.",
+    title: "See where it goes.",
+    body: "Every payment sorted by category, with clear charts, month by month.",
     ink: { size: 776, x: 453, y: 442, w: 900, h: 900 },
   },
   {
     image: "/onboarding/intro-2-clear.webp",
-    title: "Know where it goes.",
-    body: "Budgets reset on payday. Goals keep count.",
+    title: "Budgets you keep. Savings that add up.",
+    body: "A limit for each category and an amount to save each month. Wollie ticks off your savings when the money moves.",
     ink: { size: 1029, x: 456, y: 664, w: 900, h: 1350 },
   },
   {
     image: "/onboarding/intro-3-clear.webp",
     title: "On your own or together.",
-    body: "Each partner connects their own accounts.",
+    body: "Different banks? No problem. Each partner connects their own, and you see it all in one place.",
     ink: { size: 826, x: 450, y: 674, w: 900, h: 1350 },
   },
 ] as const;
@@ -81,6 +81,11 @@ const faqs = [
     question: "Can Wollie move our money?",
     answer:
       "No. Bank connections are read-only. Wollie cannot make payments or see your bank password.",
+  },
+  {
+    question: "How does saving work if Wollie cannot move money?",
+    answer:
+      "You set an amount for each goal, like €1,000 a month for a home. On payday you move it to your savings account, or set a standing order at your bank. Wollie sees the money arrive and ticks the month off.",
   },
   {
     question: "What if our bank is not available?",
@@ -174,18 +179,36 @@ function useReveal() {
 }
 
 // A few sample purchases the phone "receives" in a loop. Sample data only.
-const BALANCE = 2557.82;
-const GROCERIES_LEFT = 200;
+const EVERYDAY = 429.12;
+const GROCERIES_LEFT = 410;
 const PURCHASES = [
-  { label: "Bakery", amount: 4.2, groceries: false },
+  { label: "Bakery", amount: 4.2, groceries: true },
   { label: "Groceries", amount: 18.6, groceries: true },
   { label: "Tram", amount: 2.4, groceries: false },
 ] as const;
+// Running total of everyday spending, day by day (sample).
+const PACE_NOW = [12, 38, 61, 95, 140, 188, 236, 301, 360, 429];
+const PACE_LAST = [10, 30, 72, 101, 133, 170, 214, 262, 300, 334, 380, 422, 470, 515, 560, 600, 652, 700, 744, 790, 832, 880, 925, 970, 1010, 1046, 1080, 1110, 1140, 1172];
 
 const formatWhole = (n: number) => Math.floor(n).toLocaleString("en-US");
 const formatCents = (n: number) => String(Math.round((n - Math.floor(n)) * 100)).padStart(2, "0");
 
-const SCREENS = ["Home", "Activity", "Budgets", "Goals"] as const;
+const SCREENS = ["Home", "Spending", "Budgets", "Savings"] as const;
+
+/** A tiny running-total line, like the app's Home card. */
+function PhonePace() {
+  const max = 1200;
+  const days = PACE_LAST.length;
+  const point = (value: number, index: number) => `${((index / (days - 1)) * 100).toFixed(1)},${(40 - (value / max) * 36).toFixed(1)}`;
+  const now = PACE_NOW.map(point).join(" ");
+  return (
+    <svg className="phone__pace" viewBox="0 0 100 42" preserveAspectRatio="none" aria-hidden="true">
+      <polyline points={PACE_LAST.map(point).join(" ")} fill="none" stroke="rgb(17 17 17 / .35)" strokeWidth="1" strokeDasharray="2 2.5" vectorEffect="non-scaling-stroke" />
+      <polygon points={`0,40 ${now} ${(((PACE_NOW.length - 1) / (days - 1)) * 100).toFixed(1)},40`} fill="rgb(17 17 17 / .08)" />
+      <polyline points={now} fill="none" stroke="#111" strokeWidth="2" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+    </svg>
+  );
+}
 
 /**
  * The app at real iPhone proportions (1206 x 2622), cycling Home, Budgets, Goals.
@@ -197,19 +220,17 @@ function PhoneHome() {
   const Transport = categoryIcon("transport");
   const Shopping = categoryIcon("shopping");
   const Travel = goalIcon("plane");
-  const Rent = categoryIcon("rent");
-  const Safety = goalIcon("shield");
-  const Future = goalIcon("sprout");
+  const House = goalIcon("home");
   const tabs = [
     { label: "Home", Icon: IconHome, screen: 0 },
-    { label: "Activity", Icon: IconActivity, screen: 1 },
+    { label: "Spending", Icon: IconSpending, screen: 1 },
     { label: "Budgets", Icon: IconBudgets, screen: 2 },
-    { label: "Goals", Icon: IconGoals, screen: 3 },
+    { label: "Savings", Icon: IconSavings, screen: 3 },
   ];
 
   const [screen, setScreen] = useState(0);
   const [picks, setPicks] = useState(0);
-  const [balance, setBalance] = useState(BALANCE);
+  const [balance, setBalance] = useState(EVERYDAY);
   const [groceries, setGroceries] = useState(GROCERIES_LEFT);
   const [toast, setToast] = useState<{ label: string; amount: number } | null>(null);
   const lastToast = useRef<{ label: string; amount: number }>({ label: "Bakery", amount: 4.2 });
@@ -236,7 +257,7 @@ function PhoneHome() {
       const purchase = PURCHASES[index];
       lastToast.current = { label: purchase.label, amount: purchase.amount };
       setToast(lastToast.current);
-      setBalance(BALANCE - done.reduce((sum, p) => sum + p.amount, 0));
+      setBalance(EVERYDAY + done.reduce((sum, p) => sum + p.amount, 0));
       setGroceries(GROCERIES_LEFT - done.filter((p) => p.groceries).reduce((sum, p) => sum + p.amount, 0));
       window.clearTimeout(hide);
       hide = window.setTimeout(() => setToast(null), 1900);
@@ -272,101 +293,76 @@ function PhoneHome() {
         <div className="phone__screen">
           <section className={pageClass(0)} aria-hidden={screen !== 0}>
             <div className="phone__head">
-              <p className="phone__title">Home</p>
+              <p className="phone__title">October</p>
               <span className="phone__avatar" aria-hidden="true">W</span>
             </div>
 
             <div className="ds-balance phone__balance">
-              <p className="ds-balance__label">Safe to spend</p>
+              <p className="ds-balance__label">Everyday spending</p>
               <p className="ds-money phone__money">
                 €{formatWhole(shownBalance)}<small>.{formatCents(shownBalance)}</small>
               </p>
+              <PhonePace />
               <div className="ds-balance__chips">
-                <span className="ds-chip ds-chip--on-lime">€82.51 a day</span>
-                <span className="ds-chip ds-chip--on-lime">9 days to payday</span>
+                <span className="ds-chip ds-chip--on-lime">↓ €95 less than Sep</span>
               </div>
             </div>
 
-            <p className="phone__h">Budgets</p>
-            <div className="phone__row">
-              <Groceries className="phone__icon" />
-              <div>
-                <p className="phone__line">
-                  <span>Groceries</span>
-                  <span><b>€{Math.round(shownGroceries)}</b> <i>left of €400</i></span>
-                </p>
-                <div className="ds-bar phone__bar"><span style={{ width: `${(shownGroceries / 400) * 100}%` }} /></div>
+            <div className="phone__tiles">
+              <div className="phone__tile">
+                <p className="phone__sumlabel">Budgets</p>
+                <p className="phone__tilenum">€{formatWhole(shownGroceries + 463)}</p>
+                <div className="ds-bar phone__bar phone__bar--tick"><span style={{ width: "38%" }} /><i style={{ left: "32%" }} /></div>
+                <p className="phone__st phone__st--ok">On track</p>
               </div>
-            </div>
-            <div className="phone__row">
-              <Transport className="phone__icon" />
-              <div>
-                <p className="phone__line">
-                  <span>Transport</span>
-                  <span className="phone__over">€18.40 over</span>
-                </p>
-                <div className="ds-bar is-over phone__bar"><span style={{ width: "100%" }} /></div>
+              <div className="phone__tile">
+                <p className="phone__sumlabel">Saved</p>
+                <p className="phone__tilenum">€1,000</p>
+                <div className="ds-bar phone__bar"><span style={{ width: "83%" }} /></div>
+                <p className="phone__st phone__st--todo">1 to move</p>
               </div>
             </div>
 
-            <p className="phone__h">Goals</p>
+            <p className="phone__h">Needs you</p>
             <div className="phone__row">
-              <Travel className="phone__icon" />
+              <span className="phone__icon phone__icon--neon">€</span>
               <div>
-                <p className="phone__line">
-                  <span>Travel</span>
-                  <span className="phone__save">€200 to save</span>
-                </p>
-                <div className="ds-bar phone__bar"><span style={{ width: "40%" }} /></div>
-              </div>
-            </div>
-            <p className="phone__h">Bills</p>
-            <div className="phone__row">
-              <Rent className="phone__icon" />
-              <div>
-                <p className="phone__line"><span>Rent</span><span><b>€300</b></span></p>
-                <p className="phone__meta">Monthly · due 20 Nov</p>
+                <p className="phone__line"><span>Move €200 to Travel</span></p>
+                <p className="phone__meta">Wollie ticks it when it lands</p>
               </div>
             </div>
           </section>
 
           <section className={pageClass(1)} aria-hidden={screen !== 1}>
             <div className="phone__head">
-              <p className="phone__title">Activity</p>
+              <p className="phone__title">Spending</p>
             </div>
-            <p className="phone__h">Today</p>
-            <div className="phone__rows">
-              <div className="phone__row">
-                <Groceries className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Bakery</span><span><b>−€4.20</b></span></p>
-                  <p className="phone__meta">Groceries</p>
-                </div>
-              </div>
-              <div className="phone__row">
-                <Transport className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>City Rail</span><span><b>−€3.10</b></span></p>
-                  <p className="phone__meta">Transport</p>
-                </div>
-              </div>
+            <div className="phone__ring">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#ecece6" strokeWidth="12" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#111" strokeWidth="12" strokeDasharray="136 178" transform="rotate(-90 60 60)" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#cdea3a" strokeWidth="12" strokeDasharray="82 232" strokeDashoffset="-138" transform="rotate(-90 60 60)" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#8a8a82" strokeWidth="12" strokeDasharray="36 278" strokeDashoffset="-222" transform="rotate(-90 60 60)" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#6f7d1c" strokeWidth="12" strokeDasharray="30 284" strokeDashoffset="-260" transform="rotate(-90 60 60)" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#c9c9c1" strokeWidth="12" strokeDasharray="20 294" strokeDashoffset="-292" transform="rotate(-90 60 60)" />
+              </svg>
+              <p className="phone__ringnum"><small>Everyday</small>€429</p>
             </div>
-            <p className="phone__h">Yesterday</p>
             <div className="phone__rows">
-              <div className="phone__row">
-                <Dining className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Noodle bar</span><span><b>−€14.50</b></span></p>
-                  <p className="phone__meta">Eating out</p>
+              {[
+                { Icon: Groceries, name: "Groceries", value: "€190", share: "44%", color: "#111" },
+                { Icon: Transport, name: "Transport", value: "€117", share: "27%", color: "#cdea3a" },
+                { Icon: Dining, name: "Eating out", value: "€51", share: "12%", color: "#8a8a82" },
+                { Icon: Shopping, name: "Shopping", value: "€29", share: "7%", color: "#c9c9c1" },
+              ].map(({ Icon, name, value, share, color }) => (
+                <div key={name} className="phone__row">
+                  <span className="phone__icon phone__icon--swatch" style={{ background: color, color: color === "#111" ? "#fbfbf9" : "#111" }}><Icon /></span>
+                  <div>
+                    <p className="phone__line"><span>{name}</span><span><b>{value}</b></span></p>
+                    <p className="phone__meta">{share} of everyday</p>
+                  </div>
                 </div>
-              </div>
-              <div className="phone__row">
-                <Future className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Salary</span><span className="phone__pos"><b>+€3,200</b></span></p>
-                  <p className="phone__meta">Income</p>
-                </div>
-              </div>
+              ))}
             </div>
           </section>
 
@@ -376,70 +372,53 @@ function PhoneHome() {
             </div>
             <div className="phone__summary">
               <p className="phone__sumlabel">Left this month</p>
-              <p className="phone__sumnum">€750<small> of €1,150</small></p>
-              <div className="ds-bar phone__bar"><span style={{ width: "65%" }} /></div>
-              <p className="phone__sumfoot"><span>€400 spent</span><span>Resets on payday</span></p>
+              <p className="phone__sumnum">€873<small> of €1,390</small></p>
+              <div className="ds-bar phone__bar phone__bar--tick"><span style={{ width: "37%" }} /><i style={{ left: "29%" }} /></div>
+              <p className="phone__sumfoot"><span className="phone__okline">On track</span><span>| = today</span></p>
             </div>
-            <p className="phone__h">Categories</p>
             <div className="phone__rows">
+              <div className="phone__row">
+                <Transport className="phone__icon" />
+                <div>
+                  <p className="phone__line"><span>Transport</span><span className="phone__over">€46 over</span></p>
+                  <div className="ds-bar is-over phone__bar phone__bar--tick"><span style={{ width: "100%" }} /><i style={{ left: "29%" }} /></div>
+                </div>
+              </div>
               <div className="phone__row">
                 <Groceries className="phone__icon" />
                 <div>
-                  <p className="phone__line"><span>Groceries</span><span><b>€200</b> <i>left of €400</i></span></p>
-                  <div className="ds-bar phone__bar"><span style={{ width: "50%" }} /></div>
+                  <p className="phone__line"><span>Groceries</span><span><b>€410</b> <i>left</i></span></p>
+                  <div className="ds-bar phone__bar phone__bar--tick"><span style={{ width: "32%" }} /><i style={{ left: "29%" }} /></div>
                 </div>
               </div>
               <div className="phone__row">
                 <Dining className="phone__icon" />
                 <div>
-                  <p className="phone__line"><span>Eating out</span><span><b>€250</b> <i>left of €250</i></span></p>
-                  <div className="ds-bar phone__bar"><span style={{ width: "100%" }} /></div>
-                </div>
-              </div>
-              <div className="phone__row">
-                <Transport className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Transport</span><span className="phone__over">€18.40 over</span></p>
-                  <div className="ds-bar is-over phone__bar"><span style={{ width: "100%" }} /></div>
-                </div>
-              </div>
-              <div className="phone__row">
-                <Shopping className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Shopping</span><span><b>€300</b> <i>left of €300</i></span></p>
-                  <div className="ds-bar phone__bar"><span style={{ width: "100%" }} /></div>
+                  <p className="phone__line"><span>Eating out</span><span><b>€249</b> <i>left</i></span></p>
+                  <div className="ds-bar phone__bar phone__bar--tick"><span style={{ width: "17%" }} /><i style={{ left: "29%" }} /></div>
                 </div>
               </div>
             </div>
-            <p className="phone__cta">+ Add budget</p>
           </section>
 
           <section className={pageClass(3)} aria-hidden={screen !== 3}>
             <div className="phone__head">
-              <p className="phone__title">Goals</p>
+              <p className="phone__title">Savings</p>
             </div>
-            <div className="phone__rows">
-              <div className="phone__row">
-                <Travel className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Travel</span><span className="phone__save">€200 to save</span></p>
-                  <div className="ds-bar phone__bar"><span style={{ width: "40%" }} /></div>
-                </div>
-              </div>
-              <div className="phone__row">
-                <Safety className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Safety cushion</span><span className="phone__save">€120 to save</span></p>
-                  <div className="ds-bar phone__bar"><span style={{ width: "65%" }} /></div>
-                </div>
-              </div>
-              <div className="phone__row">
-                <Future className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Pension</span><span><b>Saved</b> <i>this month</i></span></p>
-                  <div className="ds-bar phone__bar"><span style={{ width: "100%" }} /></div>
-                </div>
-              </div>
+            <div className="ds-balance phone__balance phone__balance--small">
+              <p className="ds-balance__label">Saved so far</p>
+              <p className="ds-money phone__money">€21,400</p>
+            </div>
+            <div className="phone__goal">
+              <p className="phone__line"><span><House className="phone__inline" /> House</span><span><b>€1,000</b> <i>/ month</i></span></p>
+              <div className="ds-bar phone__bar"><span style={{ width: "33%" }} /></div>
+              <p className="phone__goalfoot"><span className="phone__okline">Moved this month</span><span>Done by Feb 2030</span></p>
+              <p className="phone__dots-row" aria-hidden="true"><i /><i /><i /><i /><i /><i /></p>
+            </div>
+            <div className="phone__goal">
+              <p className="phone__line"><span><Travel className="phone__inline" /> Travel</span><span><b>€200</b> <i>/ month</i></span></p>
+              <div className="ds-bar phone__bar"><span style={{ width: "47%" }} /></div>
+              <p className="phone__goalfoot"><span className="phone__todoline">€200 to move</span><span>Done by Jun 2027</span></p>
             </div>
           </section>
         </div>
@@ -594,16 +573,17 @@ function LandingPage() {
           <div className="ds-container landing-hero__grid">
             <div className="landing-hero__copy">
               <h1 className="landing-hero__title">
-                <span className="line"><span>Know what</span></span>
+                <span className="line"><span>See where your</span></span>
                 <span className="line">
                   <span>
-                    you can <span className="landing-hero__mark">spend.</span>
+                    money <span className="landing-hero__mark">goes.</span>
                   </span>
                 </span>
               </h1>
               <p className="landing-hero__lede rise" style={{ "--d": "420ms" } as CSSProperties}>
-                Connect your bank. See what is safe to spend, alone or with a
-                partner.
+                Connect your bank. Wollie sorts every payment, keeps your
+                monthly budgets on track and ticks off your savings. Alone or
+                with a partner.
               </p>
               <div className="landing-hero__actions rise" style={{ "--d": "560ms" } as CSSProperties}>
                 {primaryAction}
@@ -613,7 +593,7 @@ function LandingPage() {
               </div>
               <ul className="landing-hero__proof rise" style={{ "--d": "700ms" } as CSSProperties}>
                 <li>Read-only bank link</li>
-                <li>No joint account needed</li>
+                <li>Different banks, one view</li>
                 <li>Free to start</li>
               </ul>
             </div>
@@ -663,7 +643,7 @@ function LandingPage() {
             <h2 className="landing-h2 landing-h2--xl">Start in <em>two minutes.</em></h2>
             <ol className="landing-how__steps">
               <li data-reveal><span>1</span><h3>Connect your bank</h3><p className="ds-muted">Pick your bank from the list. The link is read-only.</p></li>
-              <li data-reveal><span>2</span><h3>See what is safe</h3><p className="ds-muted">Bills and goals come out first. What is left is yours.</p></li>
+              <li data-reveal><span>2</span><h3>Set budgets and goals</h3><p className="ds-muted">Wollie suggests amounts from your past months. Change them any time.</p></li>
               <li data-reveal><span>3</span><h3>Invite your partner</h3><p className="ds-muted">Each of you connects your own accounts. Nothing is merged.</p></li>
             </ol>
           </div>
@@ -781,7 +761,7 @@ function LandingPage() {
 
         <section className="ds-container landing-final" data-reveal>
           <div className="ds-balance landing-final__card">
-            <h2 className="landing-final__title">Know what is <em>yours</em> to spend.</h2>
+            <h2 className="landing-final__title">See where your money <em>goes.</em></h2>
             <div className="landing-final__actions">
               {primaryAction}
             </div>
@@ -793,7 +773,7 @@ function LandingPage() {
         <div className="ds-container">
           <div className="landing-footer__top">
             <Link to="/" className="ds-wordmark landing-footer__mark">Wollie</Link>
-            <p className="landing-footer__tag">Know what you can spend.</p>
+            <p className="landing-footer__tag">See where your money goes.</p>
           </div>
           <div className="landing-footer__row">
             <nav aria-label="Footer navigation" className="landing-footer__nav">

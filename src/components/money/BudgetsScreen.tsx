@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { IconAdd } from './icons'
-import { formatMoney } from '#/lib/finance-demo'
 import type { MoneyOverview } from '#/lib/money-overview'
 import { saveBudget, setPayday } from '#/server/money'
-import { BudgetRow, paydayLabel } from './HomeScreen'
+import { BudgetRow, paydayLabel, wholeMoney } from './HomeScreen'
+import { paceState } from '#/lib/money-insights'
 import { categoryIcon, categoryLabel } from './icons'
 import { Sheet } from './Sheet'
 import { AlertsCard } from './AlertsCard'
@@ -21,7 +21,6 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
   const [payday, setPaydayValue] = useState(String(overview.paydaySetting ?? overview.cycle.paydayDay ?? ''))
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const money = (value: number) => formatMoney(value, overview.currency)
 
   async function run(action: () => Promise<unknown>, done: () => void) {
     setBusy(true)
@@ -38,20 +37,29 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
   }
 
   const resets = overview.cycle.source === 'calendar'
-    ? `Resets on ${paydayLabel(overview)}`
+    ? `Resets ${paydayLabel(overview)}`
     : `Resets on payday, ${paydayLabel(overview)}`
+  const whole = (value: number) => wholeMoney(value, overview.currency)
+  const spent = overview.budgets.reduce((sum, budget) => sum + budget.spent, 0)
+  const state = paceState(spent, overview.budgetsLimit, overview.month.pace)
+  const daysLeft = Math.max(overview.month.days - overview.month.elapsed, 0)
+  const openAdd = (category?: string) => {
+    const option = overview.budgetOptions.find((item) => item.category === category) ?? overview.budgetOptions[0]
+    setEditing({ mode: 'add', category: option?.category ?? '', limit: String(option?.suggested || '') })
+  }
 
   return (
     <main id="main" className="m-screen">
-      <header className="m-title-row">
-        <h1>Budgets</h1>
+      <header className="m-title-row w-title">
+        <div>
+          <h1>Budgets</h1>
+          <p className="w-title__meta">
+            {overview.month.label} · {daysLeft} {daysLeft === 1 ? 'day' : 'days'} left ·{' '}
+            <button type="button" className="w-inline-link" onClick={() => !demo && setPaydayOpen(true)} disabled={demo}>{resets}</button>
+          </p>
+        </div>
         {!demo && (
-          <button
-            type="button"
-            className="m-icon-button m-icon-button--glass"
-            aria-label="Add budget"
-            onClick={() => setEditing({ mode: 'add', category: overview.budgetOptions[0]?.category ?? '', limit: String(overview.budgetOptions[0]?.suggested || '') })}
-          >
+          <button type="button" className="m-icon-button m-icon-button--glass" aria-label="Add budget" onClick={() => openAdd()}>
             <IconAdd aria-hidden="true" />
           </button>
         )}
@@ -59,66 +67,61 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
 
       {overview.budgets.length > 0 ? (
         <>
-          <section className="m-summary m-summary--card">
-            <p className="m-summary__label">Left this month</p>
-            <p className="m-summary__number">
-              {money(overview.budgetsLeft)} <span>of {money(overview.budgetsLimit)}</span>
-            </p>
-            <span className="m-bar" aria-hidden="true">
-              <span style={{ transform: `scaleX(${overview.budgetsLimit > 0 ? Math.min(1, Math.max(0, (overview.budgetsLimit - overview.budgetsLeft) / overview.budgetsLimit)) : 0})` }} />
+          <section className="w-card w-budget-sum" aria-label="All budgets">
+            <span className="w-label">Left this month</span>
+            <span className="w-big">{whole(Math.max(overview.budgetsLimit - spent, 0))}</span>
+            <span className="w-sub">of {whole(overview.budgetsLimit)} · {whole(spent)} spent</span>
+            <span className="w-meter w-meter--big" aria-hidden="true">
+              <span className={`is-${state}`} style={{ width: `${Math.min(100, (spent / Math.max(overview.budgetsLimit, 1)) * 100)}%` }} />
+              <i style={{ left: `${overview.month.pace * 100}%` }} />
             </span>
-            <p className="m-summary__foot">
-              <span>{money(Math.max(0, overview.budgetsLimit - overview.budgetsLeft))} spent</span>
-              <button type="button" className="m-link" onClick={() => !demo && setPaydayOpen(true)} disabled={demo}>
-                {resets}
-              </button>
-            </p>
-          </section>
-
-          {overview.short > 0 && (
-            <p className="m-alert m-alert--static">
-              <span>
-                <strong>{money(overview.short)} short</strong> before payday. Lower a budget or skip a goal this month.
+            <span className="w-row-foot">
+              <span className={`w-state is-${state}`}>
+                {state === 'over' ? 'Over budget' : state === 'fast' ? 'Spending faster than the month' : 'On track'}
               </span>
-            </p>
-          )}
+              <span className="m-quiet">| = today</span>
+            </span>
+          </section>
 
           <AlertsCard />
 
           <section className="m-section">
-          <div className="m-section__head m-section__head--static"><h2>Categories</h2><span className="m-section__count">{overview.budgets.length}</span></div>
-          <ul className="m-list m-list--roomy">
-            {overview.budgets.map((budget) => (
-              <BudgetRow
-                key={budget.id}
-                budget={budget}
-                currency={overview.currency}
-                onClick={demo ? undefined : () => setEditing({ mode: 'edit', category: budget.category, limit: String(budget.limit) })}
-              />
-            ))}
-          </ul>
+            <div className="m-section__head m-section__head--static"><h2>Each month</h2><span className="m-section__count">{overview.budgets.length}</span></div>
+            <ul className="m-list m-list--roomy">
+              {[...overview.budgets]
+                .sort((a, b) => (b.spent / Math.max(b.limit, 1)) - (a.spent / Math.max(a.limit, 1)))
+                .map((budget) => (
+                  <BudgetRow
+                    key={budget.id}
+                    budget={budget}
+                    currency={overview.currency}
+                    pace={overview.month.pace}
+                    state={overview.budgetPace[budget.id]}
+                    onClick={demo ? undefined : () => setEditing({ mode: 'edit', category: budget.category, limit: String(budget.limit) })}
+                  />
+                ))}
+            </ul>
           </section>
-          {!demo && (
-            <button
-              type="button"
-              className="m-button m-button--wide m-button--ghost"
-              onClick={() => setEditing({ mode: 'add', category: overview.budgetOptions[0]?.category ?? '', limit: String(overview.budgetOptions[0]?.suggested || '') })}
-            >
-              Add budget
-            </button>
+
+          {overview.unbudgeted.total > 0 && (
+            <section className="w-card w-loose">
+              <span className="m-row__main">
+                <span className="m-row__title">{whole(overview.unbudgeted.total)} spent with no budget</span>
+                <span className="m-row__meta">{overview.unbudgeted.categories.map(categoryLabel).join(', ')}</span>
+              </span>
+              {!demo && (
+                <button type="button" className="m-button" onClick={() => openAdd(overview.unbudgeted.categories[0])}>Add budget</button>
+              )}
+            </section>
           )}
           {demo && <p className="m-footnote">Example data. Create a workspace to set your own budgets.</p>}
         </>
       ) : (
         <section className="m-empty">
           <h2>Set your first budget</h2>
-          <p>Pick a category and how much you want to spend on it each month. Wollie tracks what’s left.</p>
+          <p>Pick a category and how much you want to spend on it each month. Wollie shows if you are on track every day.</p>
           {!demo && (
-            <button
-              type="button"
-              className="m-button m-button--primary"
-              onClick={() => setEditing({ mode: 'add', category: overview.budgetOptions[0]?.category ?? '', limit: String(overview.budgetOptions[0]?.suggested || '') })}
-            >
+            <button type="button" className="m-button m-button--primary" onClick={() => openAdd()}>
               Add budget
             </button>
           )}
@@ -174,6 +177,15 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
             {editing.mode === 'add' && (overview.budgetOptions.find((option) => option.category === editing.category)?.suggested ?? 0) > 0 && (
               <p className="m-hint">Suggested from your last three months.</p>
             )}
+            {editing.mode === 'edit' && (() => {
+              const budget = overview.budgets.find((item) => item.category === editing.category)
+              const last = overview.spending.categories.find((item) => item.category === editing.category)?.lastMonth ?? 0
+              return budget ? (
+                <p className="m-hint">
+                  {whole(budget.spent)} spent so far this month{last > 0 ? `, ${whole(last)} last month` : ''}.
+                </p>
+              ) : null
+            })()}
             {error && <p className="m-error" role="alert">{error}</p>}
             <button type="submit" className="m-button m-button--primary m-button--wide" disabled={busy || !editing.category || !Number(editing.limit)}>
               {busy ? 'Saving…' : 'Save'}

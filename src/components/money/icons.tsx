@@ -7,6 +7,7 @@ import {
   CaretLeft,
   CaretRight,
   ChartBar,
+  ChartPieSlice,
   Check,
   CircleDashed,
   Car,
@@ -18,6 +19,7 @@ import {
   House,
   Laptop,
   MagnifyingGlass,
+  PiggyBank,
   Plant,
   Plus,
   Receipt,
@@ -57,8 +59,10 @@ export const IconSearch = make(MagnifyingGlass)
 /** Tab bar icons. */
 export const IconHome = make(House)
 export const IconActivity = make(Receipt)
+export const IconSpending = make(ChartPieSlice)
 export const IconBudgets = make(ChartBar)
 export const IconGoals = make(Target)
+export const IconSavings = make(PiggyBank)
 
 const CATEGORY_ICONS: Record<string, AppIcon> = {
   groceries: make(ShoppingCart),

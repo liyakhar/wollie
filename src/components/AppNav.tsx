@@ -2,11 +2,11 @@ import { Link } from "@tanstack/react-router";
 import {
   CalendarDays,
   ChartNoAxesColumn,
-  CreditCard,
+  ChartPie,
   House,
   Landmark,
   Settings,
-  Target,
+  PiggyBank,
   Users,
 } from "lucide-react";
 import BetterAuthHeader from "#/integrations/better-auth/header-user";
@@ -27,7 +27,7 @@ export default function AppNav({
       <div className="app-nav__inner">
         <Link to="/app" className="app-nav__brand" aria-label="Wollie home">
           <strong>Wollie</strong>
-          <span>Shared money</span>
+          <span>Money for two</span>
         </Link>
 
         {!locked ? (
@@ -47,8 +47,8 @@ export default function AppNav({
               className="app-nav__tab"
               activeProps={{ className: "app-nav__tab is-active" }}
             >
-              <CreditCard aria-hidden="true" />
-              <span>Activity</span>
+              <ChartPie aria-hidden="true" />
+              <span>Spending</span>
             </Link>
             <Link
               to="/app/budgets"
@@ -63,8 +63,8 @@ export default function AppNav({
               className="app-nav__tab"
               activeProps={{ className: "app-nav__tab is-active" }}
             >
-              <Target aria-hidden="true" />
-              <span>Goals</span>
+              <PiggyBank aria-hidden="true" />
+              <span>Savings</span>
             </Link>
             <Link
               to="/app/recurring"
