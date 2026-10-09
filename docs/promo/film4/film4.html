@@ -1,0 +1,309 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Wollie film 4</title>
+<style>
+@font-face{font-family:IS;src:url(instrument-serif-latin-400-normal.woff2)}
+@font-face{font-family:IS;font-style:italic;src:url(instrument-serif-latin-400-italic.woff2)}
+@font-face{font-family:IN;font-weight:100 900;src:url(inter.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#f7f7f3}
+#stage{position:absolute;inset:0;overflow:hidden;color:#111;font-family:IN,sans-serif;transform-origin:50% 55%;
+  background:radial-gradient(120% 90% at 50% 40%,#fdfdfb 0%,#f5f5f0 60%,#ecece6 100%)}
+.abs{position:absolute}
+.serif{font-family:IS,serif;font-weight:400;letter-spacing:-.035em}
+.mask{position:absolute;overflow:hidden}
+.mask>div{will-change:transform}
+.chip{position:absolute;display:flex;align-items:center;gap:16px;height:84px;padding:0 32px 0 24px;border-radius:999px;background:#fff;
+  border:1px solid rgba(17,17,17,.08);box-shadow:0 10px 30px rgba(17,17,17,.07),0 1px 2px rgba(17,17,17,.05);font:500 32px IN;white-space:nowrap;transform-origin:50% 50%}
+.chip b{font-weight:600}
+.chip i{width:18px;height:18px;border-radius:50%;flex:none}
+.chip span.m{opacity:.5;font-weight:500}
+#dot{position:absolute;border-radius:50%;background:#cdea3a;box-shadow:0 0 0 2px #111;z-index:40}
+#word{position:absolute;white-space:nowrap;font-size:300px;line-height:1;z-index:39}
+.cap{position:absolute;left:0;width:1920px;height:118px;text-align:center}
+.cap>div{position:absolute;left:0;right:0;top:0;font:400 96px/1.15 IS;letter-spacing:-.035em;white-space:nowrap}
+.cap i{font-style:italic}
+#card{position:absolute;background:#fff;border:1px solid rgba(17,17,17,.08);overflow:hidden;
+  box-shadow:0 40px 80px rgba(17,17,17,.10),0 2px 6px rgba(17,17,17,.05);z-index:10}
+.layer{position:absolute;left:0;top:0}
+.lab{font:600 30px IN;letter-spacing:.1em;text-transform:uppercase;color:rgba(17,17,17,.55);white-space:nowrap}
+.big{font:400 150px/1 IS;letter-spacing:-.04em;white-space:nowrap}
+.big small{font-size:.42em;opacity:.45}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:12px 26px;border-radius:999px;font:600 36px IN;white-space:nowrap}
+.row{position:absolute;left:0;right:0;height:150px}
+.row .name{position:absolute;left:96px;top:6px;font:500 40px IN}
+.row .val{position:absolute;right:0;top:6px;font:600 40px IN;white-space:nowrap}
+.row .val span{font-weight:400;opacity:.5}
+.row .ico{position:absolute;left:0;top:0;width:68px;height:68px;border-radius:20px;background:#f3f3ef;display:grid;place-items:center}
+.row .ico svg{width:34px;height:34px}
+.track{position:absolute;left:96px;right:0;top:78px;height:20px;border-radius:99px;background:#ecece6}
+.track>span{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:#cdea3a}
+.state{position:absolute;right:330px;top:12px;text-align:right;font:600 32px IN;white-space:nowrap}
+.state::before{content:"";display:inline-block;width:12px;height:12px;border-radius:50%;background:currentColor;margin-right:10px;vertical-align:2px}
+.ok{color:#2f7d32}.fast{color:#b86a00}.over{color:#d92d20}
+#banner{position:absolute;left:560px;width:800px;height:150px;border-radius:40px;background:rgba(255,255,255,.96);z-index:30;
+  box-shadow:0 30px 70px rgba(17,17,17,.18),0 0 0 1px rgba(17,17,17,.06);display:flex;align-items:center;gap:26px;padding:0 34px}
+#banner .appi{width:86px;height:86px;border-radius:24px;background:#111;color:#cdea3a;display:grid;place-items:center;font:400 64px IS;flex:none}
+#xfer{position:absolute;height:110px;border-radius:999px;background:#111;color:#fbfbf9;display:flex;align-items:center;gap:20px;padding:0 40px 0 26px;font:500 36px IN;white-space:nowrap;z-index:35;
+  box-shadow:0 24px 50px rgba(17,17,17,.25)}
+#xfer i{width:58px;height:58px;border-radius:50%;background:#cdea3a;color:#111;display:grid;place-items:center;font:600 30px IN;font-style:normal}
+.slot{position:absolute;width:46px;height:46px;border-radius:50%;border:3px solid #111;background:#cdea3a}
+.slot.due{background:transparent;border-style:dashed}
+.slotlab{position:absolute;width:80px;text-align:center;font:400 28px IN;color:rgba(17,17,17,.5)}
+.bank{position:absolute;background:#fff;border:1px solid rgba(17,17,17,.08);border-radius:40px;box-shadow:0 30px 70px rgba(17,17,17,.10);z-index:12;overflow:hidden}
+.av{position:absolute;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font:400 58px IS}
+.av.you{background:#111;color:#cdea3a}.av.sam{background:#fff;color:#111;box-shadow:inset 0 0 0 3px rgba(17,17,17,.18)}
+#link{position:absolute;height:8px;border-radius:8px;background:#111;z-index:11;transform-origin:0 50%}
+#url{font:600 44px IN}
+</style></head><body>
+<div id="stage">
+ <div id="chips"></div>
+ <div class="mask" id="qm" style="left:0;top:452px;width:1920px;height:170px;text-align:center"><div id="q" class="serif" style="position:absolute;left:0;right:0;font-size:140px;line-height:1.15;white-space:nowrap">Where did it all <i>go?</i></div></div>
+
+ <svg id="ring" class="abs" width="640" height="640" viewBox="0 0 640 640" style="left:300px;top:300px;overflow:visible"></svg>
+ <div id="ringc" class="abs" style="left:300px;top:300px;width:640px;height:640px;display:grid;place-content:center;text-align:center">
+   <div class="lab" id="rl">Everyday · October</div><div class="serif" id="rn" style="font-size:150px;line-height:1;margin-top:12px">€0</div>
+ </div>
+ <div id="list" class="abs" style="left:1080px;top:350px;width:640px"></div>
+
+ <div id="card">
+  <div class="layer" id="Lchart" style="width:1520px;height:720px">
+    <div class="lab abs" style="left:70px;top:64px">Everyday spending</div>
+    <div class="big abs" id="cn" style="left:62px;top:104px">€429<small>.12</small></div>
+    <div class="abs pill" id="cdelta" style="left:72px;top:282px;background:#eef7cf">↓ €95 less than September by now</div>
+    <svg id="chart" class="abs" style="left:70px;top:380px" width="1380" height="270" viewBox="0 0 1380 270"></svg>
+    <div class="abs" style="left:72px;top:662px;display:flex;gap:40px;font:500 30px IN;color:rgba(17,17,17,.55)">
+      <span><b style="display:inline-block;width:30px;border-top:4px solid #111;vertical-align:6px;margin-right:10px"></b>October</span>
+      <span><b style="display:inline-block;width:30px;border-top:4px dashed rgba(17,17,17,.35);vertical-align:6px;margin-right:10px"></b>September</span>
+    </div>
+  </div>
+  <div class="layer" id="Lbud" style="width:1360px;height:760px">
+    <div class="lab abs" style="left:76px;top:66px">Budgets · October</div>
+    <div class="abs" style="left:76px;top:104px;font:400 96px/1 IS;letter-spacing:-.035em">€873 <span style="font:400 34px IN;letter-spacing:0;opacity:.5">left of €1,390</span></div>
+    <div class="abs" id="rows" style="left:76px;top:250px;width:1208px;height:480px"></div>
+    <div class="abs" id="guide" style="width:0;border-left:3px dashed #111;z-index:3"></div>
+    <div class="abs" id="todaylab" style="font:600 22px IN;letter-spacing:.1em;text-transform:uppercase">today</div>
+  </div>
+  <div class="layer" id="Lgoal" style="width:1060px;height:620px">
+    <div class="abs" style="left:70px;top:64px;width:104px;height:104px;border-radius:30px;background:#f3f3ef;display:grid;place-items:center">
+      <svg width="54" height="54" viewBox="0 0 256 256"><path d="M216 216V115.5a8 8 0 0 0-2.6-5.9l-80-72.7a8 8 0 0 0-10.8 0l-80 72.7a8 8 0 0 0-2.6 5.9V216M16 216h224M152 216v-56a8 8 0 0 0-8-8h-32a8 8 0 0 0-8 8v56" fill="none" stroke="#111" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="abs serif" style="left:200px;top:62px;font-size:110px;line-height:1">House</div>
+    <div class="abs" style="right:70px;top:92px;font:600 44px IN">€1,000<span style="font-weight:400;opacity:.5"> / month</span></div>
+    <div class="abs" style="left:72px;top:212px;font:400 34px IN;white-space:nowrap"><span class="serif" id="gsaved" style="font-size:84px;line-height:1">€19,000</span> <span style="opacity:.5">of €60,000</span></div>
+    <div class="abs" id="gpct" style="right:70px;top:240px;font:600 36px IN">32%</div>
+    <div class="abs" style="left:72px;right:72px;top:320px;height:24px;border-radius:99px;background:#ecece6"><span id="gbar" style="position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:#cdea3a;width:32%"></span></div>
+    <div class="abs" id="gstate" style="left:72px;top:372px;font:600 32px IN"></div>
+    <div class="abs" id="gdone" style="right:70px;top:372px;font:400 32px IN;color:rgba(17,17,17,.55)">Done by Feb 2030</div>
+    <div class="abs" style="left:72px;right:72px;top:446px;border-top:2px solid rgba(17,17,17,.08)"></div>
+    <div id="slots" class="abs" style="left:72px;top:470px;width:916px;height:120px"></div>
+  </div>
+  <div class="layer" id="Lbank" style="width:640px;height:380px">
+    <div class="av you" style="left:52px;top:52px">Y</div>
+    <div class="abs lab" style="left:174px;top:62px">Example Bank</div>
+    <div class="abs" style="left:174px;top:98px;font:500 36px IN">Your account</div>
+    <div class="abs serif" style="left:52px;top:214px;font-size:110px;line-height:1">€2,846</div>
+  </div>
+  <div class="layer" id="Lmerge" style="width:980px;height:440px">
+    <div class="av you" style="left:56px;top:54px">Y</div><div class="av sam" style="left:124px;top:54px">S</div>
+    <div class="abs serif" style="left:262px;top:58px;font-size:84px;line-height:1">Together</div>
+    <div class="abs lab" style="left:264px;top:150px">Two banks · October</div>
+    <div class="abs" style="left:56px;top:240px;display:grid;grid-template-columns:1fr 1fr;gap:28px;width:868px">
+      <div style="padding:26px 30px;border-radius:28px;background:#f6f6f2"><div class="lab">Everyday</div><div class="serif" style="font-size:80px;line-height:1;margin-top:12px">€429</div></div>
+      <div style="padding:26px 30px;border-radius:28px;background:#cdea3a"><div class="lab" style="color:rgba(17,17,17,.6)">Saved</div><div class="serif" style="font-size:80px;line-height:1;margin-top:12px">€1,000</div></div>
+    </div>
+  </div>
+ </div>
+
+ <div id="bankB" class="bank" style="width:640px;height:380px">
+    <div class="av sam" style="left:52px;top:52px">S</div>
+    <div class="abs lab" style="left:174px;top:62px">North Bank</div>
+    <div class="abs" style="left:174px;top:98px;font:500 36px IN">Sam's account</div>
+    <div class="abs serif" style="left:52px;top:214px;font-size:110px;line-height:1">€1,912</div>
+ </div>
+ <div id="link"></div>
+
+ <div id="banner"><div class="appi">W</div><div><div style="font:600 22px IN;letter-spacing:.1em;opacity:.5">WOLLIE · NOW</div><div style="font:600 40px IN;margin-top:6px">Transport is over budget</div><div style="font:400 30px IN;opacity:.6;margin-top:4px">€46.21 over this month</div></div></div>
+ <div id="xfer"><i>€</i><span>To Savings · House</span><b style="margin-left:18px">−€1,000</b></div>
+ <div id="check" class="abs" style="width:150px;height:150px;border-radius:50%;background:#111;display:grid;place-items:center;z-index:36">
+   <svg width="80" height="80" viewBox="0 0 80 80"><path id="ck" d="M18 42l15 15 30-34" fill="none" stroke="#cdea3a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="80"/></svg></div>
+
+ <div class="cap mask" id="c1" style="top:96px"><div>Every payment, <i>sorted.</i></div></div>
+ <div class="cap mask" id="c2" style="top:96px"><div>Every month, at a <i>glance.</i></div></div>
+ <div class="cap mask" id="c3" style="top:70px"><div>On track, <i>every day.</i></div></div>
+ <div class="cap mask" id="c4" style="top:120px"><div>Saving for a <i>home?</i></div></div>
+ <div class="cap mask" id="c5" style="top:120px"><div>Ticked off. <i>Automatically.</i></div></div>
+ <div class="cap mask" id="c6" style="top:150px"><div>Two banks. <i>One view.</i></div></div>
+
+ <div id="word" class="serif">Wollie</div>
+ <div id="dot"></div>
+ <div class="mask" id="tm" style="left:0;top:660px;width:1920px;height:130px;text-align:center"><div class="serif" style="position:absolute;left:0;right:0;font-size:96px;line-height:1.2;white-space:nowrap">See where your money <i>goes.</i></div></div>
+ <div class="mask" id="um" style="left:0;top:812px;width:1920px;height:70px;text-align:center"><div id="url" style="position:absolute;left:0;right:0">getwollie.com</div></div>
+</div>
+<script>
+const W=1920,H=1080,$=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),seg=(t,a,b)=>clamp((t-a)/(b-a)),lerp=(a,b,k)=>a+(b-a)*k;
+const eOut=x=>1-Math.pow(1-x,3),eIn=x=>x*x*x,eIO=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const eX=x=>x<=0?0:x>=1?1:(x<.5?Math.pow(2,20*x-10)/2:(2-Math.pow(2,-20*x+10))/2);
+const bez=(x)=>{/* cubic-bezier(.45,0,.15,1) approx */return eIO(x)};
+function spring(t,t0,z=.62,w=15){const s=t-t0;if(s<=0)return 0;const wd=w*Math.sqrt(1-z*z);return 1-Math.exp(-z*w*s)*(Math.cos(wd*s)+(z*w/wd)*Math.sin(wd*s))}
+function rise(el,t,t0,out=null,d=.5){let y=(1-eOut(seg(t,t0,t0+d)))*110;if(out!==null)y-=eIn(seg(t,out,out+.38))*110;el.style.transform=`translateY(${y}%)`}
+function show(el,on){el.style.display=on?'':'none'}
+function rect(el,cx,cy,w,h,r){el.style.left=(cx-w/2)+'px';el.style.top=(cy-h/2)+'px';el.style.width=w+'px';el.style.height=h+'px';el.style.borderRadius=Math.min(r,w/2,h/2)+'px'}
+const money=v=>'€'+Math.round(v).toLocaleString('en-US');
+
+/* ---------- data ---------- */
+const CH=[['Fresh Market','−€42.10','#111'],['Rent','−€1,400','#c9c9c1'],['Sushi bar','−€38.40','#8a8a82'],['Ride share','−€14.20','#cdea3a'],['Streaming','−€12.99','#c9c9c1'],['Bio shop','−€66.72','#111'],
+ ['Cinema','−€24.00','#6f7d1c'],['Pharmacy','−€18.90','#c9c9c1'],['Train ticket','−€31.00','#cdea3a'],['Corner café','−€9.80','#8a8a82'],['Book store','−€22.50','#c9c9c1'],['City gym','−€39.00','#6f7d1c'],
+ ['Pizza place','−€27.30','#8a8a82'],['Online shop','−€84.99','#c9c9c1'],['Bakery','−€4.20','#111'],['Mobile plan','−€24.99','#c9c9c1'],['Home store','−€56.10','#c9c9c1'],['City taxi','−€17.60','#cdea3a'],
+ ['Noodle bar','−€14.50','#8a8a82'],['Concert hall','−€48.00','#6f7d1c']];
+const SPOTS=[[150,120],[620,70],[1180,95],[1560,160],[90,330],[1640,360],[330,250],[1300,270],[110,560],[1700,600],[360,780],[1460,800],[150,930],[760,900],[1180,960],[1650,960],[560,300],[980,250],[420,640],[1320,680]];
+const CATS=[['Groceries','€190','44%','#111',.44],['Transport','€117','27%','#cdea3a',.27],['Eating out','€51','12%','#8a8a82',.12],['Fun','€42','10%','#6f7d1c',.10],['Shopping','€29','7%','#c9c9c1',.07]];
+const NOW=[0,12,38,61,95,140,188,236,301,360,429];
+const LAST=[0,18,52,96,140,186,236,280,330,410,524,560,612,660,701,760,812,850,904,950,1002,1040,1090,1136,1180,1214,1250,1290,1330,1352,1380];
+const BUD=[['Groceries','€190','of €600',.32,'ok','On track'],['Eating out','€51','of €300',.17,'ok','On track'],['Fun','€81','of €120',.68,'fast','Spending fast'],['Transport','€166','of €120',1,'over','Over budget']];
+const PACE=.29;
+
+/* ---------- timeline (seconds) ---------- */
+const T={qIn:.25,suck:2.62,dotIn:2.82,wIn:3.22,wOut:3.95,drop:4.4,ring:4.42,ringOut:7.25,cardIn:7.72,line:8.25,toBud:10.2,bars:11.0,red:13.75,ban:14.35,toGoal:15.6,xfer:18.6,hit:19.35,tick:20.04,toBank:22.0,link:23.6,merge:24.85,end:26.2,eWord:26.8,tag:27.45,url:28.3,END:30.5};
+
+let wordW,DOT,DOTD=44;
+function build(){
+ const word=$('word');wordW=word.getBoundingClientRect().width;const gap=10,total=wordW+gap+DOTD;const left=W/2-total/2;
+ word.style.left=left+'px';word.style.top=(H/2-210)+'px';DOT={x:left+wordW+gap+DOTD/2,y:H/2-210+300*.80};
+ // chips
+ $('chips').innerHTML=CH.map((c,i)=>`<div class="chip" id="ch${i}"><i style="background:${c[2]};box-shadow:inset 0 0 0 1px rgba(17,17,17,.15)"></i>${c[0]} <b>${c[1]}</b></div>`).join('');
+ // ring segments
+ const R=270,C=2*Math.PI*R;let off=0;
+ $('ring').innerHTML=`<circle cx="320" cy="320" r="${R}" fill="none" stroke="#ecece6" stroke-width="56" id="rtrack"/>`+CATS.map((c,i)=>{const len=c[4]*C;const s=`<circle id="rs${i}" cx="320" cy="320" r="${R}" fill="none" stroke="${c[3]}" stroke-width="56" data-len="${Math.max(len-6,1)}" data-off="${off}" transform="rotate(-90 320 320)"/>`;off+=len;return s}).join('');
+ $('list').innerHTML=CATS.map((c,i)=>`<div class="abs" id="li${i}" style="left:0;top:${i*104}px;width:640px;height:90px">
+   <div class="abs" style="left:0;top:8px;width:62px;height:62px;border-radius:18px;background:${c[3]};box-shadow:inset 0 0 0 1px rgba(17,17,17,.1)"></div>
+   <div class="abs" style="left:92px;top:10px;font:500 40px IN">${c[0]}</div>
+   <div class="abs" style="right:110px;top:16px;font:400 30px IN;opacity:.5">${c[2]}</div>
+   <div class="abs" style="right:0;top:10px;font:600 40px IN">${c[1]}</div>
+   <div class="abs" style="left:92px;right:0;top:82px;border-top:2px solid rgba(17,17,17,.07)"></div></div>`).join('');
+ // chart
+ const cw=1380,chh=270,max=1450,X=i=>i/30*cw,Y=v=>chh-v/max*chh;
+ const pts=a=>a.map((v,i)=>`${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+ $('chart').innerHTML=`<line x1="0" x2="${cw}" y1="${chh}" y2="${chh}" stroke="rgba(17,17,17,.12)" stroke-width="2"/>
+  <polyline id="last" points="${pts(LAST)}" fill="none" stroke="rgba(17,17,17,.35)" stroke-width="3" stroke-dasharray="7 9"/>
+  <clipPath id="clip"><rect id="clipr" x="0" y="0" width="0" height="${chh+10}"/></clipPath>
+  <g clip-path="url(#clip)"><polygon points="0,${chh} ${pts(NOW)} ${X(10)},${chh}" fill="#cdea3a" opacity=".55"/>
+  <polyline points="${pts(NOW)}" fill="none" stroke="#111" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/></g>`;
+ window.CX=X;window.CY=Y;
+ // budget rows
+ $('rows').innerHTML=BUD.map((b,i)=>`<div class="row" id="br${i}" style="top:${i*120}px;height:110px">
+   <div class="ico"><span style="width:20px;height:20px;border-radius:50%;background:${b[4]==='over'?'#ef6a5b':b[4]==='fast'?'#e9b949':'#cdea3a'}"></span></div>
+   <div class="name">${b[0]}</div><div class="val" id="bv${i}">${b[1]} <span>${b[2]}</span></div>
+   <div class="track"><span id="bf${i}"></span></div></div>`).join('');
+ // goal slots
+ $('slots').innerHTML=['May','Jun','Jul','Aug','Sep','Oct'].map((m,i)=>`<div class="slot${i==5?' due':''}" id="sl${i}" style="left:${i*174+20}px;top:0"></div><div class="slotlab" style="left:${i*174+3}px;top:60px">${m}</div>`).join('');
+}
+
+/* card rect keyframes: [t,cx,cy,w,h,r] */
+const CK=[[7.72,620,620,44,44,22],[8.2,960,610,1520,720,48],[10.2,960,610,1520,720,48],[10.75,960,600,1360,760,48],[15.6,960,600,1360,760,48],[16.15,1180,620,1060,620,48],[22.0,1180,620,1060,620,48],[22.55,560,640,640,380,40],[24.85,560,640,640,380,40],[25.35,960,620,980,440,44],[26.2,960,620,980,440,44],[26.68,0,0,44,44,22]];
+function cardAt(t){if(t<CK[0][0])return null;const L=CK[CK.length-1];if(t>=L[0])return L.slice(1);
+ for(let i=0;i<CK.length-1;i++){const a=CK[i],b=CK[i+1];if(t<=b[0]){const same=a.slice(1).every((v,j)=>v===b[j+1]);const k=same?0:eX(seg(t,a[0],b[0]));return [1,2,3,4,5].map(j=>lerp(a[j],b[j],k))}}}
+
+function seek(t){
+ const st=$('stage');st.style.transform=`scale(${1+.045*seg(t,0,T.END)})`;
+ /* ---- S1 hook: chips drift, question rises ---- */
+ const chipsOn=t<T.suck+1.1;show($('chips'),chipsOn);
+ if(chipsOn)CH.forEach((c,i)=>{const el=$('ch'+i);const [sx,sy]=SPOTS[i];const ph=i*1.7;
+   const enter=eOut(seg(t,0,.9+i*.02));const dx=Math.sin(t*.7+ph)*18+(1-enter)*(sx<960?-90:90),dy=Math.cos(t*.6+ph)*12+(1-enter)*30;
+   let x=sx+dx,y=sy+dy,s=1,o=enter;
+   const k=eIn(seg(t,T.suck+i*.012,T.suck+.4+i*.012));
+   x=lerp(x,DOT.x-120,k);y=lerp(y,DOT.y-34,k);s=lerp(1,.05,k);o*=1-seg(k,.85,1);
+   el.style.transform=`translate(${x}px,${y}px) scale(${s})`;el.style.opacity=o});
+ show($('qm'),t<T.suck+.6);rise($('q'),t,T.qIn,T.suck-.05,.55);
+ /* ---- dot ---- */
+ const dot=$('dot');let dv=false,dx=DOT.x,dy=DOT.y,dd=DOTD;
+ if(t>=T.dotIn&&t<T.ring+.12){dv=true;dd=DOTD*Math.max(0,Math.min(1.15,spring(t,T.dotIn,.5,16)))*(1+.25*Math.exp(-Math.pow((t-(T.suck+.55))/.08,2)));
+   const m=eX(seg(t,T.drop-.12,T.ring+.1));dx=lerp(DOT.x,620,m);dy=lerp(DOT.y,620,m)}
+ // chart rider
+ if(t>=T.line&&t<T.toBud+.6){dv=true;const c=cardAt(t);const k=eOut(seg(t,T.line,T.line+1.35));const idx=k*10;const i0=Math.floor(idx),f=idx-i0;
+   const v=lerp(NOW[i0],NOW[Math.min(i0+1,10)],f);let px=c[0]-760+70+CX(idx),py=c[1]-360+380+CY(v);
+   // move to budgets 'today' marker
+   const m=eX(seg(t,T.toBud,T.toBud+.55));const bx=960-680+76+96+1112*PACE,by=600-380+250-40;px=lerp(px,bx,m);py=lerp(py,by,m);
+   dx=px;dy=py;dd=34*(1+.15*Math.sin(Math.max(0,t-(T.line+1.35))*5)*Math.exp(-Math.max(0,t-(T.line+1.35))*1.5))}
+ if(t>=T.toBud+.6&&t<T.toGoal+.5){dv=true;dx=960-680+76+96+1112*PACE;dy=600-380+250-40;dd=34;
+   const m=eIn(seg(t,T.toGoal,T.toGoal+.45));dd=34*(1-m)}
+ // savings coin: transfer pill becomes dot and drops into Oct slot
+ if(t>=T.hit&&t<T.tick+.05){dv=true;const k=eX(seg(t,T.hit,T.hit+.55));const sx=650+72+5*174+20+23,sy=620-310+470+23;
+   dx=lerp(560,sx,k);dy=lerp(525,sy,k)-Math.sin(k*Math.PI)*50;dd=lerp(58,46,k)}
+ // end: from card collapse
+ if(t>=T.end+.45){dv=true;dx=DOT.x;dy=DOT.y;dd=DOTD*(1+.2*Math.exp(-Math.pow((t-(T.end+.5))/.07,2)))}
+ show(dot,dv);if(dv){dot.style.left=(dx-dd/2)+'px';dot.style.top=(dy-dd/2)+'px';dot.style.width=dd+'px';dot.style.height=dd+'px';dot.style.boxShadow=dd>30?'0 0 0 3px #111':'0 0 0 2px #111'}
+ /* ---- wordmark (S2 and end) ---- */
+ const word=$('word');let ws=0;
+ if(t>=T.wIn&&t<T.drop)ws=Math.min(1.02,spring(t,T.wIn,.7,13))*(1-eIn(seg(t,T.wOut,T.wOut+.35)));
+ if(t>=T.eWord)ws=Math.min(1.02,spring(t,T.eWord,.7,13));
+ const endLift=eIO(seg(t,T.tag-.15,T.tag+.5))*70;
+ word.style.transformOrigin=`${wordW+10}px 50%`;word.style.transform=`translateY(${-endLift}px) scaleX(${Math.max(ws,.001)})`;show(word,ws>.003);
+ if(t>=T.eWord){dot.style.top=(parseFloat(dot.style.top)-endLift)+'px'}
+ /* ---- S3a ring ---- */
+ const rOn=t>=T.ring&&t<T.ringOut+.5;show($('ring'),rOn);show($('ringc'),rOn);show($('list'),rOn);
+ if(rOn){const grow=eX(seg(t,T.ring,T.ring+.45))*(1-eX(seg(t,T.ringOut,T.ringOut+.45)));
+   $('ring').style.transform=`rotate(${(1-eOut(seg(t,T.ring,T.ring+1.2)))*-60+eIn(seg(t,T.ringOut,T.ringOut+.45))*90}deg) scale(${Math.max(grow,.001)})`;
+   const C=2*Math.PI*270;CATS.forEach((c,i)=>{const el=$('rs'+i);const k=eOut(seg(t,T.ring+.25+i*.16,T.ring+.85+i*.16));const len=parseFloat(el.dataset.len)*k;el.setAttribute('stroke-dasharray',`${len} ${C}`);el.setAttribute('stroke-dashoffset',-parseFloat(el.dataset.off))});
+   $('ringc').style.opacity=seg(t,T.ring+.35,T.ring+.6)*(1-seg(t,T.ringOut-.1,T.ringOut+.15));
+   $('rn').textContent=money(429*eOut(seg(t,T.ring+.3,T.ring+1.6)));
+   CATS.forEach((c,i)=>{const el=$('li'+i);const t0=T.ring+.55+i*.1;el.style.opacity=seg(t,t0,t0+.25)*(1-seg(t,T.ringOut-.25+i*.04,T.ringOut+.05+i*.04));
+     el.style.transform=`translateX(${(1-eOut(seg(t,t0,t0+.6)))*80-eIn(seg(t,T.ringOut-.25+i*.04,T.ringOut+.15+i*.04))*60}px)`})}
+ /* ---- card ---- */
+ const card=$('card');const c=cardAt(t);const cOn=c&&t<T.end+.5;show(card,cOn);
+ if(cOn){let [cx,cy,cw,chh,cr]=c;if(t>=T.end){cx=lerp(960,DOT.x,eX(seg(t,T.end,T.end+.48)));cy=lerp(620,DOT.y,eX(seg(t,T.end,T.end+.48)))}
+   rect(card,cx,cy,cw,chh,cr);card.style.background=t>=T.end+.3?'#cdea3a':'#fff';
+   const place=(id,w,h,on,o)=>{const el=$(id);show(el,on);if(on){el.style.left=(cw-w)/2+'px';el.style.top=(chh-h)/2+'px';el.style.opacity=o}};
+   place('Lchart',1520,720,t<T.toBud+.4,seg(t,T.cardIn+.3,T.cardIn+.55)*(1-seg(t,T.toBud,T.toBud+.25)));
+   place('Lbud',1360,760,t>T.toBud+.25&&t<T.toGoal+.4,seg(t,T.toBud+.4,T.toBud+.65)*(1-seg(t,T.toGoal,T.toGoal+.2)));
+   place('Lgoal',1060,620,t>T.toGoal+.3&&t<T.toBank+.4,seg(t,T.toGoal+.4,T.toGoal+.65)*(1-seg(t,T.toBank,T.toBank+.2)));
+   place('Lbank',640,380,t>T.toBank+.3&&t<T.merge+.3,seg(t,T.toBank+.4,T.toBank+.6)*(1-seg(t,T.merge,T.merge+.18)));
+   place('Lmerge',980,440,t>T.merge+.2&&t<T.end+.25,seg(t,T.merge+.3,T.merge+.55)*(1-seg(t,T.end,T.end+.2)));
+   card.style.boxShadow=`0 ${40}px 80px rgba(17,17,17,${.10*(1-seg(t,T.end,T.end+.3))}),0 2px 6px rgba(17,17,17,.05)`;}
+ // chart content
+ $('clipr').setAttribute('width',CX(10*eOut(seg(t,T.line,T.line+1.35)))+2);
+ $('last').style.opacity=seg(t,T.line-.2,T.line+.6);
+ const cn=429.12*eOut(seg(t,T.cardIn+.3,T.line+1.35));$('cn').innerHTML='€'+Math.floor(cn)+'<small>.'+String(Math.round((cn%1)*100)).padStart(2,'0')+'</small>';
+ $('cdelta').style.transform=`scale(${Math.max(0,spring(t,T.line+1.2,.7,14))})`;$('cdelta').style.transformOrigin='0 50%';
+ // budgets
+ BUD.forEach((b,i)=>{const t0=T.toBud+.5+i*.08;const row=$('br'+i);row.style.opacity=seg(t,t0,t0+.25);row.style.transform=`translateY(${(1-eOut(seg(t,t0,t0+.55)))*40}px)`;
+   const f=$('bf'+i);const k=eOut(seg(t,T.bars+i*.42,T.bars+i*.42+(b[4]==='over'?1.25:.9)));f.style.width=(b[3]*100*k)+'%';
+   if(b[4]==='over'){const r=eIO(seg(t,T.red-.1,T.red+.25));f.style.background=`rgb(${Math.round(lerp(205,239,r))},${Math.round(lerp(234,106,r))},${Math.round(lerp(58,91,r))})`;
+     $('bv'+i).innerHTML=r>.5?'<b style="color:#d92d20">€46.21 over</b>':`${b[1]} <span>${b[2]}</span>`}
+   else if(b[4]==='fast'){f.style.background=k>.85?'#e9b949':'#cdea3a'}
+   let st=row.querySelector('.state');if(!st){st=document.createElement('div');st.className='state '+b[4];st.textContent=b[5];row.appendChild(st)}
+   const s0=b[4]==='over'?T.red+.1:T.bars+i*.42+.8;st.style.opacity=seg(t,s0,s0+.2);st.style.transform=`translateY(${(1-eOut(seg(t,s0,s0+.35)))*14}px)`});
+ const g=$('guide'),gk=eOut(seg(t,T.toBud+.6,T.toBud+1.1));g.style.left=(76+96+1112*PACE-1)+'px';g.style.top='230px';g.style.height=(480*gk)+'px';
+ $('todaylab').style.left=(76+96+1112*PACE+22)+'px';$('todaylab').style.top='200px';$('todaylab').style.opacity=seg(t,T.toBud+.8,T.toBud+1.1);
+ // banner
+ const bn=$('banner');const bOn=t>T.ban-.1&&t<T.toGoal+.5;show(bn,bOn);
+ if(bOn){const s=spring(t,T.ban,.55,13);const out=eIn(seg(t,T.toGoal-.3,T.toGoal+.15));bn.style.top=(lerp(-190,40,s)-out*260)+'px'}
+ // goal
+ const gk2=seg(t,T.tick-.15,T.tick+.6);const saved=19000+1000*eOut(gk2);$('gsaved').textContent=money(saved);$('gpct').textContent=Math.round(31.7+eOut(gk2)*1.6)+'%';
+ $('gbar').style.width=(31.7+1.6*eOut(gk2))+'%';
+ const done=t>=T.tick;$('gstate').innerHTML=done?'<span class="ok" style="display:inline-flex;align-items:center;gap:12px"><span style="width:14px;height:14px;border-radius:50%;background:#2f7d32"></span>Moved this month</span>':'<span class="fast" style="display:inline-flex;align-items:center;gap:12px"><span style="width:14px;height:14px;border-radius:50%;background:#b86a00"></span>€1,000 to move</span>';
+ const sl=$('sl5');sl.className='slot'+(t>=T.hit+.5?'':' due');sl.style.transform=`scale(${t>=T.hit+.5?1+.35*Math.exp(-Math.pow((t-(T.hit+.58))/.09,2)):1})`;
+ for(let i=0;i<5;i++){const el=$('sl'+i);const t0=T.toGoal+.7+i*.09;el.style.transform=`scale(${Math.max(0,Math.min(1.1,spring(t,t0,.6,16)))})`}
+ // transfer pill
+ const xf=$('xfer');const xOn=t>T.xfer-.05&&t<T.hit+.12;show(xf,xOn);
+ if(xOn){const k=eOut(seg(t,T.xfer,T.xfer+.6));const s=1-eIn(seg(t,T.hit-.15,T.hit+.1));xf.style.left=lerp(-760,-40,k)+'px';xf.style.top='470px';xf.style.transform=`scale(${Math.max(s,.02)})`;xf.style.transformOrigin='85% 50%'}
+ // check badge
+ const ck=$('check');const cOn2=t>=T.tick&&t<T.toBank+.3;show(ck,cOn2);
+ if(cOn2){const s=Math.max(0,spring(t,T.tick,.55,15))*(1-eIn(seg(t,T.toBank-.2,T.toBank+.2)));ck.style.left=(1180+530-110)+'px';ck.style.top=(620-310-50)+'px';ck.style.transform=`scale(${s})`;
+   $('ck').style.strokeDashoffset=80*(1-eOut(seg(t,T.tick+.08,T.tick+.4)))}
+ // bank B + link
+ const bb=$('bankB');const bOn2=t>T.toBank+.2&&t<T.merge+.55;show(bb,bOn2);
+ if(bOn2){const k=eX(seg(t,T.toBank+.15,T.toBank+.75));const m=eX(seg(t,T.merge,T.merge+.5));const x=lerp(2100,1360,k);const cx=lerp(x,960,m);
+   bb.style.left=(cx-320)+'px';bb.style.top=(640-190)+'px';bb.style.opacity=1-seg(t,T.merge+.25,T.merge+.5);bb.style.transform=`scale(${lerp(1,.9,m)})`}
+ const ln=$('link');const lOn=t>T.link&&t<T.merge+.3;show(ln,lOn);
+ if(lOn){const k=eOut(seg(t,T.link,T.link+.45));const m=eX(seg(t,T.merge,T.merge+.3));const x0=880,x1=1040;ln.style.left=x0+'px';ln.style.top='636px';ln.style.width=((x1-x0)*k*(1-m))+'px'}
+ // captions
+ const caps=[['c1',T.ring+.5,T.ringOut-.2],['c2',T.cardIn+.35,T.toBud-.25],['c3',T.toBud+.5,T.ban-.45],['c4',T.toGoal+.35,T.xfer-.3],['c5',T.tick+.1,T.toBank-.3],['c6',T.toBank+.4,T.end-.3]];
+ caps.forEach(([id,a,b])=>{const el=$(id);const on=t>a-.05&&t<b+.5;show(el,on);if(on)rise(el.firstElementChild,t,a,b,.55)});
+ // end text
+ show($('tm'),t>T.tag-.1);rise($('tm').firstElementChild,t,T.tag,null,.6);
+ show($('um'),t>T.url-.1);rise($('url'),t,T.url,null,.5);
+ $('tm').style.top=(660-endLift*.0)+'px';
+}
+window.__ready=false;
+Promise.all([document.fonts.load('300px IS'),document.fonts.load('italic 96px IS'),document.fonts.load('500 40px IN'),document.fonts.load('600 40px IN')]).then(()=>document.fonts.ready).then(()=>{build();window.seek=seek;window.__ready=true;
+ if(!location.search.includes('render')){const t0=performance.now();const loop=()=>{seek(((performance.now()-t0)/1000)%T.END);requestAnimationFrame(loop)};loop()}else seek(0)});
+</script></body></html>
