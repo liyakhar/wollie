@@ -155,13 +155,15 @@ bell(3.22, 72, 0.075, -0.2, 2.2); bell(3.22, 79, 0.05, 0.2, 2.2)
 // ring: segments drawn
 ;[0, 1, 2, 3, 4].forEach((i) => tick(4.67 + i * 0.16, [76, 79, 81, 84, 88][i], 0.12, -0.5 + i * 0.25))
 // transitions: soft air + a tiny low glide
-const TR = [[7.2, 0.7], [10.15, 0.7], [15.55, 0.7], [21.95, 0.7], [25.5, 0.8]]
+const TR = [[7.15, 0.7], [10.15, 0.7], [15.55, 0.7], [21.95, 0.7], [25.5, 0.8]]
 TR.forEach(([t, l], i) => {
   swoosh(t - 0.1, l, 250, 2000, 0.16, i % 2 ? 0.25 : -0.25)
   put(dry, t, l, (tt) => Math.sin(TAU * (160 + 170 * smooth(tt / l)) * tt) * Math.sin(Math.PI * tt / l) * 0.05, 1)
 })
 // card lands
-tick(8.25, 84, 0.10); tick(8.3, 91, 0.06)
+tick(7.95, 84, 0.10); tick(8.0, 91, 0.06)
+// a payment drops into its slice
+bloop(5.85, 0.20, 600, 300)
 // chart line draws
 swoosh(8.25, 1.4, 500, 1800, 0.04, 0.1)
 // budget bars fill
