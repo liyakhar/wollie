@@ -149,10 +149,9 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
               <span className="w-sub">left of {whole(overview.budgetsLimit)}</span>
               <span className="w-meter" aria-hidden="true">
                 <span className={`is-${budgetState}`} style={{ width: `${Math.min(100, (budgetSpent / Math.max(overview.budgetsLimit, 1)) * 100)}%` }} />
-                <i style={{ left: `${month.pace * 100}%` }} />
               </span>
               <span className={`w-state is-${budgetState}`}>
-                {budgetState === 'over' ? 'Over budget' : budgetState === 'fast' ? 'Spending fast' : 'On track'}
+                {budgetState === 'over' ? 'Over budget' : budgetState === 'fast' ? 'Almost used' : 'Within budget'}
               </span>
             </>
           ) : (
@@ -301,23 +300,21 @@ export function Bar({ share, state = 'ok' }: { share: number; state?: 'ok' | 'lo
   )
 }
 
-/** A budget: spent so far against the limit, with a tick for today's even pace. */
+/** A budget: spent so far against the limit. */
 export function BudgetRow({
   budget,
   currency,
-  pace,
   state,
   onClick,
 }: {
   budget: MoneyOverview['budgets'][number]
   currency: string
-  pace?: number
   state?: 'on-track' | 'fast' | 'over'
   onClick?: () => void
 }) {
   const Icon = categoryIcon(budget.category)
   const status = state ?? (budget.state === 'over' ? 'over' : 'on-track')
-  const words = { 'on-track': 'On track', fast: 'Spending fast', over: 'Over budget' } as const
+  const words = { 'on-track': 'Within budget', fast: 'Almost used', over: 'Over budget' } as const
   const content = (
     <>
       <Icon className="m-row__icon" aria-hidden="true" />
@@ -332,7 +329,6 @@ export function BudgetRow({
         </span>
         <span className="w-meter w-meter--row" aria-hidden="true">
           <span className={`is-${status}`} style={{ width: `${Math.min(100, (budget.spent / Math.max(budget.limit, 1)) * 100)}%` }} />
-          {pace !== undefined && <i style={{ left: `${pace * 100}%` }} />}
         </span>
         <span className="m-row__line w-row-foot">
           <span className={`w-state is-${status}`}>{words[status]}</span>

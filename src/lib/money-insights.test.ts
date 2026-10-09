@@ -98,8 +98,8 @@ describe('helpers', () => {
     expect(projectedFinish(100, null, 50, today)).toBeNull()
   })
   it('flags fast and over spending', () => {
-    expect(paceState(50, 100, 0.3)).toBe('fast')
-    expect(paceState(30, 100, 0.3)).toBe('on-track')
+    expect(paceState(90, 100)).toBe('fast')
+    expect(paceState(60, 100)).toBe('on-track')
     expect(paceState(120, 100, 0.3)).toBe('over')
   })
 })

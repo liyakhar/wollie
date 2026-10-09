@@ -313,9 +313,12 @@ export function monthPace(elapsed: number, days: number) {
 
 export type PaceState = 'on-track' | 'fast' | 'over'
 
-/** On track, spending fast (ahead of the even pace by 10%+), or over the limit. */
-export function paceState(spent: number, limit: number, pace: number): PaceState {
+/**
+ * Within budget, almost used (85%+ spent), or over the limit.
+ * No day-by-day pace: many budgets (eating out, gifts) are spent in one go.
+ */
+export function paceState(spent: number, limit: number, _pace?: number): PaceState {
   if (limit <= 0) return 'on-track'
   if (spent > limit) return 'over'
-  return spent / limit > pace + 0.1 ? 'fast' : 'on-track'
+  return spent / limit >= 0.85 ? 'fast' : 'on-track'
 }

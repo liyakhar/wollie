@@ -73,13 +73,11 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
             <span className="w-sub">of {whole(overview.budgetsLimit)} · {whole(spent)} spent</span>
             <span className="w-meter w-meter--big" aria-hidden="true">
               <span className={`is-${state}`} style={{ width: `${Math.min(100, (spent / Math.max(overview.budgetsLimit, 1)) * 100)}%` }} />
-              <i style={{ left: `${overview.month.pace * 100}%` }} />
             </span>
             <span className="w-row-foot">
               <span className={`w-state is-${state}`}>
-                {state === 'over' ? 'Over budget' : state === 'fast' ? 'Spending faster than the month' : 'On track'}
+                {state === 'over' ? 'Over budget' : state === 'fast' ? 'Almost used' : 'Within budget'}
               </span>
-              <span className="m-quiet">| = today</span>
             </span>
           </section>
 
@@ -95,7 +93,6 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
                     key={budget.id}
                     budget={budget}
                     currency={overview.currency}
-                    pace={overview.month.pace}
                     state={overview.budgetPace[budget.id]}
                     onClick={demo ? undefined : () => setEditing({ mode: 'edit', category: budget.category, limit: String(budget.limit) })}
                   />
