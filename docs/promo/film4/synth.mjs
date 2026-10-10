@@ -1,7 +1,7 @@
 // Wollie film score: all sounds made from scratch (no stock audio).
 // Soft pads, a gentle pluck line, glass bells and airy swooshes. 120 BPM.
 import { writeFileSync } from 'node:fs'
-const SR = 44100, DUR = 30.5, N = Math.round(SR * DUR)
+const SR = 44100, DUR = 35.3, N = Math.round(SR * DUR)
 const mk = () => ({ L: new Float32Array(N), R: new Float32Array(N) })
 const dry = mk(), wet = mk() // wet goes through a reverb
 const TAU = Math.PI * 2
@@ -113,7 +113,7 @@ const CH = [
   { root: 41, notes: [53, 57, 60, 64, 67], arp: [60, 65, 69, 72, 76, 72, 69, 65] },
   { root: 43, notes: [50, 55, 59, 62, 64], arp: [59, 62, 67, 71, 74, 71, 67, 62] },
 ]
-const END_MUSIC = 26.4
+const END_MUSIC = 31.4
 for (let bar = 0; bar * BAR < END_MUSIC + BAR; bar++) {
   const c = CH[bar % 4], t0 = bar * BAR
   const open = t0 >= DROP - 0.01
@@ -144,8 +144,8 @@ swoosh(3.35, 1.03, 400, 3500, 0.12, 0)
 thud(DROP, 0.40, 55, 0.5)
 sparkle(DROP, 72, 0.045, [0, 7, 12, 16], 0.05)
 // final chord (tonic) rings out under the end card
-;[48, 55, 60, 64, 67, 71].forEach((m, i) => pad(26.3, 4.2, m, 0.020, dry, -0.4 + i * 0.16))
-bell(26.85, 84, 0.07, 0, 3.4)
+;[48, 55, 60, 64, 67, 71].forEach((m, i) => pad(31.3, 4.2, m, 0.020, dry, -0.4 + i * 0.16))
+bell(31.65, 84, 0.07, 0, 3.4)
 
 /* ---------------- sound design on every motion ---------------- */
 // hook: chips are pulled in, the dot appears, the logo blooms
@@ -155,38 +155,38 @@ bell(3.22, 72, 0.075, -0.2, 2.2); bell(3.22, 79, 0.05, 0.2, 2.2)
 // ring: segments drawn
 ;[0, 1, 2, 3, 4].forEach((i) => tick(4.67 + i * 0.16, [76, 79, 81, 84, 88][i], 0.12, -0.5 + i * 0.25))
 // transitions: soft air + a tiny low glide
-const TR = [[7.15, 0.7], [10.15, 0.7], [15.55, 0.7], [21.95, 0.7], [25.5, 0.8]]
+const TR = [[8.15, 0.7], [11.05, 0.7], [17.25, 0.7], [27.45, 0.7], [31.15, 0.8]]
 TR.forEach(([t, l], i) => {
   swoosh(t - 0.1, l, 250, 2000, 0.16, i % 2 ? 0.25 : -0.25)
   put(dry, t, l, (tt) => Math.sin(TAU * (160 + 170 * smooth(tt / l)) * tt) * Math.sin(Math.PI * tt / l) * 0.05, 1)
 })
 // card lands
-tick(7.95, 84, 0.10); tick(8.0, 91, 0.06)
+tick(8.65, 84, 0.10); tick(8.7, 91, 0.06)
 
 
 // chart line draws
-swoosh(8.25, 1.4, 500, 1800, 0.04, 0.1)
+swoosh(8.7, 1.4, 500, 1800, 0.04, 0.1)
 // budget bars fill
-;[0, 1, 2, 3].forEach((i) => tick(11.0 + i * 0.42, [79, 81, 84, 79][i], 0.12, -0.4 + i * 0.27))
+;[0, 1, 2, 3].forEach((i) => tick(11.9 + i * 0.42, [79, 81, 84, 79][i], 0.12, -0.4 + i * 0.27))
 // transport goes red: soft low warning (two descending marimba-ish notes)
-tick(13.75, 60, 0.28); tick(13.9, 55, 0.24); thud(13.75, 0.22, 90, 0.18)
+tick(15.1, 60, 0.28); tick(15.25, 55, 0.24); thud(15.1, 0.22, 90, 0.18)
 // notification chime
-bell(14.35, 88, 0.12, 0.15, 2.0); bell(14.52, 95, 0.095, 0.25, 2.2)
+bell(15.5, 88, 0.12, 0.15, 2.0); bell(15.67, 95, 0.095, 0.25, 2.2)
 // savings: transfer slides in, drops into the slot, tick-off sparkle
-swoosh(18.45, 0.8, 300, 1900, 0.13, -0.3)
-bloop(19.15, 0.30, 500, 280); thud(19.15, 0.26, 70, 0.16)
-sparkle(20.1, 84, 0.12, [0, 4, 7, 12, 16], 0.075)
-bell(20.1, 60, 0.07, 0, 2.6)
+swoosh(24.55, 0.8, 300, 1900, 0.13, -0.3)
+bloop(25.34, 0.30, 500, 280); thud(25.34, 0.26, 70, 0.16)
+;[0, 1, 2, 3].forEach((i) => sparkle(26.17 + i * 0.32, 84 + i * 2, 0.10, [0, 4, 7, 12], 0.06)); [17.9, 18.7, 19.6, 21.0].forEach((t, i) => tick(t, [76, 79, 81, 84][i], 0.12, -0.3 + i * 0.2))
+bell(26.17, 60, 0.07, 0, 2.6)
 // two banks link, then merge
-swoosh(23.55, 0.5, 500, 2200, 0.09, 0.2)
-tick(24.0, 79, 0.12, 0.3)
-thud(24.85, 0.22, 66, 0.3)
-sparkle(24.85, 76, 0.07, [0, 7, 12], 0.06)
+swoosh(28.75, 0.5, 500, 2200, 0.09, 0.2)
+tick(29.25, 79, 0.12, 0.3)
+thud(30.05, 0.22, 66, 0.3)
+sparkle(30.05, 76, 0.07, [0, 7, 12], 0.06)
 // end: flood collapses to the dot, wordmark opens
-swoosh(26.25, 0.7, 2400, 280, 0.14, 0)
-bloop(26.82, 0.26, 420, 900)
+swoosh(31.15, 0.7, 2400, 280, 0.14, 0)
+bloop(31.6, 0.26, 420, 900)
 // tagline lands, url lands
-tick(27.45, 91, 0.10); tick(28.3, 96, 0.08)
+tick(32.15, 91, 0.10); tick(33.0, 96, 0.08)
 
 /* ---------------- reverb on the wet bus ---------------- */
 function reverb(src) {
