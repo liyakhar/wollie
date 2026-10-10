@@ -125,7 +125,7 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:#f6f6f2}
  <div id="word" class="serif">Wollie</div>
  <div id="dot"></div>
  <div class="mask" id="tm" style="left:0;top:640px;width:1920px;height:150px;text-align:center"><div class="serif" style="position:absolute;left:0;right:0;font-size:112px;line-height:1.25;white-space:nowrap">See where your money <i>goes.</i></div></div>
- <div id="sub" style="position:absolute;left:0;width:1920px;top:985px;text-align:center;font:500 38px IN;color:rgba(17,17,17,.82);opacity:0;z-index:90;display:none"></div>
+ <div id="sub" style="position:absolute;left:0;width:1920px;top:915px;text-align:center;font:500 52px IN;color:rgba(17,17,17,.9);opacity:0;z-index:90;display:none"></div>
  <div class="mask" id="um" style="left:0;top:812px;width:1920px;height:80px;text-align:center"><div id="url" style="position:absolute;left:0;right:0;font:600 52px IN">getwollie.com</div></div>
  </div>
 </div>
@@ -216,7 +216,7 @@ const WANT_SUBS=location.search.includes('subs');
 function seek(t){
  if(WANT_SUBS){const el=$('sub');let on=null;for(const [a,b,x] of SUBS){if(t>=a&&t<b){on=[a,b,x]}}
    if(on){el.style.display='';el.textContent=on[2];el.style.opacity=Math.min(seg(t,on[0],on[0]+.12),1-seg(t,on[1]-.12,on[1]))}else{el.style.display='none'}}
- const S=.9,kk=1;
+ const S=.9,kk=eIO(seg(t,3.9,4.4))*(1-eIO(seg(t,T.end-.05,T.end+.45)));
  const gt=`translateY(${-96*kk}px) scale(${S})`;$('inner').style.transform=gt;$('inner2').style.transform=gt;
  $('stage').style.transform=`scale(${1+.03*seg(t,0,T.END)})`;
  /* 01 hook */
