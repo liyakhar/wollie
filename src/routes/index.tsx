@@ -456,8 +456,8 @@ function FilmPlayer() {
       <video
         ref={video}
         className="landing-film__video"
-        src="/video/wollie-promo.mp4"
-        poster="/video/wollie-promo-poster.jpg"
+        src="/video/wollie-film-43s.mp4"
+        poster="/video/wollie-film-43s.jpg"
         playsInline
         preload="metadata"
         controls={started}
