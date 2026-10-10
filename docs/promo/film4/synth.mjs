@@ -1,7 +1,10 @@
 // Wollie film score: all sounds made from scratch (no stock audio).
 // Soft pads, a gentle pluck line, glass bells and airy swooshes. 120 BPM.
 import { writeFileSync } from 'node:fs'
-const SR = 44100, DUR = 35.3, N = Math.round(SR * DUR)
+const A = 7.08, B = 8.15 // the new opening makes the film longer: sounds before 3.3 s move by A, the rest by B
+let SFX = false
+const rm = (t) => (t < 3.3 ? t + A : t + B)
+const SR = 44100, DUR = 35.3 + B, N = Math.round(SR * DUR)
 const mk = () => ({ L: new Float32Array(N), R: new Float32Array(N) })
 const dry = mk(), wet = mk() // wet goes through a reverb
 const TAU = Math.PI * 2
@@ -11,6 +14,7 @@ const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296) * 
 const pan = (p) => [Math.cos(((p + 1) * Math.PI) / 4), Math.sin(((p + 1) * Math.PI) / 4)]
 
 function put(bus, t0, len, fn, gain = 1, p = 0) {
+  if (SFX) t0 = rm(t0)
   const [gl, gr] = pan(p)
   const i0 = Math.max(0, Math.floor(t0 * SR)), i1 = Math.min(N, Math.floor((t0 + len) * SR))
   for (let i = i0; i < i1; i++) {
@@ -105,7 +109,7 @@ function sparkle(t0, base, gain, steps = [0, 4, 7, 12], gap = 0.07) {
 }
 
 /* ---------------- music ---------------- */
-const BEAT = 0.5, BAR = 2.0, DROP = 4.38
+const BEAT = 0.5, BAR = 2.0, DROP = 4.38 + B
 // chords: C maj9, A min9, F maj9, G 6/9 (voicings in midi)
 const CH = [
   { root: 36, notes: [48, 52, 55, 59, 62], arp: [60, 64, 67, 71, 72, 71, 67, 64] },
@@ -113,7 +117,7 @@ const CH = [
   { root: 41, notes: [53, 57, 60, 64, 67], arp: [60, 65, 69, 72, 76, 72, 69, 65] },
   { root: 43, notes: [50, 55, 59, 62, 64], arp: [59, 62, 67, 71, 74, 71, 67, 62] },
 ]
-const END_MUSIC = 31.4
+const END_MUSIC = 31.4 + B
 for (let bar = 0; bar * BAR < END_MUSIC + BAR; bar++) {
   const c = CH[bar % 4], t0 = bar * BAR
   const open = t0 >= DROP - 0.01
@@ -138,11 +142,12 @@ for (let bar = 0; bar * BAR < END_MUSIC + BAR; bar++) {
     put(dry, tt, 0.09, (t) => { const x = rnd(); const y = x - hp; hp += 0.5 * (x - hp); return y * Math.exp(-t * 60) }, 0.03, i % 2 ? 0.4 : -0.4)
   }
 }
+SFX = true // from here on, every sound is placed on the original timeline and shifted by rm()
 // riser before the drop: soft air that opens
 swoosh(3.35, 1.03, 400, 3500, 0.12, 0)
 // the drop: warm low boom + open shimmer
-thud(DROP, 0.40, 55, 0.5)
-sparkle(DROP, 72, 0.045, [0, 7, 12, 16], 0.05)
+thud(4.38, 0.40, 55, 0.5)
+sparkle(4.38, 72, 0.045, [0, 7, 12, 16], 0.05)
 // final chord (tonic) rings out under the end card
 ;[48, 55, 60, 64, 67, 71].forEach((m, i) => pad(31.3, 4.2, m, 0.020, dry, -0.4 + i * 0.16))
 bell(31.65, 84, 0.07, 0, 3.4)
