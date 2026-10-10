@@ -31,7 +31,7 @@ const landingMeta = buildPageMeta({
   path: "/",
   title: "A Plan For Your Money",
   description:
-    "Wollie gives your money a plan. Budgets you can keep, savings for what matters that tick themselves off, and one view for couples, even with different banks.",
+    "Wollie gives your money a plan. Spend within your means and save for what matters, alone or together, even with different banks.",
 });
 
 // The phone app has no landing page. The native WebView injects
@@ -592,8 +592,8 @@ function LandingPage() {
               </span>
             </h1>
             <p className="landing-hero__lede rise" style={{ "--d": "420ms" } as CSSProperties}>
-              Budgets you can keep. Savings that tick themselves off. One view
-              for you and your partner, even with different banks.
+              Wollie helps you spend within your means and save for what
+              matters. Alone or together, even with different banks.
             </p>
             <div className="landing-hero__actions rise" style={{ "--d": "560ms" } as CSSProperties}>
               {primaryAction}
