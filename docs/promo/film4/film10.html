@@ -41,26 +41,19 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:#f6f6f2}
  <div class="mask" id="qm" style="left:0;top:448px;width:1920px;height:190px;text-align:center"><div id="q" class="serif" style="position:absolute;left:0;right:0;font-size:156px;line-height:1.15;white-space:nowrap">Where does my money actually <i>go?</i></div></div>
 
  <!-- 03 ring -->
- <svg id="ring" class="abs" width="720" height="720" viewBox="0 0 720 720" style="left:240px;top:280px;overflow:visible"></svg>
- <div id="ringc" class="abs" style="left:240px;top:280px;width:720px;height:720px;display:grid;place-content:center;text-align:center">
+ <svg id="ring" class="abs" width="720" height="720" viewBox="0 0 720 720" style="left:170px;top:280px;overflow:visible"></svg>
+ <div id="ringc" class="abs" style="left:170px;top:280px;width:720px;height:720px;display:grid;place-content:center;text-align:center">
    <div class="lab">Spent</div><div class="serif" id="rn" style="font-size:170px;line-height:1;margin-top:10px">€0</div>
    <div style="font:500 30px IN;color:rgba(17,17,17,.5);margin-top:14px">in October</div>
  </div>
- <div id="list" class="abs" style="left:1060px;top:368px;width:700px"></div>
- <div id="fly" class="chip" style="z-index:20"></div>
+ <div id="list" class="abs" style="left:990px;top:368px;width:700px"></div>
+ 
 
  <!-- 04 chart -->
- <div class="card" id="kChart" style="left:160px;top:316px;width:1600px;height:640px">
-   <div class="lab abs" style="left:72px;top:64px">Spent so far</div>
-   <div class="abs" style="left:72px;top:150px;width:1456px">
-     <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:500 46px IN;color:rgba(17,17,17,.6)">September</span><span class="serif" id="vA" style="font-size:100px;line-height:1;color:rgba(17,17,17,.55)">€334</span></div>
-     <div class="track" style="position:relative;height:56px;margin-top:14px;background:#efefe9"><span id="bA" style="background:#cfcfc7"></span></div>
-   </div>
-   <div class="abs" style="left:72px;top:330px;width:1456px">
-     <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 46px IN">October</span><span class="serif" id="vB" style="font-size:100px;line-height:1">€429</span></div>
-     <div class="track" style="position:relative;height:56px;margin-top:14px;background:#efefe9"><span id="bB" style="background:#cdea3a"></span></div>
-   </div>
-   <div class="abs tag t-over" id="cdelta" style="left:72px;top:508px;height:60px;font-size:34px;transform-origin:0 50%">↑ €95 more than September</div>
+ <div class="card" id="kChart" style="left:160px;top:264px;width:1600px;height:744px">
+   <div class="lab abs" style="left:72px;top:64px">Spent in the first 9 days of each month</div>
+   <div class="abs" id="mbars" style="left:72px;top:130px;width:1456px;height:420px"></div>
+   <div class="abs tag t-over" id="cdelta" style="left:72px;top:612px;height:60px;font-size:34px;transform-origin:0 50%">↑ €95 more than September</div>
  </div>
 
  <!-- 05 budgets -->
@@ -153,7 +146,7 @@ const PACE=.29;
 const T={qIn:.0,suck:2.58,dotIn:2.8,wIn:3.22,wOut:3.95,drop:4.4,ring:4.42,fly:5.25,ringOut:7.2,cardIn:7.42,line:8.2,toBud:10.2,bars:11.0,red:13.75,ban:14.35,toGoal:15.6,xfer:18.45,hit:19.15,tick:20.1,toBank:22.0,link:23.6,merge:24.85,end:26.25,eWord:26.75,tag:27.45,url:28.3,END:30.5};
 
 /* geometry */
-const RC={x:600,y:640},R=300;            // ring centre (stage coords)
+const RC={x:530,y:640},R=300;            // ring centre (stage coords)
 const BUDX=160+72+104, BUDW=1456-104;      // budget bars: start and width (stage)
 const GUIDEX=BUDX+BUDW*PACE;
 const MON_Y=262+592, OCT_X=160+72+5*(1456-72)/5+36-36; // last month dot (computed in build)
@@ -175,7 +168,14 @@ function build(){
    <div class="abs" style="right:150px;top:28px;font:400 32px IN;color:rgba(17,17,17,.45)">${c[2]}</div>
    <div class="abs" id="la${i}" style="right:0;top:22px;font:600 42px IN">${c[1]}</div>
    <div class="abs" style="left:110px;right:0;top:104px;border-top:2px solid rgba(17,17,17,.06)"></div></div>`).join('');
- $('fly').innerHTML=`<span class="t" style="background:#111">${ico('ShoppingCart',36,'#fbfbf9')}</span>Fresh Market <b>−€42.10</b>`;
+ // month bars
+ {const M=[['May',402],['Jun',351],['Jul',288],['Aug',377],['Sep',334],['Oct',429]];const col=1456/6,bw=150,H0=290,base=370;
+  $('mbars').innerHTML=M.map((m,i)=>{const h=H0*m[1]/429,x=i*col+(col-bw)/2,cur=i===5;
+   return `<div class="abs" id="mv${i}" style="left:${i*col}px;width:${col}px;text-align:center;top:${base-h-84}px;font:400 66px/1 IS;letter-spacing:-.03em;color:${cur?'#111':'rgba(17,17,17,.5)'}">€${m[1]}</div>
+   <div class="abs" id="mb${i}" data-h="${h}" style="left:${x}px;width:${bw}px;top:${base}px;height:0;border-radius:22px 22px 6px 6px;background:${cur?'#cdea3a':'#d9d9d1'}${cur?';box-shadow:inset 0 0 0 3px #111':''}"></div>
+   <div class="abs" style="left:${i*col}px;width:${col}px;text-align:center;top:${base+26}px;font:${cur?600:500} 38px IN;color:${cur?'#111':'rgba(17,17,17,.55)'}">${m[0]}</div>`}).join('')
+  +`<div class="abs" style="left:0;right:0;top:${base}px;border-top:2px solid rgba(17,17,17,.1)"></div>`;
+  window.MB={M,base,H0}}
  // budget rows
  $('rows').innerHTML=BUD.map((b,i)=>`<div class="abs" id="br${i}" style="left:0;top:${i*130}px;width:1456px;height:104px">
    <div class="abs tile" style="left:0;top:0;width:76px;height:76px;background:#f3f3ef">${ico(b[1],38,'#111')}</div>
@@ -252,18 +252,13 @@ function seek(t){
    $('ringc').style.opacity=seg(t,T.ring+.35,T.ring+.6)*(1-seg(t,T.ringOut-.15,T.ringOut+.1));
    $('rn').textContent=money(429*eOut(seg(t,T.ring+.3,T.ring+1.7)));
    CATS.forEach((c,i)=>{const el=$('li'+i);const t0=T.ring+.5+i*.09;el.style.opacity=seg(t,t0,t0+.25)*(1-seg(t,T.ringOut-.3+i*.03,T.ringOut+i*.03));
-     const pulse=i===0?1+.06*Math.exp(-Math.pow((t-(T.fly+.62))/.1,2)):1;
+     const pulse=1;
      el.style.transform=`translateX(${(1-eOut(seg(t,t0,t0+.6)))*70-eIn(seg(t,T.ringOut-.3+i*.03,T.ringOut+.1+i*.03))*50}px) scale(${pulse})`;el.style.transformOrigin='0 50%'})}
- // a payment flies into its slice ("sorted")
- const fl=$('fly');const fOn=t>T.fly&&t<T.fly+.62;show(fl,fOn);
- if(fOn){const k=eIO(seg(t,T.fly,T.fly+.6));const sx=1300,sy=250,ex=RC.x+R*Math.sin(.6),ey=RC.y-R*Math.cos(.6);
-   const w=fl.offsetWidth;fl.style.transform=`translate(${lerp(sx,ex,k)-w/2}px,${lerp(sy,ey,k)-48-Math.sin(k*Math.PI)*80}px) scale(${lerp(1,.15,eIn(k))})`;fl.style.opacity=1-seg(k,.8,1)}
  /* 04 chart */
  card('kChart',t,T.cardIn,T.toBud,{fromX:RC.x,fromY:RC.y,fromScale:.42,inD:.55});
- {const kA=eOut(seg(t,T.cardIn+.35,T.cardIn+1.15)),kB=eOut(seg(t,T.cardIn+.75,T.cardIn+1.75));
-  $('bA').style.width=(334/429*100*kA)+'%';$('bB').style.width=(100*kB)+'%';
-  $('vA').textContent=money(334*kA);$('vB').textContent=money(429*kB)}
- $('cdelta').style.transform=`scale(${Math.max(0,Math.min(1.04,spring(t,T.cardIn+1.7,.7,14)))})`;
+ {const {M,base}=window.MB;M.forEach((m,i)=>{const t0=T.cardIn+.35+i*.12;const k=eOut(seg(t,t0,t0+.7));const h=290*m[1]/429*k;const el=$('mb'+i);el.style.height=h+'px';el.style.top=(base-h)+'px';
+   const v=$('mv'+i);v.style.top=(base-h-84)+'px';v.style.opacity=seg(t,t0+.15,t0+.5);v.textContent='€'+Math.round(m[1]*(i===5?k:1))})}
+ $('cdelta').style.transform=`scale(${Math.max(0,Math.min(1.04,spring(t,T.cardIn+1.6,.7,14)))})`;
  /* 05 budgets */
  $('kBud').style.top=(336+70*eOut(seg(t,T.ban-.1,T.ban+.45)))+'px';
  card('kBud',t,T.toBud+.12,T.toGoal,{inD:.5});

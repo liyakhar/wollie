@@ -162,8 +162,8 @@ TR.forEach(([t, l], i) => {
 })
 // card lands
 tick(7.95, 84, 0.10); tick(8.0, 91, 0.06)
-// a payment drops into its slice
-bloop(5.85, 0.20, 600, 300)
+
+
 // chart line draws
 swoosh(8.25, 1.4, 500, 1800, 0.04, 0.1)
 // budget bars fill
