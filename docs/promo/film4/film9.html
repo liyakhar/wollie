@@ -216,8 +216,8 @@ const WANT_SUBS=location.search.includes('subs');
 function seek(t){
  if(WANT_SUBS){const el=$('sub');let on=null;for(const [a,b,x] of SUBS){if(t>=a&&t<b){on=[a,b,x]}}
    if(on){el.style.display='';el.textContent=on[2];el.style.opacity=Math.min(seg(t,on[0],on[0]+.12),1-seg(t,on[1]-.12,on[1]))}else{el.style.display='none'}}
- const S=.9,kk=eIO(seg(t,3.9,4.4))*(1-eIO(seg(t,T.end-.05,T.end+.45)));
- const gt=`translateY(${-96*kk}px) scale(${S})`;$('inner').style.transform=gt;$('inner2').style.transform=gt;
+ const kk=eIO(seg(t,3.9,4.4))*(1-eIO(seg(t,T.end-.05,T.end+.45)));const S=.9-.12*kk;
+ const gt=`translateY(${-166*kk}px) scale(${S})`;$('inner').style.transform=gt;$('inner2').style.transform=gt;
  $('stage').style.transform=`scale(${1+.03*seg(t,0,T.END)})`;
  /* 01 hook */
  const chipsOn=t<T.suck+.75;show($('chips'),chipsOn);
@@ -279,7 +279,7 @@ function seek(t){
    st.style.transform=`scale(${Math.max(0,Math.min(1.05,spring(t,s0,.65,15)))})`;st.style.transformOrigin='100% 50%'});
  
  const bn=$('banner');const bOn=t>T.ban-.05&&t<T.toGoal+.3;show(bn,bOn);
- if(bOn){const s=spring(t,T.ban,.58,13);const out=eIn(seg(t,T.toGoal-.35,T.toGoal+.1));bn.style.top=(lerp(-260,86,s)-out*320)+'px'}
+ if(bOn){const s=spring(t,T.ban,.58,13);const out=eIn(seg(t,T.toGoal-.35,T.toGoal+.1));bn.style.top=(lerp(-260,98,s)-out*320)+'px'}
  /* 06 savings */
  card('kGoal',t,T.toGoal+.1,T.toBank,{inD:.5});
  const gk2=eOut(seg(t,T.tick-.1,T.tick+.7));$('gsaved').textContent=money(19000+1000*gk2);$('gpct').textContent=Math.round(31.7+1.6*gk2)+'%';$('gbar').style.width=(31.7+1.6*gk2)+'%';
