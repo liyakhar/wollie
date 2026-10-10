@@ -116,7 +116,7 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
 
       {/* 1. How much did we spend? */}
       <Link to="/app/transactions" className="w-card w-spent">
-        <span className="w-label">Everyday spending</span>
+        <span className="w-label">Spent this month</span>
         <span className="w-big">{whole(spending.total)}</span>
         {spending.lastMonthTotal > 0 && (
           <span className={`w-delta ${diff <= 0 ? 'is-good' : 'is-up'}`}>

@@ -102,7 +102,7 @@ export function SpendingScreen({ overview, data, readOnly = false }: { overview:
 
           <section className="w-ring-block" aria-label={`Spent in ${monthName}`}>
             <Ring segments={categories.map((item, index) => ({ value: item.total, color: chartColor(index) }))} size={212} thickness={20}>
-              <span className="w-label">Everyday</span>
+              <span className="w-label">Spent</span>
               <span className="w-ring__total">{whole(summary.total)}</span>
               {compare > 0 && (
                 <span className={`w-delta w-delta--small ${diff <= 0 ? 'is-good' : 'is-up'}`}>

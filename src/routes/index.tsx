@@ -29,9 +29,9 @@ import {
 
 const landingMeta = buildPageMeta({
   path: "/",
-  title: "See Where Your Money Goes",
+  title: "A Plan For Your Money",
   description:
-    "Wollie connects to your bank, sorts every payment and shows clear charts. Set monthly budgets, save for what matters, on your own or as a couple with different banks.",
+    "Wollie gives your money a plan. Budgets you can keep, savings for what matters that tick themselves off, and one view for couples, even with different banks.",
 });
 
 // The phone app has no landing page. The native WebView injects
@@ -41,30 +41,6 @@ const nativeFlagScript = {
   children:
     "try{if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){document.documentElement.setAttribute('data-native','1')}}catch(e){}",
 };
-
-// Same pictures and titles as the app's first-launch intro. The drawings
-// have uneven white space inside the files, so `ink` is where the lines
-// really are (percent of the file), used to centre each one by eye.
-const story = [
-  {
-    image: "/onboarding/intro-1-clear.webp",
-    title: "See where it goes.",
-    body: "Every payment sorted by category, with clear charts, month by month.",
-    ink: { size: 776, x: 453, y: 442, w: 900, h: 900 },
-  },
-  {
-    image: "/onboarding/intro-2-clear.webp",
-    title: "Budgets you keep. Savings that add up.",
-    body: "A limit for each category and an amount to save each month. Wollie ticks off your savings when the money moves.",
-    ink: { size: 1029, x: 456, y: 664, w: 900, h: 1350 },
-  },
-  {
-    image: "/onboarding/intro-3-clear.webp",
-    title: "On your own or together.",
-    body: "Different banks? No problem. Each partner connects their own, and you see it all in one place.",
-    ink: { size: 826, x: 450, y: 674, w: 900, h: 1350 },
-  },
-] as const;
 
 const faqs = [
   {
@@ -298,13 +274,13 @@ function PhoneHome() {
             </div>
 
             <div className="ds-balance phone__balance">
-              <p className="ds-balance__label">Everyday spending</p>
+              <p className="ds-balance__label">Spent this month</p>
               <p className="ds-money phone__money">
                 €{formatWhole(shownBalance)}<small>.{formatCents(shownBalance)}</small>
               </p>
               <PhonePace />
               <div className="ds-balance__chips">
-                <span className="ds-chip ds-chip--on-lime">↓ €95 less than Sep</span>
+                <span className="ds-chip ds-chip--on-lime">↑ €95 more than Sep</span>
               </div>
             </div>
 
@@ -312,8 +288,8 @@ function PhoneHome() {
               <div className="phone__tile">
                 <p className="phone__sumlabel">Budgets</p>
                 <p className="phone__tilenum">€{formatWhole(shownGroceries + 463)}</p>
-                <div className="ds-bar phone__bar phone__bar--tick"><span style={{ width: "38%" }} /><i style={{ left: "32%" }} /></div>
-                <p className="phone__st phone__st--ok">On track</p>
+                <div className="ds-bar phone__bar"><span style={{ width: "38%" }} /></div>
+                <p className="phone__st phone__st--ok">Within budget</p>
               </div>
               <div className="phone__tile">
                 <p className="phone__sumlabel">Saved</p>
@@ -327,7 +303,7 @@ function PhoneHome() {
             <div className="phone__row">
               <span className="phone__icon phone__icon--neon">€</span>
               <div>
-                <p className="phone__line"><span>Move €200 to Travel</span></p>
+                <p className="phone__line"><span>Move €1,600 to your goals</span></p>
                 <p className="phone__meta">Wollie ticks it when it lands</p>
               </div>
             </div>
@@ -346,7 +322,7 @@ function PhoneHome() {
                 <circle cx="60" cy="60" r="50" fill="none" stroke="#6f7d1c" strokeWidth="12" strokeDasharray="30 284" strokeDashoffset="-260" transform="rotate(-90 60 60)" />
                 <circle cx="60" cy="60" r="50" fill="none" stroke="#c9c9c1" strokeWidth="12" strokeDasharray="20 294" strokeDashoffset="-292" transform="rotate(-90 60 60)" />
               </svg>
-              <p className="phone__ringnum"><small>Everyday</small>€429</p>
+              <p className="phone__ringnum"><small>Spent</small>€429</p>
             </div>
             <div className="phone__rows">
               {[
@@ -359,7 +335,7 @@ function PhoneHome() {
                   <span className="phone__icon phone__icon--swatch" style={{ background: color, color: color === "#111" ? "#fbfbf9" : "#111" }}><Icon /></span>
                   <div>
                     <p className="phone__line"><span>{name}</span><span><b>{value}</b></span></p>
-                    <p className="phone__meta">{share} of everyday</p>
+                    <p className="phone__meta">{share} of the month</p>
                   </div>
                 </div>
               ))}
@@ -373,29 +349,29 @@ function PhoneHome() {
             <div className="phone__summary">
               <p className="phone__sumlabel">Left this month</p>
               <p className="phone__sumnum">€873<small> of €1,390</small></p>
-              <div className="ds-bar phone__bar phone__bar--tick"><span style={{ width: "37%" }} /><i style={{ left: "29%" }} /></div>
-              <p className="phone__sumfoot"><span className="phone__okline">On track</span><span>| = today</span></p>
+              <div className="ds-bar phone__bar"><span style={{ width: "37%" }} /></div>
+              <p className="phone__sumfoot"><span className="phone__okline">Within budget</span></p>
             </div>
             <div className="phone__rows">
               <div className="phone__row">
                 <Transport className="phone__icon" />
                 <div>
                   <p className="phone__line"><span>Transport</span><span className="phone__over">€46 over</span></p>
-                  <div className="ds-bar is-over phone__bar phone__bar--tick"><span style={{ width: "100%" }} /><i style={{ left: "29%" }} /></div>
+                  <div className="ds-bar is-over phone__bar"><span style={{ width: "100%" }} /></div>
                 </div>
               </div>
               <div className="phone__row">
                 <Groceries className="phone__icon" />
                 <div>
                   <p className="phone__line"><span>Groceries</span><span><b>€410</b> <i>left</i></span></p>
-                  <div className="ds-bar phone__bar phone__bar--tick"><span style={{ width: "32%" }} /><i style={{ left: "29%" }} /></div>
+                  <div className="ds-bar phone__bar"><span style={{ width: "32%" }} /></div>
                 </div>
               </div>
               <div className="phone__row">
                 <Dining className="phone__icon" />
                 <div>
                   <p className="phone__line"><span>Eating out</span><span><b>€249</b> <i>left</i></span></p>
-                  <div className="ds-bar phone__bar phone__bar--tick"><span style={{ width: "17%" }} /><i style={{ left: "29%" }} /></div>
+                  <div className="ds-bar phone__bar"><span style={{ width: "17%" }} /></div>
                 </div>
               </div>
             </div>
@@ -460,6 +436,42 @@ function PhoneHome() {
           </button>
         ))}
       </div>
+    </figure>
+  );
+}
+
+/** The 35-second film. Click to play with sound; subtitles are in the picture. */
+function FilmPlayer() {
+  const video = useRef<HTMLVideoElement>(null);
+  const [started, setStarted] = useState(false);
+  const play = () => {
+    const el = video.current;
+    if (!el) return;
+    el.muted = false;
+    setStarted(true);
+    void el.play().catch(() => setStarted(false));
+  };
+  return (
+    <figure className="landing-film">
+      <video
+        ref={video}
+        className="landing-film__video"
+        src="/video/wollie-promo.mp4"
+        poster="/video/wollie-promo-poster.jpg"
+        playsInline
+        preload="metadata"
+        controls={started}
+        onEnded={() => setStarted(false)}
+        aria-label="Wollie in 35 seconds"
+      />
+      {!started && (
+        <button type="button" className="landing-film__play" onClick={play} aria-label="Play the film, 35 seconds">
+          <span className="landing-film__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+          </span>
+          <span className="landing-film__label">Watch the film · 35 s</span>
+        </button>
+      )}
     </figure>
   );
 }
@@ -569,71 +581,71 @@ function LandingPage() {
       </header>
 
       <main id="main">
-        <section className="landing-hero">
-          <div className="ds-container landing-hero__grid">
-            <div className="landing-hero__copy">
-              <h1 className="landing-hero__title">
-                <span className="line"><span>See where your</span></span>
-                <span className="line">
-                  <span>
-                    money <span className="landing-hero__mark">goes.</span>
-                  </span>
+        <section className="landing-hero landing-hero--center">
+          <div className="ds-container landing-hero__center">
+            <h1 className="landing-hero__title">
+              <span className="line"><span>A plan for</span></span>
+              <span className="line">
+                <span>
+                  your <span className="landing-hero__mark">money.</span>
                 </span>
-              </h1>
-              <p className="landing-hero__lede rise" style={{ "--d": "420ms" } as CSSProperties}>
-                Connect your bank. Wollie sorts every payment, keeps your
-                monthly budgets on track and ticks off your savings. Alone or
-                with a partner.
-              </p>
-              <div className="landing-hero__actions rise" style={{ "--d": "560ms" } as CSSProperties}>
-                {primaryAction}
-                <a href="#how" className="ds-btn ds-btn--lg">
-                  See how it works
-                </a>
-              </div>
-              <ul className="landing-hero__proof rise" style={{ "--d": "700ms" } as CSSProperties}>
-                <li>Read-only bank link</li>
-                <li>Different banks, one view</li>
-                <li>Free to start</li>
-              </ul>
+              </span>
+            </h1>
+            <p className="landing-hero__lede rise" style={{ "--d": "420ms" } as CSSProperties}>
+              Budgets you can keep. Savings that tick themselves off. One view
+              for you and your partner, even with different banks.
+            </p>
+            <div className="landing-hero__actions rise" style={{ "--d": "560ms" } as CSSProperties}>
+              {primaryAction}
+              <a href="#app" className="ds-btn ds-btn--lg">
+                See the app
+              </a>
             </div>
-
-            <div className="landing-hero__stage" aria-hidden="false">
-              <PhoneHome />
+            <ul className="landing-hero__proof rise" style={{ "--d": "700ms" } as CSSProperties}>
+              <li>Read-only bank link</li>
+              <li>Different banks, one view</li>
+              <li>Free to start</li>
+            </ul>
+            <div className="rise" style={{ "--d": "820ms" } as CSSProperties}>
+              <FilmPlayer />
             </div>
           </div>
         </section>
 
-        <section className="landing-story" aria-label="What Wollie does">
+        <section id="app" className="landing-show" aria-label="Inside the app">
           <div className="ds-container">
-            <p className="landing-kicker">What it does</p>
-            <h2 className="landing-h2 landing-h2--xl">Three things. Done well.</h2>
-            <ul className="landing-story__list">
-              {story.map(({ image, title, body, ink }, index) => (
-                <li key={title} className="landing-story__item" data-reveal style={{ "--i": index } as CSSProperties}>
-                  <span className="landing-story__num">0{index + 1}</span>
-                  <div className="landing-story__text">
-                    <h3 className="landing-story__title">{title}</h3>
-                    <p className="ds-muted">{body}</p>
-                  </div>
-                  <div className="landing-story__frame">
-                    <img
-                      src={image}
-                      alt=""
-                      width={ink.w}
-                      height={ink.h}
-                      loading="lazy"
-                      decoding="async"
-                      style={{
-                        width: `${(ink.w * 0.8 * 100) / ink.size}%`,
-                        left: `${50 - (ink.x * 0.8 * 100) / ink.size}%`,
-                        top: `${50 - (ink.y * 0.8 * 100) / ink.size}%`,
-                      }}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <p className="landing-kicker landing-show__kicker">Inside the app</p>
+            <div className="landing-show__grid">
+              <div className="landing-show__col landing-show__col--left">
+                <article className="landing-note" data-reveal>
+                  <p className="landing-note__num">01 · Spending</p>
+                  <h3 className="landing-note__title">See where it goes.</h3>
+                  <p className="ds-muted">Every payment sorted by category, and a clear look at this month against the last.</p>
+                </article>
+                <article className="landing-note" data-reveal>
+                  <p className="landing-note__num">03 · Savings</p>
+                  <h3 className="landing-note__title">Save for what matters.</h3>
+                  <p className="ds-muted">A home, a trip, your kids&rsquo; education, retirement. Pick an amount for each month. Wollie ticks it off when it lands.</p>
+                </article>
+              </div>
+
+              <div className="landing-show__stage">
+                <PhoneHome />
+              </div>
+
+              <div className="landing-show__col landing-show__col--right">
+                <article className="landing-note" data-reveal>
+                  <p className="landing-note__num">02 · Budgets</p>
+                  <h3 className="landing-note__title">Stay within your means.</h3>
+                  <p className="ds-muted">Set a limit for each category. Wollie warns you before you overspend.</p>
+                </article>
+                <article className="landing-note" data-reveal>
+                  <p className="landing-note__num">04 · Together</p>
+                  <h3 className="landing-note__title">Different banks, one view.</h3>
+                  <p className="ds-muted">Each of you connects your own accounts and keeps your own login. Nothing is merged.</p>
+                </article>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -643,7 +655,7 @@ function LandingPage() {
             <h2 className="landing-h2 landing-h2--xl">Start in <em>two minutes.</em></h2>
             <ol className="landing-how__steps">
               <li data-reveal><span>1</span><h3>Connect your bank</h3><p className="ds-muted">Pick your bank from the list. The link is read-only.</p></li>
-              <li data-reveal><span>2</span><h3>Set budgets and goals</h3><p className="ds-muted">Wollie suggests amounts from your past months. Change them any time.</p></li>
+              <li data-reveal><span>2</span><h3>Make your plan</h3><p className="ds-muted">Set budgets and savings goals. Wollie suggests amounts from your past months.</p></li>
               <li data-reveal><span>3</span><h3>Invite your partner</h3><p className="ds-muted">Each of you connects your own accounts. Nothing is merged.</p></li>
             </ol>
           </div>
@@ -761,7 +773,7 @@ function LandingPage() {
 
         <section className="ds-container landing-final" data-reveal>
           <div className="ds-balance landing-final__card">
-            <h2 className="landing-final__title">See where your money <em>goes.</em></h2>
+            <h2 className="landing-final__title">Give your money <em>a plan.</em></h2>
             <div className="landing-final__actions">
               {primaryAction}
             </div>
@@ -773,7 +785,7 @@ function LandingPage() {
         <div className="ds-container">
           <div className="landing-footer__top">
             <Link to="/" className="ds-wordmark landing-footer__mark">Wollie</Link>
-            <p className="landing-footer__tag">See where your money goes.</p>
+            <p className="landing-footer__tag">A plan for your money.</p>
           </div>
           <div className="landing-footer__row">
             <nav aria-label="Footer navigation" className="landing-footer__nav">

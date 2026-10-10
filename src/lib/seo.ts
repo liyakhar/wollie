@@ -1,6 +1,6 @@
 import { absoluteUrl, getSiteUrl, site } from '#/lib/site'
 
-const DEFAULT_OG_IMAGE = '/og/share-v4.png'
+const DEFAULT_OG_IMAGE = '/og/share-v5.png'
 const OG_IMAGE_WIDTH = 1200
 const OG_IMAGE_HEIGHT = 630
 

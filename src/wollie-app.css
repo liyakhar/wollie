@@ -234,3 +234,47 @@ a.w-card:active, .w-goal__button:active { transform: scale(.985); }
 .phone .phone__st--ok { color: #2f7d32 !important; }
 .phone .phone__st--todo { color: #b86a00 !important; }
 .phone .phone__st::before { content: "● "; }
+
+/* ═══ Landing: centered hero with the film, then the app with notes around it ═══ */
+.landing-hero--center .landing-hero__center { display: grid; justify-items: center; text-align: center; padding-block: var(--ds-space-8) var(--ds-space-10, 5rem); }
+.landing-hero--center .landing-hero__title { font-size: clamp(3.2rem, 11vw, 6.5rem); margin-bottom: var(--ds-space-5); }
+.landing-hero--center .landing-hero__lede { max-width: 38rem; margin-inline: auto; }
+.landing-hero--center .landing-hero__actions { justify-content: center; }
+.landing-hero--center .landing-hero__proof { justify-content: center; }
+
+.landing-film { position: relative; width: min(100%, 62rem); margin: var(--ds-space-8, 3rem) auto 0; aspect-ratio: 16 / 9; border-radius: 28px; overflow: hidden; background: #f4f4ef; border: 1px solid rgb(17 17 17 / .1); box-shadow: 0 40px 80px -30px rgb(17 17 17 / .28), 0 2px 6px rgb(17 17 17 / .05); }
+.landing-film__video { width: 100%; height: 100%; display: block; object-fit: cover; background: #f4f4ef; }
+.landing-film__play { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: .9rem; border: 0; background: linear-gradient(rgb(251 251 249 / .0), rgb(251 251 249 / .0)); cursor: pointer; font: inherit; color: #111; transition: background .25s ease; }
+.landing-film__play:hover { background: rgb(251 251 249 / .28); }
+.landing-film__icon { width: 5.25rem; height: 5.25rem; border-radius: 50%; display: grid; place-items: center; background: #cdea3a; box-shadow: 0 0 0 1px #111, 0 18px 40px -12px rgb(17 17 17 / .45); transition: transform .25s ease; }
+.landing-film__icon svg { margin-left: .2rem; }
+.landing-film__play:hover .landing-film__icon { transform: scale(1.06); }
+.landing-film__label { padding: .45rem 1rem; border-radius: 999px; background: rgb(255 255 255 / .92); font: 600 .9375rem var(--m-font); box-shadow: 0 1px 0 rgb(17 17 17 / .08); }
+
+.landing-show { padding-block: var(--ds-space-10, 5rem) var(--ds-space-12, 6rem); }
+.landing-show__kicker { text-align: center; margin-bottom: var(--ds-space-8, 3rem); }
+.landing-show__grid { display: grid; gap: var(--ds-space-8, 3rem); justify-items: center; }
+.landing-show__stage { order: -1; display: grid; place-items: center; }
+.landing-show__col { display: grid; gap: var(--ds-space-7, 2.5rem); width: 100%; max-width: 28rem; }
+.landing-note { display: grid; gap: .5rem; }
+.landing-note__num { margin: 0; font: 600 .75rem var(--m-font); letter-spacing: .12em; text-transform: uppercase; color: rgb(17 17 17 / .5); }
+.landing-note__title { margin: 0; font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: clamp(2rem, 3.2vw, 2.9rem); line-height: 1.02; letter-spacing: -.03em; }
+.landing-note p.ds-muted { margin: 0; max-width: 22rem; line-height: 1.5; }
+@media (min-width: 60rem) {
+  .landing-show__grid { grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: var(--ds-space-9, 4rem); }
+  .landing-show__stage { order: 0; }
+  .landing-show__col { max-width: none; align-content: space-between; gap: 0; }
+  .landing-show__col--left { justify-items: start; padding-top: 3rem; padding-bottom: 6rem; }
+  .landing-show__col--right { justify-items: end; text-align: right; padding-top: 12rem; padding-bottom: 1rem; }
+  .landing-show__col--right .landing-note p.ds-muted { margin-left: auto; }
+}
+.landing-show__grid { padding-top: 3rem; }
+@media (max-width: 59.99rem) { .landing-show__grid { padding-top: 1rem; } }
+@media (max-width: 59.99rem) {
+  .landing-show__col { display: contents; }
+  .landing-note { width: 100%; max-width: 28rem; }
+  .landing-show__col--left .landing-note:nth-child(1) { order: 1; }
+  .landing-show__col--right .landing-note:nth-child(1) { order: 2; }
+  .landing-show__col--left .landing-note:nth-child(2) { order: 3; }
+  .landing-show__col--right .landing-note:nth-child(2) { order: 4; }
+}
