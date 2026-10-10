@@ -163,7 +163,7 @@ function build(){
  $('stage').appendChild($('sub'));
  document.querySelectorAll('.cap>div').forEach(el=>{el.style.left='auto';el.style.right='auto';const w=el.getBoundingClientRect().width;let fs=72;if(w>1500){fs=Math.floor(72*1500/w)}el.style.fontSize=fs+'px';el.style.left='0';el.style.right='0'});
  {const q=$('q');q.style.right='auto';const w=q.getBoundingClientRect().width;if(w>1640)q.style.fontSize=Math.floor(156*1640/w)+'px';q.style.right='0'}
- const word=$('word');wordW=word.offsetWidth;const gap=12;const left=W/2-wordW/2;
+ const word=$('word');wordW=word.offsetWidth;const gap=12;const left=W/2-(wordW+gap+DOTD)/2;
  word.style.left=left+'px';word.style.top=(H/2-175)+'px';DOT={x:left+wordW+gap+DOTD/2,y:H/2-175+300*.80};
  $('chips').innerHTML=CH.map((c,i)=>`<div class="chip" id="ch${i}"><span class="t" style="background:${c[3]}">${ico(c[2],36,(c[3]==='#111'||c[3]==='#8a8a82'||c[3]==='#6f7d1c')?'#fbfbf9':'#111')}</span>${c[0]} <b>${c[1]}</b></div>`).join('');
  // ring
@@ -243,7 +243,7 @@ function seek(t){
  const word=$('word');let ws=0;
  if(t>=T.wIn&&t<T.drop)ws=Math.min(1.02,spring(t,T.wIn,.72,13))*(1-eIn(seg(t,T.wOut,T.wOut+.34)));
  if(t>=T.eWord)ws=Math.min(1.02,spring(t,T.eWord,.72,13));
- const lift=100*eIO(seg(t,T.tag-.15,T.tag+.5));word.style.transformOrigin=`${wordW+12}px 50%`;word.style.transform=`translate(${-(1-clamp(ws,0,1))*wordW/2}px,${-lift}px) scaleX(${Math.max(ws,.001)})`;show(word,ws>.004);window.__lift=lift;
+ const lift=100*eIO(seg(t,T.tag-.15,T.tag+.5));word.style.transformOrigin=`${wordW+12}px 50%`;word.style.transform=`translate(${-(1-clamp(ws,0,1))*(wordW+12+58)/2}px,${-lift}px) scaleX(${Math.max(ws,.001)})`;show(word,ws>.004);window.__lift=lift;
  /* 03 ring */
  const rOn=t>=T.ring&&t<T.ringOut+.5;show($('ring'),rOn);show($('ringc'),rOn);show($('list'),rOn);
  if(rOn){const grow=eX(seg(t,T.ring,T.ring+.5))*(1-eX(seg(t,T.ringOut,T.ringOut+.45)));
