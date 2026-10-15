@@ -282,7 +282,7 @@ function seek(t){
  const youIn=card('kYou',t,T.toBank+.1,T.merge+.62,{inD:.5,outScale:1,outD:.01});
  const samOn=t>=T.toBank+.25&&t<T.merge+.62;show($('kSam'),samOn);
  if(samOn){const k=eX(seg(t,T.toBank+.25,T.toBank+.85));const m=eX(seg(t,T.merge,T.merge+.3));$('kSam').style.transform=`translateX(${(1-k)*900-m*60}px)`;$('kSam').style.opacity=1-seg(t,T.merge+.3,T.merge+.6)}
- if(t>=T.merge&&t<T.merge+.62){const m=eX(seg(t,T.merge,T.merge+.3));$('kYou').style.transform=`translateX(${m*60}px)`;$('kYou').style.opacity=1-seg(t,T.merge+.3,T.merge+.6)}
+ if(t>=T.merge&&t<T.merge+.75){const m=eX(seg(t,T.merge,T.merge+.3));$('kYou').style.transform=`translateX(${m*60}px)`;$('kYou').style.opacity=1-seg(t,T.merge+.3,T.merge+.6)}
  const ln=$('link');const lOn=t>T.link&&t<T.merge;show(ln,lOn);if(lOn)ln.style.width=(120*eOut(seg(t,T.link,T.link+.35)))+'px';
  card('kTog',t,T.merge+.3,T.end,{inD:.01});
  if(t>=T.merge+.3&&t<T.end){const el=$('kTog'),e=eOut(seg(t,T.merge+.3,T.merge+.85)),ko=seg(t,T.merge+.5,T.merge+.85);el.style.transform=`translate(0px,${20*(1-e)}px) scale(${lerp(1.1333,1,e)},${lerp(.6875,1,e)})`;el.style.opacity=1;[...el.children].forEach(c=>c.style.opacity=ko)}
