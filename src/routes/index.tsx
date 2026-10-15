@@ -440,7 +440,7 @@ function PhoneHome() {
   );
 }
 
-/** The 43-second film. Click to play with sound; subtitles are in the picture. */
+/** The 44-second film. Click to play with sound; subtitles are in the picture. */
 function FilmPlayer() {
   const video = useRef<HTMLVideoElement>(null);
   const [started, setStarted] = useState(false);
@@ -456,20 +456,20 @@ function FilmPlayer() {
       <video
         ref={video}
         className="landing-film__video"
-        src="/video/wollie-film-43s.mp4"
-        poster="/video/wollie-film-43s.jpg"
+        src="/video/wollie-film-44s.mp4"
+        poster="/video/wollie-film-44s.jpg"
         playsInline
         preload="metadata"
         controls={started}
         onEnded={() => setStarted(false)}
-        aria-label="Wollie in 43 seconds"
+        aria-label="Wollie in 44 seconds"
       />
       {!started && (
-        <button type="button" className="landing-film__play" onClick={play} aria-label="Play the film, 43 seconds">
+        <button type="button" className="landing-film__play" onClick={play} aria-label="Play the film, 44 seconds">
           <span className="landing-film__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
           </span>
-          <span className="landing-film__label">Watch the film · 43 s</span>
+          <span className="landing-film__label">Watch the film · 44 s</span>
         </button>
       )}
     </figure>

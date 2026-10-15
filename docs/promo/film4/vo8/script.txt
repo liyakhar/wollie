@@ -1,0 +1,23 @@
+<emotion value="calm"/>Your salary comes in. Bills, shopping, subscriptions. <speed ratio="0.92"/>And somehow... it's all gone.
+
+<emotion value="curious"/>Do you have a plan for your money?
+
+<emotion value="content"/>Meet Wollie. It gives your money a plan.
+
+<emotion value="content"/>It sorts every payment, so you can see where your money goes.
+
+<emotion value="calm"/>See if you're spending more or less than last month.
+
+<emotion value="content"/>Set a budget for each category and stay on track.
+
+<emotion value="calm"/>And it warns you before you overspend.
+
+<emotion value="curious"/>Saving for a home, a trip, school, or retirement?
+
+<emotion value="content"/>Choose how much to set aside each month.
+
+<emotion value="content"/>When the money lands in savings, Wollie checks it off.
+
+<emotion value="content"/>Plan together with your partner, even at different banks.
+
+<emotion value="content"/><speed ratio="0.92"/>Wollie. <break time="200ms"/> A plan for your money.
