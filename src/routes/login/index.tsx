@@ -75,7 +75,7 @@ function AuthVisual() {
         </p>
         <img
           className="auth-visual__art"
-          src="/onboarding/intro-1-clear.webp"
+          src="/auth-art.svg"
           alt=""
           width="900"
           height="900"

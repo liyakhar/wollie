@@ -425,3 +425,29 @@ html[data-native] .landing { display: none; }
   .landing-story__item .landing-story__frame,
   .landing .ds-btn svg { transition: none; }
 }
+
+/* ── Phone shows the real app: screens are rendered at 390px and scaled ── */
+.phone__stage { position: relative; flex: 1; min-height: 0; overflow: hidden; background: #fbfbf9; }
+.phone__app { position: absolute; left: 0; top: 0; transform-origin: 0 0; font-size: 16px; background: #fbfbf9; overflow: hidden; }
+.phone__app-scroll { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.phone__app .m-screen { width: 100% !important; max-width: none !important; margin: 0 !important; padding: .25rem 1.25rem 8rem !important; gap: 1.75rem; }
+.phone-nav {
+  position: absolute; z-index: 5; left: 50%; bottom: .75rem; width: calc(100% - 2.5rem);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: .375rem;
+  border-radius: 9999px; background: rgb(251 251 249 / .94);
+  box-shadow: 0 0 0 1px rgb(17 17 17 / .12), 0 8px 24px rgb(17 17 17 / .06);
+  transform: translateX(-50%);
+}
+.phone-nav__indicator {
+  position: absolute; top: .375rem; bottom: .375rem; left: .375rem; width: calc((100% - .75rem) / 4);
+  border-radius: 9999px; background: #cdea3a; transform: translateX(calc(100% * var(--tab, 0)));
+  transition: transform 380ms cubic-bezier(.25, 1, .5, 1);
+}
+.phone-nav__item {
+  position: relative; display: grid; place-items: center; gap: .1875rem; min-height: 3.125rem; padding: .25rem 0;
+  border: 0; border-radius: 9999px; background: transparent; color: rgb(17 17 17 / .5);
+  font: 600 .625rem/1 Inter, system-ui, sans-serif; cursor: pointer; transition: color .2s;
+}
+.phone-nav__item svg { width: 1.3125rem; height: 1.3125rem; }
+.phone-nav__item.is-active { color: #111; }
+.phone .phone__home-bar { z-index: 6; }

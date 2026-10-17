@@ -2,14 +2,18 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { Capacitor } from "@capacitor/core";
 import { ArrowRight, Launch } from "@carbon/icons-react";
+import { BudgetsScreen } from "#/components/money/BudgetsScreen";
+import { GoalsScreen } from "#/components/money/GoalsScreen";
+import { HomeScreen } from "#/components/money/HomeScreen";
+import { SpendingScreen } from "#/components/money/SpendingScreen";
 import {
   IconBudgets,
   IconHome,
   IconSavings,
   IconSpending,
-  categoryIcon,
-  goalIcon,
 } from "#/components/money/icons";
+import { getPublicDemoFinanceDashboard } from "#/lib/public-demo";
+import { getDemoMoneyOverview } from "#/lib/money-overview";
 import { authClient } from "#/lib/auth-client";
 import { loginSearch } from "#/lib/auth-nav";
 import {
@@ -88,44 +92,6 @@ const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/** Eases a number toward its target. With `from`, the first run counts up from there. */
-function useTween(target: number, opts: { from?: number; delay?: number } = {}) {
-  const [value, setValue] = useState(target);
-  const current = useRef(target);
-  const first = useRef(true);
-
-  useEffect(() => {
-    if (prefersReducedMotion()) {
-      current.current = target;
-      setValue(target);
-      return;
-    }
-    const start = first.current && opts.from !== undefined ? opts.from : current.current;
-    const wait = first.current ? (opts.delay ?? 0) : 0;
-    first.current = false;
-    let raf = 0;
-    const timer = window.setTimeout(() => {
-      const t0 = performance.now();
-      const tick = (now: number) => {
-        const p = Math.min(1, (now - t0) / 1000);
-        const eased = 1 - Math.pow(1 - p, 3);
-        current.current = start + (target - start) * eased;
-        setValue(current.current);
-        if (p < 1) raf = requestAnimationFrame(tick);
-      };
-      current.current = start;
-      setValue(start);
-      raf = requestAnimationFrame(tick);
-    }, wait);
-    return () => {
-      window.clearTimeout(timer);
-      cancelAnimationFrame(raf);
-    };
-  }, [target, opts.from, opts.delay]);
-
-  return value;
-}
-
 /** Sections marked data-reveal rise into view as they enter the screen. */
 function useReveal() {
   useEffect(() => {
@@ -155,103 +121,49 @@ function useReveal() {
 }
 
 // A few sample purchases the phone "receives" in a loop. Sample data only.
-const EVERYDAY = 429.12;
-const GROCERIES_LEFT = 410;
-const PURCHASES = [
-  { label: "Bakery", amount: 4.2, groceries: true },
-  { label: "Groceries", amount: 18.6, groceries: true },
-  { label: "Tram", amount: 2.4, groceries: false },
+const APP_WIDTH = 390;
+const APP_TABS = [
+  { label: "Home", Icon: IconHome },
+  { label: "Spending", Icon: IconSpending },
+  { label: "Budgets", Icon: IconBudgets },
+  { label: "Savings", Icon: IconSavings },
 ] as const;
-// Running total of everyday spending, day by day (sample).
-const PACE_NOW = [12, 38, 61, 95, 140, 188, 236, 301, 360, 429];
-const PACE_LAST = [10, 30, 72, 101, 133, 170, 214, 262, 300, 334, 380, 422, 470, 515, 560, 600, 652, 700, 744, 790, 832, 880, 925, 970, 1010, 1046, 1080, 1110, 1140, 1172];
 
-const formatWhole = (n: number) => Math.floor(n).toLocaleString("en-US");
-const formatCents = (n: number) => String(Math.round((n - Math.floor(n)) * 100)).padStart(2, "0");
-
-const SCREENS = ["Home", "Spending", "Budgets", "Savings"] as const;
-
-/** A tiny running-total line, like the app's Home card. */
-function PhonePace() {
-  const max = 1200;
-  const days = PACE_LAST.length;
-  const point = (value: number, index: number) => `${((index / (days - 1)) * 100).toFixed(1)},${(40 - (value / max) * 36).toFixed(1)}`;
-  const now = PACE_NOW.map(point).join(" ");
-  return (
-    <svg className="phone__pace" viewBox="0 0 100 42" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points={PACE_LAST.map(point).join(" ")} fill="none" stroke="rgb(17 17 17 / .35)" strokeWidth="1" strokeDasharray="2 2.5" vectorEffect="non-scaling-stroke" />
-      <polygon points={`0,40 ${now} ${(((PACE_NOW.length - 1) / (days - 1)) * 100).toFixed(1)},40`} fill="rgb(17 17 17 / .08)" />
-      <polyline points={now} fill="none" stroke="#111" strokeWidth="2" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-    </svg>
-  );
-}
-
-/**
- * The app at real iPhone proportions (1206 x 2622), cycling Home, Budgets, Goals.
- * Everything inside is sized in em, so the whole screen scales together.
- */
+/** The real app screens, fed with the public sample data and scaled into a phone frame. */
 function PhoneHome() {
-  const Groceries = categoryIcon("groceries");
-  const Dining = categoryIcon("eating out");
-  const Transport = categoryIcon("transport");
-  const Shopping = categoryIcon("shopping");
-  const Travel = goalIcon("plane");
-  const House = goalIcon("home");
-  const tabs = [
-    { label: "Home", Icon: IconHome, screen: 0 },
-    { label: "Spending", Icon: IconSpending, screen: 1 },
-    { label: "Budgets", Icon: IconBudgets, screen: 2 },
-    { label: "Savings", Icon: IconSavings, screen: 3 },
-  ];
-
+  const overview = useMemo(() => getDemoMoneyOverview(), []);
+  const activity = useMemo(() => {
+    const dashboard = getPublicDemoFinanceDashboard();
+    return {
+      transactions: dashboard.transactions,
+      categoryOptions: [...new Set(dashboard.transactions.map((transaction) => transaction.category))],
+    };
+  }, []);
   const [screen, setScreen] = useState(0);
-  const [picks, setPicks] = useState(0);
-  const [balance, setBalance] = useState(EVERYDAY);
-  const [groceries, setGroceries] = useState(GROCERIES_LEFT);
-  const [toast, setToast] = useState<{ label: string; amount: number } | null>(null);
-  const lastToast = useRef<{ label: string; amount: number }>({ label: "Bakery", amount: 4.2 });
-  const step = useRef(0);
+  const [size, setSize] = useState({ scale: 0.75, height: 844 });
+  const stage = useRef<HTMLDivElement>(null);
+  const content = useRef<HTMLDivElement>(null);
 
-  // Every 7 seconds the phone moves to the next screen. Tapping a dot restarts the timer.
   useEffect(() => {
-    if (prefersReducedMotion()) return;
-    const id = window.setInterval(() => {
-      if (!document.hidden) setScreen((current) => (current + 1) % SCREENS.length);
-    }, 7000);
-    return () => window.clearInterval(id);
-  }, [picks]);
+    const node = stage.current;
+    if (!node) return;
+    const measure = () => {
+      const scale = node.clientWidth / APP_WIDTH;
+      if (scale > 0) setSize({ scale, height: node.clientHeight / scale });
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
-  // On Home, two purchases arrive: a pill slides up and the numbers tick down.
+  // The screens are the app's own pages: keep them look-only inside the frame.
   useEffect(() => {
-    if (prefersReducedMotion() || screen !== 0) return;
-    let hide = 0;
-    const fire = () => {
-      if (document.hidden) return;
-      const index = step.current % PURCHASES.length;
-      step.current += 1;
-      const done = PURCHASES.slice(0, index + 1);
-      const purchase = PURCHASES[index];
-      lastToast.current = { label: purchase.label, amount: purchase.amount };
-      setToast(lastToast.current);
-      setBalance(EVERYDAY + done.reduce((sum, p) => sum + p.amount, 0));
-      setGroceries(GROCERIES_LEFT - done.filter((p) => p.groceries).reduce((sum, p) => sum + p.amount, 0));
-      window.clearTimeout(hide);
-      hide = window.setTimeout(() => setToast(null), 1900);
-    };
-    const first = window.setTimeout(fire, 1800);
-    const second = window.setTimeout(fire, 4600);
-    return () => {
-      window.clearTimeout(first);
-      window.clearTimeout(second);
-      window.clearTimeout(hide);
-      setToast(null);
-    };
+    const node = content.current;
+    if (!node) return;
+    node.setAttribute("inert", "");
+    node.querySelectorAll("[id]").forEach((el) => el.removeAttribute("id"));
   }, [screen]);
-
-  const shownBalance = useTween(balance, { from: 0, delay: 500 });
-  const shownGroceries = useTween(groceries);
-  const shown = toast ?? lastToast.current;
-  const pageClass = (index: number) => `phone__page${screen === index ? " is-active" : ""}`;
 
   return (
     <figure className="phone" aria-label="The Wollie app, with sample data">
@@ -260,187 +172,40 @@ function PhoneHome() {
         <div className="phone__status" aria-hidden="true">
           <span>9:41</span>
         </div>
-        <div className={`phone__toast${toast ? " is-on" : ""}`} aria-hidden="true">
-          <span className="ds-dot" />
-          <span>{shown.label}</span>
-          <b>−€{shown.amount.toFixed(2)}</b>
-        </div>
-
-        <div className="phone__screen">
-          <section className={pageClass(0)} aria-hidden={screen !== 0}>
-            <div className="phone__head">
-              <p className="phone__title">October</p>
-              <span className="phone__avatar" aria-hidden="true">W</span>
-            </div>
-
-            <div className="ds-balance phone__balance">
-              <p className="ds-balance__label">Spent this month</p>
-              <p className="ds-money phone__money">
-                €{formatWhole(shownBalance)}<small>.{formatCents(shownBalance)}</small>
-              </p>
-              <PhonePace />
-              <div className="ds-balance__chips">
-                <span className="ds-chip ds-chip--on-lime">↑ €95 more than Sep</span>
-              </div>
-            </div>
-
-            <div className="phone__tiles">
-              <div className="phone__tile">
-                <p className="phone__sumlabel">Budgets</p>
-                <p className="phone__tilenum">€{formatWhole(shownGroceries + 463)}</p>
-                <div className="ds-bar phone__bar"><span style={{ width: "38%" }} /></div>
-                <p className="phone__st phone__st--ok">Within budget</p>
-              </div>
-              <div className="phone__tile">
-                <p className="phone__sumlabel">Saved</p>
-                <p className="phone__tilenum">€1,000</p>
-                <div className="ds-bar phone__bar"><span style={{ width: "83%" }} /></div>
-                <p className="phone__st phone__st--todo">1 to move</p>
-              </div>
-            </div>
-
-            <p className="phone__h">Needs you</p>
-            <div className="phone__row">
-              <span className="phone__icon phone__icon--neon">€</span>
-              <div>
-                <p className="phone__line"><span>Move €1,600 to your goals</span></p>
-                <p className="phone__meta">Wollie ticks it when it lands</p>
-              </div>
-            </div>
-          </section>
-
-          <section className={pageClass(1)} aria-hidden={screen !== 1}>
-            <div className="phone__head">
-              <p className="phone__title">Spending</p>
-            </div>
-            <div className="phone__ring">
-              <svg viewBox="0 0 120 120" aria-hidden="true">
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#ecece6" strokeWidth="12" />
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#111" strokeWidth="12" strokeDasharray="136 178" transform="rotate(-90 60 60)" />
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#cdea3a" strokeWidth="12" strokeDasharray="82 232" strokeDashoffset="-138" transform="rotate(-90 60 60)" />
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#8a8a82" strokeWidth="12" strokeDasharray="36 278" strokeDashoffset="-222" transform="rotate(-90 60 60)" />
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#6f7d1c" strokeWidth="12" strokeDasharray="30 284" strokeDashoffset="-260" transform="rotate(-90 60 60)" />
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#c9c9c1" strokeWidth="12" strokeDasharray="20 294" strokeDashoffset="-292" transform="rotate(-90 60 60)" />
-              </svg>
-              <p className="phone__ringnum"><small>Spent</small>€429</p>
-            </div>
-            <div className="phone__rows">
-              {[
-                { Icon: Groceries, name: "Groceries", value: "€190", share: "44%", color: "#111" },
-                { Icon: Transport, name: "Transport", value: "€117", share: "27%", color: "#cdea3a" },
-                { Icon: Dining, name: "Eating out", value: "€51", share: "12%", color: "#8a8a82" },
-                { Icon: Shopping, name: "Shopping", value: "€29", share: "7%", color: "#c9c9c1" },
-              ].map(({ Icon, name, value, share, color }) => (
-                <div key={name} className="phone__row">
-                  <span className="phone__icon phone__icon--swatch" style={{ background: color, color: color === "#111" ? "#fbfbf9" : "#111" }}><Icon /></span>
-                  <div>
-                    <p className="phone__line"><span>{name}</span><span><b>{value}</b></span></p>
-                    <p className="phone__meta">{share} of the month</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className={pageClass(2)} aria-hidden={screen !== 2}>
-            <div className="phone__head">
-              <p className="phone__title">Budgets</p>
-            </div>
-            <div className="phone__summary">
-              <p className="phone__sumlabel">Left this month</p>
-              <p className="phone__sumnum">€873<small> of €1,390</small></p>
-              <div className="ds-bar phone__bar"><span style={{ width: "37%" }} /></div>
-              <p className="phone__sumfoot"><span className="phone__okline">Within budget</span></p>
-            </div>
-            <div className="phone__rows">
-              <div className="phone__row">
-                <Transport className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Transport</span><span className="phone__over">€46 over</span></p>
-                  <div className="ds-bar is-over phone__bar"><span style={{ width: "100%" }} /></div>
-                </div>
-              </div>
-              <div className="phone__row">
-                <Groceries className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Groceries</span><span><b>€410</b> <i>left</i></span></p>
-                  <div className="ds-bar phone__bar"><span style={{ width: "32%" }} /></div>
-                </div>
-              </div>
-              <div className="phone__row">
-                <Dining className="phone__icon" />
-                <div>
-                  <p className="phone__line"><span>Eating out</span><span><b>€249</b> <i>left</i></span></p>
-                  <div className="ds-bar phone__bar"><span style={{ width: "17%" }} /></div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className={pageClass(3)} aria-hidden={screen !== 3}>
-            <div className="phone__head">
-              <p className="phone__title">Savings</p>
-            </div>
-            <div className="ds-balance phone__balance phone__balance--small">
-              <p className="ds-balance__label">Saved so far</p>
-              <p className="ds-money phone__money">€21,400</p>
-            </div>
-            <div className="phone__goal">
-              <p className="phone__line"><span><House className="phone__inline" /> House</span><span><b>€1,000</b> <i>/ month</i></span></p>
-              <div className="ds-bar phone__bar"><span style={{ width: "33%" }} /></div>
-              <p className="phone__goalfoot"><span className="phone__okline">Moved this month</span><span>Done by Feb 2030</span></p>
-              <p className="phone__dots-row" aria-hidden="true"><i /><i /><i /><i /><i /><i /></p>
-            </div>
-            <div className="phone__goal">
-              <p className="phone__line"><span><Travel className="phone__inline" /> Travel</span><span><b>€200</b> <i>/ month</i></span></p>
-              <div className="ds-bar phone__bar"><span style={{ width: "47%" }} /></div>
-              <p className="phone__goalfoot"><span className="phone__todoline">€200 to move</span><span>Done by Jun 2027</span></p>
-            </div>
-          </section>
-        </div>
-
-        <nav className="ds-tabbar phone__tabs" aria-label="App screens">
-          {tabs.map(({ label, Icon, screen: target }) => (
-            <button
-              key={label}
-              type="button"
-              className={`ds-tabbar__item${screen === target ? " is-active" : ""}`}
-              aria-current={screen === target ? "page" : undefined}
-              onClick={() => {
-                setScreen(target);
-                setPicks((count) => count + 1);
-              }}
-            >
-              <Icon />
-              {label}
-            </button>
-          ))}
-        </nav>
-        <span className="phone__home-bar" aria-hidden="true" />
-      </div>
-
-      <div className="phone__dots" role="group" aria-label="App screens">
-        {SCREENS.map((name, index) => (
-          <button
-            key={name}
-            type="button"
-            className={`phone__dot${screen === index ? " is-on" : ""}`}
-            aria-label={`Show the ${name} screen`}
-            aria-pressed={screen === index}
-            onClick={() => {
-              setScreen(index);
-              setPicks((count) => count + 1);
-            }}
+        <div className="phone__stage" ref={stage}>
+          <div
+            className="phone__app"
+            style={{ width: APP_WIDTH, height: size.height, transform: `scale(${size.scale})` }}
           >
-            <span />
-          </button>
-        ))}
+            <div className="phone__app-scroll" ref={content} key={screen}>
+              {screen === 0 ? <HomeScreen overview={overview} demo /> : null}
+              {screen === 1 ? <SpendingScreen overview={overview} data={activity} readOnly /> : null}
+              {screen === 2 ? <BudgetsScreen overview={overview} /> : null}
+              {screen === 3 ? <GoalsScreen overview={overview} /> : null}
+            </div>
+            <nav className="phone-nav" aria-label="App screens" style={{ "--tab": screen } as CSSProperties}>
+              <span className="phone-nav__indicator" aria-hidden="true" />
+              {APP_TABS.map(({ label, Icon }, index) => (
+                <button
+                  key={label}
+                  type="button"
+                  className={`phone-nav__item${screen === index ? " is-active" : ""}`}
+                  aria-current={screen === index ? "page" : undefined}
+                  onClick={() => setScreen(index)}
+                >
+                  <Icon aria-hidden="true" strokeWidth={screen === index ? 2 : 1.6} />
+                  <span>{label}</span>
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
+        <span className="phone__home-bar" aria-hidden="true" />
       </div>
     </figure>
   );
 }
 
-/** The 44-second film. Click to play with sound; subtitles are in the picture. */
 function FilmPlayer() {
   const video = useRef<HTMLVideoElement>(null);
   const [started, setStarted] = useState(false);
@@ -612,9 +377,8 @@ function LandingPage() {
           </div>
         </section>
 
-        <section id="app" className="landing-show" aria-label="Inside the app">
+        <section id="app" className="landing-show" aria-label="The app">
           <div className="ds-container">
-            <p className="landing-kicker landing-show__kicker">Inside the app</p>
             <div className="landing-show__grid">
               <div className="landing-show__col landing-show__col--left">
                 <article className="landing-note" data-reveal>
@@ -658,14 +422,6 @@ function LandingPage() {
               <li data-reveal><span>2</span><h3>Make your plan</h3><p className="ds-muted">Set budgets and savings goals. Wollie suggests amounts from your past months.</p></li>
               <li data-reveal><span>3</span><h3>Invite your partner</h3><p className="ds-muted">Each of you connects your own accounts. Nothing is merged.</p></li>
             </ol>
-          </div>
-        </section>
-
-        <section className="landing-promise" aria-label="Our promise">
-          <div className="ds-container landing-promise__inner" data-reveal>
-            <p className="landing-kicker landing-kicker--on-ink">Our promise</p>
-            <p className="landing-promise__text">Wollie cannot move your money. It can only <em>look.</em></p>
-            <p className="landing-promise__sub">Bank connections are read-only. We never see your bank password.</p>
           </div>
         </section>
 
@@ -770,22 +526,16 @@ function LandingPage() {
             ))}
           </div>
         </section>
-
-        <section className="ds-container landing-final" data-reveal>
-          <div className="ds-balance landing-final__card">
-            <h2 className="landing-final__title">Give your money <em>a plan.</em></h2>
-            <div className="landing-final__actions">
-              {primaryAction}
-            </div>
-          </div>
-        </section>
       </main>
 
       <footer className="landing-footer">
         <div className="ds-container">
           <div className="landing-footer__top">
             <Link to="/" className="ds-wordmark landing-footer__mark">Wollie</Link>
-            <p className="landing-footer__tag">A plan for your money.</p>
+            <div className="landing-final__card landing-footer__cta">
+              <h2 className="landing-final__title">Give your money <em>a plan.</em></h2>
+              <div className="landing-final__actions">{primaryAction}</div>
+            </div>
           </div>
           <div className="landing-footer__row">
             <nav aria-label="Footer navigation" className="landing-footer__nav">

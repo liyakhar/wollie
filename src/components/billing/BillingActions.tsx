@@ -3,7 +3,6 @@ import { useState } from 'react'
 import type { BillingAccess } from '#/server/billing.server'
 import { createCustomerPortalSession } from '#/server/billing'
 import { loginSearch } from '#/lib/auth-nav'
-import { Button } from '#/components/ui/button'
 
 export function BillingActions({ billing }: { billing: BillingAccess | null }) {
   const [loading, setLoading] = useState(false)
@@ -11,9 +10,7 @@ export function BillingActions({ billing }: { billing: BillingAccess | null }) {
 
   if (!billing) {
     return (
-      <Button asChild className="wollie-primary-action min-h-11 rounded-lg">
-        <Link to="/login" search={loginSearch({ signup: true })}>Create free account</Link>
-      </Button>
+      <Link to="/login" search={loginSearch({ signup: true })} className="ds-btn ds-btn--primary ds-btn--lg">Create free account</Link>
     )
   }
 
@@ -34,17 +31,15 @@ export function BillingActions({ billing }: { billing: BillingAccess | null }) {
   if (canManageSubscription) {
     return (
       <div className="grid gap-3">
-        <Button type="button" variant="outline" onClick={() => void openPortal()} disabled={loading} className="min-h-11 rounded-lg">
+        <button type="button" onClick={() => void openPortal()} disabled={loading} className="ds-btn ds-btn--lg">
           {loading ? 'Opening billing…' : 'Manage subscription'}
-        </Button>
+        </button>
         {error && <p className="text-sm text-red-700" role="alert">{error}</p>}
       </div>
     )
   }
 
   return (
-    <Button asChild className="wollie-primary-action min-h-11 rounded-lg">
-      <Link to="/app">Open Wollie</Link>
-    </Button>
+    <Link to="/app" className="ds-btn ds-btn--primary ds-btn--lg">Open Wollie</Link>
   )
 }

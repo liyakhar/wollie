@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { PublicShell } from '#/components/PublicShell'
+import { SitePage } from '#/components/SitePage'
 
 export const Route = createFileRoute('/terms')({
-  component: PublicShell,
+  component: SitePage,
 })

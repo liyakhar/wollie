@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { buildPageMeta, breadcrumbJsonLd, jsonLdScript } from '#/lib/seo'
 import { site } from '#/lib/site'
+import { SiteHead } from '#/components/SitePage'
 
 const aboutMeta = buildPageMeta({
   path: '/about',
@@ -26,17 +27,12 @@ export const Route = createFileRoute('/about/')({
 
 function AboutPage() {
   return (
-    <main id="main" className="app-page">
-      <header className="app-page__head">
-        <p className="app-page__eyebrow">About</p>
-        <h1 className="app-page__title">{site.name}</h1>
-        <p className="app-page__lede">Budgeting without the chore.</p>
-      </header>
-
-      <article className="post-detail__body">
+    <div className="ds-container site-wrap">
+      <SiteHead eyebrow="About" title={<>Budgeting without the <em>chore.</em></>} />
+      <article className="site-prose">
         <p>Connect accounts. Review less. Spend with a number.</p>
         <p><Link to="/app">Open the demo</Link>.</p>
       </article>
-    </main>
+    </div>
   )
 }

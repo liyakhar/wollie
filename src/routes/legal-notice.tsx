@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { LegalDocument, LegalSection } from '#/components/LegalDocument'
+import { SitePage } from '#/components/SitePage'
 import { buildPageMeta } from '#/lib/seo'
 import { getLegalIdentity } from '#/server/legal'
 
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/legal-notice')({
 function LegalNoticePage() {
   const legal = Route.useLoaderData()
   return (
+    <SitePage>
     <LegalDocument
       eyebrow="Legal"
       title="Legal Notice"
@@ -44,5 +46,6 @@ function LegalNoticePage() {
         <p><a className="underline underline-offset-4" href={legal.mediatorUrl} rel="noreferrer">{legal.mediatorUrl}</a></p>
       </LegalSection>
     </LegalDocument>
+    </SitePage>
   )
 }
