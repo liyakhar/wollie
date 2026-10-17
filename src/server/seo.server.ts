@@ -1,3 +1,4 @@
+import { guides } from '#/content/guides'
 import { absoluteUrl } from '#/lib/site'
 
 export type SitemapEntry = {
@@ -12,6 +13,8 @@ export async function getSitemapEntries(): Promise<SitemapEntry[]> {
     { path: '/', lastModified: '2026-07-15', changeFrequency: 'weekly', priority: 1 },
     { path: '/pricing', lastModified: '2026-07-15', changeFrequency: 'monthly', priority: 0.8 },
     { path: '/about', lastModified: '2026-07-15', changeFrequency: 'monthly', priority: 0.7 },
+    { path: '/guides', lastModified: '2026-10-18', changeFrequency: 'weekly', priority: 0.8 },
+    ...guides.map((guide) => ({ path: `/guides/${guide.slug}`, lastModified: guide.updated, changeFrequency: 'monthly' as const, priority: 0.7 })),
     { path: '/privacy', lastModified: '2026-07-14', changeFrequency: 'yearly', priority: 0.2 },
     { path: '/terms', lastModified: '2026-07-14', changeFrequency: 'yearly', priority: 0.2 },
   ]

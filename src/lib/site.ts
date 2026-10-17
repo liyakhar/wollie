@@ -2,7 +2,7 @@ export const site = {
   name: 'Wollie',
   tagline: 'A plan for your money',
   description:
-    'A personal finance dashboard that connects accounts, organizes spending, tracks bills, and shows what you can safely spend each month.',
+    'Wollie sorts your spending by category, keeps your monthly budgets and savings goals on track, and lets couples plan together, even with different banks.',
   locale: 'en_US',
   twitterHandle: '@wollie',
   email: 'hello@getwollie.com',

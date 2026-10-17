@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Link, Outlet } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 import { authClient } from '#/lib/auth-client'
+import { guides } from '#/content/guides'
 import { loginSearch } from '#/lib/auth-nav'
 
 /** Header, footer and page frame shared by every public page. Same look as the landing page. */
@@ -28,23 +29,42 @@ export function SiteHeader() {
   )
 }
 
+/** Brand, link columns and legal line. Used by every public page, the landing page adds its closing call above it. */
+export function FooterLinks() {
+  return (
+    <div className="site-foot">
+      <div className="site-foot__brand">
+        <Link to="/" className="ds-wordmark site-foot__mark">Wollie</Link>
+      </div>
+      <nav className="site-foot__col" aria-label="Product">
+        <h2>Product</h2>
+        <Link to="/" hash="banks">Banks</Link>
+        <Link to="/pricing" search={{ checkout: undefined }}>Pricing</Link>
+        <Link to="/login" search={loginSearch({ signup: true })}>Start free</Link>
+      </nav>
+      <nav className="site-foot__col" aria-label="Guides">
+        <h2>Guides</h2>
+        {guides.map((guide) => (
+          <Link key={guide.slug} to="/guides/$slug" params={{ slug: guide.slug }}>{guide.label}</Link>
+        ))}
+      </nav>
+      <nav className="site-foot__col" aria-label="Company">
+        <h2>Company</h2>
+        <Link to="/about">About</Link>
+        <Link to="/privacy">Privacy</Link>
+        <Link to="/terms">Terms</Link>
+        <Link to="/legal-notice">Legal notice</Link>
+      </nav>
+      <p className="site-foot__legal ds-muted">© 2026 Wollie</p>
+    </div>
+  )
+}
+
 export function SiteFooter() {
   return (
     <footer className="landing-footer site-footer">
       <div className="ds-container">
-        <div className="landing-footer__top">
-          <Link to="/" className="ds-wordmark landing-footer__mark">Wollie</Link>
-        </div>
-        <div className="landing-footer__row">
-          <nav aria-label="Footer navigation" className="landing-footer__nav">
-            <Link to="/about">About</Link>
-            <Link to="/pricing" search={{ checkout: undefined }}>Pricing</Link>
-            <Link to="/privacy">Privacy</Link>
-            <Link to="/terms">Terms</Link>
-            <Link to="/legal-notice">Legal notice</Link>
-          </nav>
-          <span className="ds-muted">© 2026 Wollie</span>
-        </div>
+        <FooterLinks />
       </div>
     </footer>
   )

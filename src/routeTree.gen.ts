@@ -24,6 +24,7 @@ import { Route as PrivacyRouteRouteImport } from './routes/privacy/route'
 import { Route as PRouteRouteImport } from './routes/p/route'
 import { Route as NewRouteRouteImport } from './routes/new/route'
 import { Route as LoginRouteRouteImport } from './routes/login/route'
+import { Route as GuidesRouteRouteImport } from './routes/guides/route'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as AboutRouteRouteImport } from './routes/about/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -33,6 +34,7 @@ import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
 import { Route as PrivacyIndexRouteImport } from './routes/privacy/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as GuidesIndexRouteImport } from './routes/guides/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
@@ -40,6 +42,7 @@ import { Route as UUsernameRouteImport } from './routes/u/$username'
 import { Route as SettingsDataRouteImport } from './routes/settings/data'
 import { Route as PPostIdRouteImport } from './routes/p/$postId'
 import { Route as InviteTokenRouteImport } from './routes/invite/$token'
+import { Route as GuidesSlugRouteImport } from './routes/guides/$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as BillingSuccessRouteImport } from './routes/billing/success'
 import { Route as AppTransactionsRouteImport } from './routes/app/transactions'
@@ -134,6 +137,11 @@ const LoginRouteRoute = LoginRouteRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesRouteRoute = GuidesRouteRouteImport.update({
+  id: '/guides',
+  path: '/guides',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/app',
   path: '/app',
@@ -179,6 +187,11 @@ const LoginIndexRoute = LoginIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LoginRouteRoute,
 } as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GuidesRouteRoute,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -213,6 +226,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => GuidesRouteRoute,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
@@ -309,6 +327,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteRouteWithChildren
   '/app': typeof AppRouteRouteWithChildren
+  '/guides': typeof GuidesRouteRouteWithChildren
   '/login': typeof LoginRouteRouteWithChildren
   '/new': typeof NewRouteRoute
   '/p': typeof PRouteRouteWithChildren
@@ -336,6 +355,7 @@ export interface FileRoutesByFullPath {
   '/app/transactions': typeof AppTransactionsRoute
   '/billing/success': typeof BillingSuccessRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
   '/settings/data': typeof SettingsDataRoute
@@ -343,6 +363,7 @@ export interface FileRoutesByFullPath {
   '/about/': typeof AboutIndexRoute
   '/app/': typeof AppIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/guides/': typeof GuidesIndexRoute
   '/login/': typeof LoginIndexRoute
   '/privacy/': typeof PrivacyIndexRoute
   '/reset-password/': typeof ResetPasswordIndexRoute
@@ -379,6 +400,7 @@ export interface FileRoutesByTo {
   '/app/transactions': typeof AppTransactionsRoute
   '/billing/success': typeof BillingSuccessRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
   '/settings/data': typeof SettingsDataRoute
@@ -386,6 +408,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutIndexRoute
   '/app': typeof AppIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/guides': typeof GuidesIndexRoute
   '/login': typeof LoginIndexRoute
   '/privacy': typeof PrivacyIndexRoute
   '/reset-password': typeof ResetPasswordIndexRoute
@@ -403,6 +426,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteRouteWithChildren
   '/app': typeof AppRouteRouteWithChildren
+  '/guides': typeof GuidesRouteRouteWithChildren
   '/login': typeof LoginRouteRouteWithChildren
   '/new': typeof NewRouteRoute
   '/p': typeof PRouteRouteWithChildren
@@ -430,6 +454,7 @@ export interface FileRoutesById {
   '/app/transactions': typeof AppTransactionsRoute
   '/billing/success': typeof BillingSuccessRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
   '/settings/data': typeof SettingsDataRoute
@@ -437,6 +462,7 @@ export interface FileRoutesById {
   '/about/': typeof AboutIndexRoute
   '/app/': typeof AppIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/guides/': typeof GuidesIndexRoute
   '/login/': typeof LoginIndexRoute
   '/privacy/': typeof PrivacyIndexRoute
   '/reset-password/': typeof ResetPasswordIndexRoute
@@ -456,6 +482,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/app'
+    | '/guides'
     | '/login'
     | '/new'
     | '/p'
@@ -483,6 +510,7 @@ export interface FileRouteTypes {
     | '/app/transactions'
     | '/billing/success'
     | '/blog/$slug'
+    | '/guides/$slug'
     | '/invite/$token'
     | '/p/$postId'
     | '/settings/data'
@@ -490,6 +518,7 @@ export interface FileRouteTypes {
     | '/about/'
     | '/app/'
     | '/blog/'
+    | '/guides/'
     | '/login/'
     | '/privacy/'
     | '/reset-password/'
@@ -526,6 +555,7 @@ export interface FileRouteTypes {
     | '/app/transactions'
     | '/billing/success'
     | '/blog/$slug'
+    | '/guides/$slug'
     | '/invite/$token'
     | '/p/$postId'
     | '/settings/data'
@@ -533,6 +563,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/app'
     | '/blog'
+    | '/guides'
     | '/login'
     | '/privacy'
     | '/reset-password'
@@ -549,6 +580,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/app'
+    | '/guides'
     | '/login'
     | '/new'
     | '/p'
@@ -576,6 +608,7 @@ export interface FileRouteTypes {
     | '/app/transactions'
     | '/billing/success'
     | '/blog/$slug'
+    | '/guides/$slug'
     | '/invite/$token'
     | '/p/$postId'
     | '/settings/data'
@@ -583,6 +616,7 @@ export interface FileRouteTypes {
     | '/about/'
     | '/app/'
     | '/blog/'
+    | '/guides/'
     | '/login/'
     | '/privacy/'
     | '/reset-password/'
@@ -601,6 +635,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRouteRoute: typeof AboutRouteRouteWithChildren
   AppRouteRoute: typeof AppRouteRouteWithChildren
+  GuidesRouteRoute: typeof GuidesRouteRouteWithChildren
   LoginRouteRoute: typeof LoginRouteRouteWithChildren
   NewRouteRoute: typeof NewRouteRoute
   PRouteRoute: typeof PRouteRouteWithChildren
@@ -732,6 +767,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides': {
+      id: '/guides'
+      path: '/guides'
+      fullPath: '/guides'
+      preLoaderRoute: typeof GuidesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -795,6 +837,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof LoginRouteRoute
     }
+    '/guides/': {
+      id: '/guides/'
+      path: '/'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof GuidesRouteRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -843,6 +892,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof GuidesRouteRoute
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -1019,6 +1075,20 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
   AppRouteRouteChildren,
 )
 
+interface GuidesRouteRouteChildren {
+  GuidesSlugRoute: typeof GuidesSlugRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
+}
+
+const GuidesRouteRouteChildren: GuidesRouteRouteChildren = {
+  GuidesSlugRoute: GuidesSlugRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
+}
+
+const GuidesRouteRouteWithChildren = GuidesRouteRoute._addFileChildren(
+  GuidesRouteRouteChildren,
+)
+
 interface LoginRouteRouteChildren {
   LoginIndexRoute: typeof LoginIndexRoute
 }
@@ -1140,6 +1210,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRouteRoute: AboutRouteRouteWithChildren,
   AppRouteRoute: AppRouteRouteWithChildren,
+  GuidesRouteRoute: GuidesRouteRouteWithChildren,
   LoginRouteRoute: LoginRouteRouteWithChildren,
   NewRouteRoute: NewRouteRoute,
   PRouteRoute: PRouteRouteWithChildren,
