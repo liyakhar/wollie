@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
-import { IconCheck, IconAdd } from './icons'
+import { IconAdd } from './icons'
 import { formatMoney } from '#/lib/finance-demo'
 import type { MoneyOverview } from '#/lib/money-overview'
 import { archiveGoal, recordGoalCycle, saveGoal } from '#/server/money'
@@ -84,7 +84,6 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
               <span style={{ width: `${Math.min(100, (savings.done / Math.max(savings.planned, 1)) * 100)}%` }} />
             </span>
           </section>
-          <p className="w-howto">On payday, move money to your savings account. Wollie sees it arrive and ticks your goals, in order.</p>
 
           <ul className="w-goals">
             {overview.goals.map((goal) => {
@@ -93,23 +92,16 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
                 <>
                   <span className="w-goal__head">
                     <Icon className="m-row__icon" aria-hidden="true" />
-                    <span className="w-goal__name">{goal.name}</span>
-                    <span className="w-goal__monthly">{whole(goal.monthly)}<span className="m-quiet"> / month</span></span>
-                  </span>
-                  <span className="w-goal__amount">
-                    <strong>{whole(goal.saved)}</strong>
-                    {goal.target !== null && <span className="m-quiet"> of {whole(goal.target)}</span>}
-                    {goal.share !== null && <span className="w-goal__pct">{Math.round(goal.share * 100)}%</span>}
+                    <span className="w-goal__text">
+                      <span className="w-goal__name">{goal.name}</span>
+                      <span className="w-goal__monthly">{whole(goal.monthly)} a month</span>
+                    </span>
+                    <span className="w-goal__saved">
+                      <strong>{whole(goal.saved)}</strong>
+                      {goal.target !== null && <span className="m-quiet"> / {whole(goal.target)}</span>}
+                    </span>
                   </span>
                   {goal.share !== null && <Bar share={goal.share} />}
-                  <span className="w-goal__foot">
-                    <GoalStatus goal={goal} money={whole} />
-                    {goal.reached ? null : goal.finish ? (
-                      <span className="m-quiet">Done by {goal.finish}</span>
-                    ) : goal.target === null ? (
-                      <span className="m-quiet">No end date</span>
-                    ) : null}
-                  </span>
                   {goal.months.length > 0 && <MonthDots months={goal.months} />}
                 </>
               )
@@ -303,18 +295,3 @@ export function GoalsScreen({ overview, demo = false }: { overview: MoneyOvervie
   )
 }
 
-function GoalStatus({ goal, money }: { goal: Goal; money: (value: number) => string }) {
-  if (goal.reached) return <span className="w-state is-on-track">Goal reached</span>
-  if (goal.skippedThisCycle) return <span className="w-state is-skip">Skipped this month</span>
-  if (goal.due > 0) {
-    return <span className="w-state is-fast">{goal.savedThisCycle > 0 ? `${money(goal.due)} more to move` : `${money(goal.due)} to move`}</span>
-  }
-  if (goal.monthly > 0) {
-    return (
-      <span className="w-state is-on-track">
-        <IconCheck aria-hidden="true" className="m-inline-icon" /> {goal.thisMonth.auto ? 'Moved this month' : 'Saved this month'}
-      </span>
-    )
-  }
-  return null
-}

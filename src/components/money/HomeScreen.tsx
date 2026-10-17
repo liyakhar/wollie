@@ -85,7 +85,6 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
   const whole = (value: number) => wholeMoney(value, currency)
   const lastLabel = spending.history.at(-2)?.label ?? 'last month'
   const diff = spending.total - spending.lastMonthByNow
-  const daysLeft = Math.max(month.days - month.elapsed, 0)
   const partner = overview.members.find((member) => !member.you)
 
   const budgetSpent = overview.budgets.reduce((sum, budget) => sum + budget.spent, 0)
@@ -106,10 +105,7 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
       <header className="m-title-row w-title">
         <div>
           <h1>{month.label}</h1>
-          <p className="w-title__meta">
-            {daysLeft === 0 ? 'Last day of the month' : `${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} to go`}
-            {partner ? ` · with ${partner.name}` : ''}
-          </p>
+          {partner ? <p className="w-title__meta">with {partner.name}</p> : null}
         </div>
         <ProfileButton demo={demo} />
       </header>
@@ -127,10 +123,6 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
           <PaceChart daily={spending.daily} lastDaily={spending.lastDaily} days={spending.days} />
           <PaceDot daily={spending.daily} lastDaily={spending.lastDaily} days={spending.days} />
         </span>
-        <span className="w-legend">
-          <span><i className="w-key w-key--now" /> {month.label}</span>
-          <span><i className="w-key w-key--last" /> {lastLabel}</span>
-        </span>
         {overview.fixed.total > 0 && (
           <span className="w-fixed-line">
             <span>Rent and bills</span>
@@ -146,12 +138,9 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
           {overview.budgets.length ? (
             <>
               <span className="w-mid">{whole(Math.max(overview.budgetsLimit - budgetSpent, 0))}</span>
-              <span className="w-sub">left of {whole(overview.budgetsLimit)}</span>
+              <span className="w-sub">left</span>
               <span className="w-meter" aria-hidden="true">
                 <span className={`is-${budgetState}`} style={{ width: `${Math.min(100, (budgetSpent / Math.max(overview.budgetsLimit, 1)) * 100)}%` }} />
-              </span>
-              <span className={`w-state is-${budgetState}`}>
-                {budgetState === 'over' ? 'Over budget' : budgetState === 'fast' ? 'Almost used' : 'Within budget'}
               </span>
             </>
           ) : (
@@ -163,12 +152,9 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
           {overview.goals.length ? (
             <>
               <span className="w-mid">{whole(overview.savings.done)}</span>
-              <span className="w-sub">of {whole(overview.savings.planned)} this month</span>
+              <span className="w-sub">of {whole(overview.savings.planned)}</span>
               <span className="w-meter" aria-hidden="true">
                 <span className="is-saved" style={{ width: `${Math.min(100, (overview.savings.done / Math.max(overview.savings.planned, 1)) * 100)}%` }} />
-              </span>
-              <span className={`w-state ${goalsToMove.length ? 'is-fast' : 'is-on-track'}`}>
-                {goalsToMove.length ? `${goalsToMove.length} to move` : 'All set aside'}
               </span>
             </>
           ) : (
@@ -189,7 +175,7 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
                   <Icon className="m-row__icon w-icon--alert" aria-hidden="true" />
                   <span className="m-row__main">
                     <span className="m-row__title">{categoryLabel(budget.category)} is over budget</span>
-                    <span className="m-row__meta">{money(-budget.left)} over · {whole(budget.limit)} a month</span>
+                    <span className="m-row__meta">{whole(-budget.left)} over</span>
                   </span>
                   <IconChevronRight className="m-row__chevron" aria-hidden="true" />
                 </Link>
@@ -202,7 +188,6 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
                 <span className="m-row__icon w-icon--neon" aria-hidden="true">€</span>
                 <span className="m-row__main">
                   <span className="m-row__title">Move {whole(goal.due)} to {goal.name}</span>
-                  <span className="m-row__meta">Wollie ticks it when it lands in savings</span>
                 </span>
                 <IconChevronRight className="m-row__chevron" aria-hidden="true" />
               </Link>
@@ -226,7 +211,6 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
               <span className="m-row__icon w-icon--neon" aria-hidden="true"><IconCheck /></span>
               <span className="m-row__main">
                 <span className="m-row__title">All good</span>
-                <span className="m-row__meta">Within budget, and this month's saving is done.</span>
               </span>
             </li>
           )}
@@ -314,7 +298,6 @@ export function BudgetRow({
 }) {
   const Icon = categoryIcon(budget.category)
   const status = state ?? (budget.state === 'over' ? 'over' : 'on-track')
-  const words = { 'on-track': 'Within budget', fast: 'Almost used', over: 'Over budget' } as const
   const content = (
     <>
       <Icon className="m-row__icon" aria-hidden="true" />
@@ -323,16 +306,12 @@ export function BudgetRow({
           <span className="m-row__title">{categoryLabel(budget.category)}</span>
           <span className={`m-row__value${budget.state === 'over' ? ' is-negative' : ''}`}>
             {budget.state === 'over'
-              ? `${formatMoney(-budget.left, currency)} over`
-              : <>{formatMoney(budget.left, currency)} <span className="m-quiet">left</span></>}
+              ? `${wholeMoney(-budget.left, currency)} over`
+              : <>{wholeMoney(budget.left, currency)} <span className="m-quiet">left</span></>}
           </span>
         </span>
         <span className="w-meter w-meter--row" aria-hidden="true">
           <span className={`is-${status}`} style={{ width: `${Math.min(100, (budget.spent / Math.max(budget.limit, 1)) * 100)}%` }} />
-        </span>
-        <span className="m-row__line w-row-foot">
-          <span className={`w-state is-${status}`}>{words[status]}</span>
-          <span className="m-quiet">{wholeMoney(budget.spent, currency)} of {wholeMoney(budget.limit, currency)}</span>
         </span>
       </span>
     </>

@@ -290,3 +290,18 @@ a.w-card:active, .w-goal__button:active { transform: scale(.985); }
   .landing-show__col--left .landing-note:nth-child(2) { order: 3; }
   .landing-show__col--right .landing-note:nth-child(2) { order: 4; }
 }
+
+/* Cleaner app: tiles fit their content, a little air under page titles */
+.w-tile { min-height: 0; }
+.w-title .w-title__meta { margin-top: .4rem; }
+
+/* Goal card, simple: name and monthly amount left, saved right, one bar */
+.w-goal__button { gap: .9rem; padding: 1.1rem 1.2rem; }
+.w-goal__text { flex: 1; display: grid; gap: .2rem; min-width: 0; }
+.w-goal__name { flex: none; font: 500 1.0625rem/1.2 var(--m-font); letter-spacing: 0; }
+.w-goal__monthly { font: 400 .875rem var(--m-font); color: rgb(17 17 17 / .55); }
+.w-goal__saved { font: 400 .9375rem var(--m-font); white-space: nowrap; }
+.w-goal__saved strong { font: 400 1.5rem/1 var(--m-font-display); letter-spacing: -.02em; color: #111; }
+.w-goal__name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.w-goal__saved { font-size: .8125rem; }
+.w-goal__saved strong { font-size: 1.35rem; }

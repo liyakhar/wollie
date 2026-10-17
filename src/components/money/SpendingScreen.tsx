@@ -135,10 +135,6 @@ export function SpendingScreen({ overview, data, readOnly = false }: { overview:
                           <span className="m-row__title">{categoryLabel(item.category)}</span>
                           <span className="m-row__amount">{whole(item.total)}</span>
                         </span>
-                        <span className="m-row__line">
-                          <span className="m-row__meta">{item.count} {item.count === 1 ? 'payment' : 'payments'} · {Math.round(item.share * 100)}%</span>
-                          {item.lastMonth > 0 && <span className="m-row__meta">{summary.history.at(-2)?.label} {whole(item.lastMonth)}</span>}
-                        </span>
                       </span>
                     </button>
                   </li>
@@ -158,7 +154,7 @@ export function SpendingScreen({ overview, data, readOnly = false }: { overview:
                       <Icon className="m-row__icon" aria-hidden="true" />
                       <span className="m-row__main">
                         <span className="m-row__title">{transaction.merchant}</span>
-                        <span className="m-row__meta">{new Date(`${transaction.date.slice(0, 10)}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} · {categoryLabel(transaction.category)}</span>
+                        <span className="m-row__meta">{new Date(`${transaction.date.slice(0, 10)}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
                       </span>
                       <span className="m-row__amount">{formatMoney(Math.abs(transaction.amount), currency)}</span>
                     </li>

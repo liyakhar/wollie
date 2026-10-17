@@ -42,7 +42,6 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
   const whole = (value: number) => wholeMoney(value, overview.currency)
   const spent = overview.budgets.reduce((sum, budget) => sum + budget.spent, 0)
   const state = paceState(spent, overview.budgetsLimit, overview.month.pace)
-  const daysLeft = Math.max(overview.month.days - overview.month.elapsed, 0)
   const openAdd = (category?: string) => {
     const option = overview.budgetOptions.find((item) => item.category === category) ?? overview.budgetOptions[0]
     setEditing({ mode: 'add', category: option?.category ?? '', limit: String(option?.suggested || '') })
@@ -54,7 +53,6 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
         <div>
           <h1>Budgets</h1>
           <p className="w-title__meta">
-            {overview.month.label} · {daysLeft} {daysLeft === 1 ? 'day' : 'days'} left ·{' '}
             <button type="button" className="w-inline-link" onClick={() => !demo && setPaydayOpen(true)} disabled={demo}>{resets}</button>
           </p>
         </div>
@@ -70,21 +68,16 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
           <section className="w-card w-budget-sum" aria-label="All budgets">
             <span className="w-label">Left this month</span>
             <span className="w-big">{whole(Math.max(overview.budgetsLimit - spent, 0))}</span>
-            <span className="w-sub">of {whole(overview.budgetsLimit)} · {whole(spent)} spent</span>
+            <span className="w-sub">of {whole(overview.budgetsLimit)}</span>
             <span className="w-meter w-meter--big" aria-hidden="true">
               <span className={`is-${state}`} style={{ width: `${Math.min(100, (spent / Math.max(overview.budgetsLimit, 1)) * 100)}%` }} />
-            </span>
-            <span className="w-row-foot">
-              <span className={`w-state is-${state}`}>
-                {state === 'over' ? 'Over budget' : state === 'fast' ? 'Almost used' : 'Within budget'}
-              </span>
             </span>
           </section>
 
           <AlertsCard />
 
           <section className="m-section">
-            <div className="m-section__head m-section__head--static"><h2>Each month</h2><span className="m-section__count">{overview.budgets.length}</span></div>
+            <div className="m-section__head m-section__head--static"><h2>Each month</h2></div>
             <ul className="m-list m-list--roomy">
               {[...overview.budgets]
                 .sort((a, b) => (b.spent / Math.max(b.limit, 1)) - (a.spent / Math.max(a.limit, 1)))
@@ -103,8 +96,8 @@ export function BudgetsScreen({ overview, demo = false }: { overview: MoneyOverv
           {overview.unbudgeted.total > 0 && (
             <section className="w-card w-loose">
               <span className="m-row__main">
-                <span className="m-row__title">{whole(overview.unbudgeted.total)} spent with no budget</span>
-                <span className="m-row__meta">{overview.unbudgeted.categories.map(categoryLabel).join(', ')}</span>
+                <span className="m-row__title">{overview.unbudgeted.categories.map(categoryLabel).join(', ')}</span>
+                <span className="m-row__meta">{whole(overview.unbudgeted.total)}, no budget</span>
               </span>
               {!demo && (
                 <button type="button" className="m-button" onClick={() => openAdd(overview.unbudgeted.categories[0])}>Add budget</button>
