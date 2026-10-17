@@ -1,10 +1,10 @@
 import pw from '/home/liya/.npm/_npx/e41f203b7505f1fb/node_modules/playwright-core/index.js'; const { chromium } = pw
 import { spawn } from 'node:child_process'
 const FPS=60, DUR=43.57, N=Math.round(FPS*DUR)
-const ff=spawn('ffmpeg',['-y','-loglevel','error','-f','image2pipe','-framerate',String(FPS),'-c:v','mjpeg','-i','-','-c:v','libx264','-preset','medium','-crf','16','-pix_fmt','yuv420p','-r',String(FPS),'/home/liya/work/promo/film4/silent15.mp4'],{stdio:['pipe','inherit','inherit']})
+const ff=spawn('ffmpeg',['-y','-loglevel','error','-f','image2pipe','-framerate',String(FPS),'-c:v','mjpeg','-i','-','-c:v','libx264','-preset','medium','-crf','16','-pix_fmt','yuv420p','-r',String(FPS),'/home/liya/work/promo/film4/silent15n.mp4'],{stdio:['pipe','inherit','inherit']})
 const b=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox','--disable-gpu','--allow-file-access-from-files']})
 const p=await b.newPage({viewport:{width:1920,height:1080}})
-await p.goto('file:///home/liya/work/promo/film4/film15.html?render&subs')
+await p.goto('file:///home/liya/work/promo/film4/film15.html?render')
 await p.waitForFunction(()=>window.__ready===true)
 for(let i=0;i<N;i++){
   await p.evaluate(t=>window.seek(t),i/FPS)

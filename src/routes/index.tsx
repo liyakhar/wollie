@@ -206,9 +206,26 @@ function PhoneHome() {
   );
 }
 
+const FILM_CAPTIONS: [number, number, string][] = [
+  [0.35, 1.62, "Your salary comes in."],
+  [1.68, 4.26, "Bills, shopping, subscriptions."],
+  [4.41, 6.58, "And somehow, it's all gone."],
+  [10.2, 12.53, "Meet Wollie. It gives your money a plan."],
+  [13.0, 16.13, "It sorts every payment, so you can see where your money goes."],
+  [16.58, 19.34, "See if you're spending more or less than last month."],
+  [19.38, 22.34, "Set a budget for each category and stay on track."],
+  [22.98, 25.0, "And it warns you before you overspend."],
+  [25.58, 29.53, "Saving for a home, a trip, school, or retirement?"],
+  [29.65, 31.66, "Choose how much to set aside each month."],
+  [32.06, 35.06, "When the money lands in savings, Wollie checks it off."],
+  [35.61, 38.5, "Plan together with your partner, even at different banks."],
+];
+
 function FilmPlayer() {
   const video = useRef<HTMLVideoElement>(null);
   const [started, setStarted] = useState(false);
+  const [caption, setCaption] = useState("");
+  const [captionsOn, setCaptionsOn] = useState(true);
   const play = () => {
     const el = video.current;
     if (!el) return;
@@ -216,28 +233,56 @@ function FilmPlayer() {
     setStarted(true);
     void el.play().catch(() => setStarted(false));
   };
+  const onTime = () => {
+    const t = video.current?.currentTime ?? 0;
+    const cue = FILM_CAPTIONS.find(([from, to]) => t >= from && t < to);
+    setCaption(cue ? cue[2] : "");
+  };
   return (
-    <figure className="landing-film">
-      <video
-        ref={video}
-        className="landing-film__video"
-        src="/video/wollie-film-44s.mp4"
-        poster="/video/wollie-film-44s.jpg"
-        playsInline
-        preload="metadata"
-        controls={started}
-        onEnded={() => setStarted(false)}
-        aria-label="Wollie in 44 seconds"
-      />
-      {!started && (
-        <button type="button" className="landing-film__play" onClick={play} aria-label="Play the film, 44 seconds">
-          <span className="landing-film__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
-          </span>
-          <span className="landing-film__label">Watch the film · 44 s</span>
-        </button>
-      )}
-    </figure>
+    <div className="film-frame">
+      <div className="film-frame__bar" aria-hidden="true">
+        <span /><span /><span />
+        <em>getwollie.com</em>
+      </div>
+      <figure className="landing-film">
+        <video
+          ref={video}
+          className="landing-film__video"
+          src="/video/wollie-film-44s-v2.mp4"
+          poster="/video/wollie-film-44s-v2.jpg"
+          playsInline
+          preload="metadata"
+          controls={started}
+          onTimeUpdate={onTime}
+          onEnded={() => { setStarted(false); setCaption(""); }}
+          aria-label="Wollie in 44 seconds"
+        />
+        {started && captionsOn && caption && (
+          <p className="landing-film__caption" aria-live="off"><span>{caption}</span></p>
+        )}
+        {started && (
+          <button
+            type="button"
+            className="landing-film__cc"
+            aria-pressed={captionsOn}
+            aria-label={captionsOn ? "Turn captions off" : "Turn captions on"}
+            onClick={() => setCaptionsOn((v) => !v)}
+          >
+            CC
+          </button>
+        )}
+        {!started && (
+          <button type="button" className="landing-film__play" onClick={play} aria-label="Play the film, 44 seconds">
+            <span className="landing-film__kicker">The film · 44 seconds</span>
+            <span className="landing-film__title">Your money, <em>finally with a plan.</em></span>
+            <span className="landing-film__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+            </span>
+            <span className="landing-film__label">Watch it</span>
+          </button>
+        )}
+      </figure>
+    </div>
   );
 }
 
@@ -371,7 +416,7 @@ function LandingPage() {
               <li>Different banks, one view</li>
               <li>Free to start</li>
             </ul>
-            <div className="rise" style={{ "--d": "820ms" } as CSSProperties}>
+            <div className="rise" style={{ "--d": "820ms", width: "100%" } as CSSProperties}>
               <FilmPlayer />
             </div>
           </div>
