@@ -8,6 +8,8 @@ import type { BillingAccess } from '#/server/billing.server'
 
 type Interval = 'month' | 'year'
 
+const FAMILY = { name: 'Family', monthlyPrice: 12.99, yearlyPrice: 99 }
+
 export function PricingPlans({ billing }: { billing: BillingAccess | null }) {
   const { free, household } = WOLLIE_PLANS
   const [interval, setInterval] = useState<Interval>('year')
@@ -18,6 +20,7 @@ export function PricingPlans({ billing }: { billing: BillingAccess | null }) {
   const subscribed = billing?.state === 'subscribed' || billing?.state === 'founder'
   const canCheckout = Boolean(billing?.paidPlansEnabled) && !subscribed && billing?.isHouseholdOwner !== false
   const yearlyMonthly = (household.yearlyPrice / 12).toFixed(2)
+  const familyYearlyMonthly = (FAMILY.yearlyPrice / 12).toFixed(2)
   const savePercent = Math.round((1 - household.yearlyPrice / (household.monthlyPrice * 12)) * 100)
 
   const startCheckout = async () => {
@@ -93,6 +96,28 @@ export function PricingPlans({ billing }: { billing: BillingAccess | null }) {
           </ul>
           <div className="site-plan__cta">{householdCta}</div>
           {error && <p className="site-plan__error" role="alert">{error}</p>}
+        </section>
+
+        <section className="site-plan site-plan--soon" aria-labelledby="plan-family">
+          <h2 id="plan-family" className="site-plan__name">
+            {FAMILY.name}
+            <span className="site-plan__tag site-plan__tag--soft">Coming soon</span>
+          </h2>
+          <p className="site-plan__price">
+            {interval === 'year' ? `€${familyYearlyMonthly}` : `€${FAMILY.monthlyPrice}`}<span> / month</span>
+          </p>
+          <p className="site-plan__sub">
+            {interval === 'year' ? `Billed €${FAMILY.yearlyPrice} once a year` : 'Billed monthly. Cancel any time.'}
+          </p>
+          <ul className="site-plan__list">
+            <li><Check aria-hidden="true" />Everything in Household</li>
+            <li><Check aria-hidden="true" />Up to 5 people in one plan</li>
+            <li><Check aria-hidden="true" />Shared goals for the whole family</li>
+            <li><Check aria-hidden="true" />Priority support</li>
+          </ul>
+          <div className="site-plan__cta">
+            <button type="button" className="ds-btn ds-btn--lg" disabled>Coming soon</button>
+          </div>
         </section>
       </div>
 

@@ -518,6 +518,7 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .site-links a { color: #111; text-decoration: none; font-weight: 500; }
 .site-links a:hover { text-decoration: underline; text-underline-offset: .2em; }
 .site-plans { display: grid; gap: 1.25rem; max-width: 52rem; }
+@media (min-width: 64rem) { .site-pricing .site-plans { grid-template-columns: repeat(3, 1fr); max-width: 66rem; } }
 @media (min-width: 40rem) { .site-plans { grid-template-columns: 1fr 1fr; } }
 .site-plan { border: 1px solid rgb(17 17 17 / .1); border-radius: 24px; padding: 2rem; background: #fff; }
 .site-plan__name { font: 500 .75rem/1 Inter, system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: rgb(17 17 17 / .6); margin: 0; }
@@ -803,3 +804,13 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .auth-art__line { position: absolute; left: 7%; top: 13%; margin: 0; font: 400 clamp(2.2rem, 4vw, 2.75rem)/1 "Instrument Serif", Georgia, serif; letter-spacing: -0.03em; color: #111; max-width: 12ch; }
 .auth-art__line em { font-style: italic; }
 @media (max-width: 63.99rem) { .auth-art { display: none; } }
+
+.site-plan--soon { background: rgb(255 255 255 / .55); border-style: dashed; }
+.site-plan__tag--soft { background: rgb(17 17 17 / .06); }
+.site-plan .ds-btn:disabled { opacity: .55; cursor: not-allowed; }
+.site-wrap--center .site-head { margin-inline: auto; text-align: center; }
+.site-wrap--center .site-head .landing-kicker { justify-content: center; }
+.site-wrap--center .site-title, .site-wrap--center .site-lede { margin-inline: auto; }
+.site-wrap--center .site-pricing { display: flex; flex-direction: column; align-items: center; }
+.site-wrap--center .site-plans { width: 100%; margin-inline: auto; }
+.site-wrap--center .site-pricing-note { text-align: center; margin-inline: auto; }

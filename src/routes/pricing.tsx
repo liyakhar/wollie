@@ -22,7 +22,7 @@ function PricingPage() {
 
   return (
     <SitePage>
-      <div className="ds-container site-wrap">
+      <div className="ds-container site-wrap site-wrap--center">
         <SiteHead
           eyebrow="Pricing"
           title={<>Start free. <em>Upgrade</em> later.</>}
