@@ -350,13 +350,11 @@ a.w-card:active, .w-goal__button:active { transform: scale(.985); }
 .w-chat__composer {
   display: grid; grid-template-columns: 1fr auto; gap: .5rem; align-items: end;
   padding: .5rem; border-radius: 22px; background: var(--w-card); border: 1px solid rgb(17 17 17 / .14);
-  box-shadow: 0 8px 24px rgb(17 17 17 / .06);
-}
+  }
 .w-chat__composer textarea {
   resize: none; border: 0; outline: 0; background: transparent; padding: .6rem .6rem; min-height: 2.6rem;
   font: 400 1rem/1.4 var(--m-font); color: var(--w-ink);
 }
-.w-chat__composer:focus-within { border-color: rgb(17 17 17 / .4); box-shadow: 0 0 0 3px rgb(205 234 58 / .55); }
 .w-chat__send {
   width: 2.6rem; height: 2.6rem; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer;
   background: var(--w-ink); color: var(--w-neon);
@@ -368,4 +366,10 @@ a.w-card:active, .w-goal__button:active { transform: scale(.985); }
   .w-chat__dock { padding-bottom: calc(max(.75rem, env(safe-area-inset-bottom) - .25rem) + 5rem); margin-bottom: -8rem; }
   .w-chat__end { scroll-margin-bottom: 14rem; }
 }
-.w-chat__composer textarea:focus, .w-chat__composer textarea:focus-visible { outline: 0 !important; border: 0 !important; box-shadow: none !important; }
+.w-chat__composer, .w-chat__composer:focus-within { box-shadow: none; border: 1px solid rgb(17 17 17 / .14); }
+.w-chat__composer textarea, .w-chat__composer textarea:focus, .w-chat__composer textarea:focus-visible { outline: 0 !important; border: 0 !important; box-shadow: none !important; background: transparent !important; }
+.w-chat__send, .w-chat__send:hover, .w-chat__send:active, .w-chat__send:focus-visible { background: var(--w-ink); color: #fbfbf9; outline: 0; }
+.w-chat__send:disabled { background: #e4e4df; color: rgb(17 17 17 / .35); }
+.w-chat__starters button:hover, .w-chat__starters button:active { border-color: var(--w-edge); background: var(--w-card); }
+.w-chat :focus-visible { box-shadow: none !important; outline: 1px solid rgb(17 17 17 / .4); outline-offset: 2px; }
+.w-chat__composer :focus-visible { outline: 0; }

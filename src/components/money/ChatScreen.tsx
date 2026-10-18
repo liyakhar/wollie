@@ -159,7 +159,6 @@ export function ChatScreen() {
         <button type="submit" className="w-chat__send" aria-label="Send" disabled={busy || !draft.trim()}>
           <IconSend aria-hidden="true" />
         </button>
-        <p className="w-chat__note">Not financial advice. Wollie can’t move money or pay.</p>
       </form>
       </div>
     </main>
