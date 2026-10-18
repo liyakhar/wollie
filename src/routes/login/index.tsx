@@ -68,16 +68,18 @@ type AuthMode = 'signin' | 'signup' | 'forgot' | 'forgot-sent'
 function AuthVisual() {
   return (
     <aside className="auth-art" aria-label="A shared money plan for couples">
-      <p className="auth-art__line">
-        A calm plan for your <em>money.</em>
-      </p>
-      <img
-        className="auth-art__img"
-        src="/brand/auth-art.webp"
-        alt=""
-        width="1024"
-        height="1024"
-      />
+      <div className="auth-art__group">
+        <img
+          className="auth-art__img"
+          src="/brand/auth-art.webp"
+          alt=""
+          width="1024"
+          height="1024"
+        />
+        <p className="auth-art__line">
+          A calm plan for <em>your money.</em>
+        </p>
+      </div>
     </aside>
   )
 }
