@@ -817,3 +817,18 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .site-wrap--center .site-head:has(.site-title:only-child){margin-bottom:clamp(2rem,3.5vw,3rem)}
 .site-plan__tag, .site-plan__tag--soft { margin-left: .5rem; padding: 0; background: none; border-radius: 0; font: 400 .75rem Inter, system-ui, sans-serif; letter-spacing: 0; text-transform: none; color: rgb(17 17 17 / .45); }
 .site-plan__tag::before { content: "· "; }
+.site-slim-foot { border-top: 1px solid rgb(17 17 17 / .1); padding-block: 1.5rem; font-size: .875rem; color: rgb(17 17 17 / .55); }
+.site-slim-foot__row { display: flex; flex-wrap: wrap; gap: .75rem 2rem; justify-content: space-between; align-items: center; }
+.site-slim-foot p { margin: 0; }
+.site-slim-foot nav { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+.site-slim-foot a { color: rgb(17 17 17 / .7); text-decoration: none; }
+.site-slim-foot a:hover { color: #111; text-decoration: underline; text-underline-offset: .2em; }
+.site .site-wrap--center { min-height: calc(100vh - 8rem); }
+.site .site-wrap--center { display: flex; flex-direction: column; justify-content: center; min-height: calc(100svh - 9rem); padding-block: clamp(2.5rem, 6vh, 5rem); }
+.site-wrap--center .site-head { margin-bottom: clamp(2rem, 4.5vh, 3.5rem); }
+.site-wrap--center .site-title { font-size: clamp(2.75rem, 5.5vw, 4.75rem); }
+.site-wrap--center .site-toggle { margin-bottom: clamp(1.75rem, 4vh, 2.75rem); }
+@media (min-width: 64rem) { .site-wrap--center .site-pricing .site-plans { max-width: 72rem; gap: 1.75rem; } }
+.site-wrap--center .site-plan { padding: clamp(2rem, 3vw, 2.75rem); }
+.site-wrap--center .site-plan__list { margin-top: 2rem; gap: .9rem; }
+.site-wrap--center .site-plan__cta { padding-top: 2.5rem; }

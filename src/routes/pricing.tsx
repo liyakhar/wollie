@@ -21,7 +21,7 @@ function PricingPage() {
   const billing = Route.useLoaderData()
 
   return (
-    <SitePage>
+    <SitePage slim>
       <div className="ds-container site-wrap site-wrap--center">
         <SiteHead title="Start free. Upgrade later." />
 

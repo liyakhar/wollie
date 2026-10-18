@@ -70,12 +70,29 @@ export function SiteFooter() {
   )
 }
 
-export function SitePage({ children }: { children?: ReactNode }) {
+/** One-line footer for single-purpose pages such as pricing. */
+export function SlimFooter() {
+  return (
+    <footer className="site-slim-foot">
+      <div className="ds-container site-slim-foot__row">
+        <p>© 2026 Wollie</p>
+        <nav aria-label="Legal">
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/terms">Terms</Link>
+          <Link to="/legal-notice">Legal notice</Link>
+          <Link to="/about">About</Link>
+        </nav>
+      </div>
+    </footer>
+  )
+}
+
+export function SitePage({ children, slim }: { children?: ReactNode; slim?: boolean }) {
   return (
     <div className="ds-page landing site">
       <SiteHeader />
       <main id="main" className="site-main">{children ?? <Outlet />}</main>
-      <SiteFooter />
+      {slim ? <SlimFooter /> : <SiteFooter />}
     </div>
   )
 }
