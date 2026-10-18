@@ -1,7 +1,6 @@
 export type LoginSearch = {
   signup?: '1'
   redirect?: string
-  art?: 1 | 2 | 3 | 4
 }
 
 export function loginSearch(options?: {
