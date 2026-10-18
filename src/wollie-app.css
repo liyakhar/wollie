@@ -305,3 +305,60 @@ a.w-card:active, .w-goal__button:active { transform: scale(.985); }
 .w-goal__name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .w-goal__saved { font-size: .8125rem; }
 .w-goal__saved strong { font-size: 1.35rem; }
+
+/* Ask Wollie: chat about your money */
+.w-ask {
+  width: 2.25rem; height: 2.25rem; display: grid; place-items: center; border-radius: 50%;
+  background: var(--w-ink); color: var(--w-neon); text-decoration: none;
+}
+.w-ask svg { width: 1.15rem; height: 1.15rem; }
+.w-chat { gap: 1.25rem; min-height: 100dvh; grid-template-rows: auto 1fr auto auto; }
+.w-chat__head { gap: .75rem; align-items: center; }
+.w-chat__head h1 { margin: 0; }
+.w-chat__intro { display: grid; gap: 1.25rem; align-content: start; }
+.w-chat__intro > p { margin: 0; max-width: 34rem; color: var(--w-mute); font: 400 1rem/1.5 var(--m-font); }
+.w-chat__starters { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+.w-chat__starters button {
+  width: 100%; text-align: left; padding: .9rem 1rem; border-radius: 14px; cursor: pointer;
+  background: var(--w-card); border: 1px solid var(--w-edge); color: var(--w-ink); font: 400 .9375rem/1.35 var(--m-font);
+}
+.w-chat__starters button:hover { border-color: rgb(17 17 17 / .3); }
+.w-chat__log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .75rem; align-content: start; }
+.w-chat__msg { max-width: min(85%, 36rem); display: grid; gap: .6rem; }
+.w-chat__msg p { margin: 0; white-space: pre-wrap; font: 400 1rem/1.5 var(--m-font); color: var(--w-ink); }
+.w-chat__msg--user { align-self: flex-end; padding: .7rem 1rem; border-radius: 18px 18px 4px 18px; background: var(--w-ink); }
+.w-chat__msg--user p { color: #fbfbf9; }
+.w-chat__msg--assistant { align-self: flex-start; padding: .15rem 0; }
+.w-chat__msg.is-error p { color: var(--w-bad); }
+.w-chat__change { display: grid; gap: .5rem; padding: 1rem; border-radius: 18px; background: var(--w-card); border: 1px solid var(--w-edge); }
+.w-chat__change p { font-weight: 500; }
+.w-chat__change.is-done { border-color: var(--w-ink); box-shadow: inset 4px 0 0 var(--w-neon); }
+.w-chat__change.is-cancelled { opacity: .55; }
+.w-chat__change-actions { display: flex; gap: .5rem; margin-top: .25rem; }
+.w-chat__change-actions .m-button { min-height: 2.6rem; padding: 0 1.1rem; }
+.w-chat__thinking { flex-direction: row; display: flex; gap: .3rem; padding: .6rem 0; }
+.w-chat__thinking span { width: .45rem; height: .45rem; border-radius: 50%; background: rgb(17 17 17 / .35); animation: w-chat-dot 1s ease-in-out infinite; }
+.w-chat__thinking span:nth-child(2) { animation-delay: .15s; }
+.w-chat__thinking span:nth-child(3) { animation-delay: .3s; }
+@keyframes w-chat-dot { 0%, 100% { opacity: .3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-2px); } }
+@media (prefers-reduced-motion: reduce) { .w-chat__thinking span { animation: none; } }
+.w-chat__composer {
+  position: sticky; bottom: 1rem; z-index: 5; display: grid; grid-template-columns: 1fr auto; gap: .5rem; align-items: end;
+  padding: .5rem; border-radius: 22px; background: var(--w-card); border: 1px solid rgb(17 17 17 / .14);
+  box-shadow: 0 8px 24px rgb(17 17 17 / .06);
+}
+.w-chat__composer textarea {
+  resize: none; border: 0; outline: 0; background: transparent; padding: .6rem .6rem; min-height: 2.6rem;
+  font: 400 1rem/1.4 var(--m-font); color: var(--w-ink);
+}
+.w-chat__composer:focus-within { border-color: rgb(17 17 17 / .4); box-shadow: 0 0 0 3px rgb(205 234 58 / .55); }
+.w-chat__send {
+  width: 2.6rem; height: 2.6rem; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer;
+  background: var(--w-ink); color: var(--w-neon);
+}
+.w-chat__send:disabled { background: #e4e4df; color: rgb(17 17 17 / .35); cursor: default; }
+.w-chat__send svg { width: 1.1rem; height: 1.1rem; }
+.w-chat__note { grid-column: 1 / -1; margin: 0; padding: 0 .6rem .2rem; font: 400 .75rem/1.3 var(--m-font); color: var(--w-mute); }
+@media (max-width: 63.99rem) {
+  .w-chat__composer { bottom: calc(max(.75rem, env(safe-area-inset-bottom) - .25rem) + 4.75rem); }
+}

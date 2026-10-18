@@ -303,7 +303,9 @@ function useChipsFleeCursor() {
     const reset = () => chips.forEach((c) => c.style.removeProperty("translate"));
     const onMove = (e: PointerEvent) => {
       if (!wide.matches || calm.matches) return;
-      const box = hero.getBoundingClientRect();
+      const layer = hero.querySelector<HTMLElement>(".landing-hero__proof");
+      if (!layer) return;
+      const box = layer.getBoundingClientRect();
       const mx = e.clientX - box.left;
       const my = e.clientY - box.top;
       for (const c of chips) {
@@ -434,6 +436,7 @@ function LandingPage() {
       <main id="main">
         <section className="landing-hero landing-hero--center">
           <div className="ds-container landing-hero__center">
+            <div className="landing-hero__copy">
             <h1 className="landing-hero__title">
               <span className="line"><span>A plan for</span></span>
               <span className="line">
@@ -506,6 +509,7 @@ function LandingPage() {
                 <span>Plan with your partner</span>
               </li>
             </ul>
+            </div>
             <div className="rise" style={{ "--d": "820ms", width: "100%" } as CSSProperties}>
               <FilmPlayer />
             </div>

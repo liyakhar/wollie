@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { IconCheck, IconChevronRight } from './icons'
+import { IconChat, IconCheck, IconChevronRight } from './icons'
 import { ProfileButton } from '#/components/ProfileButton'
 import { formatMoney } from '#/lib/finance-demo'
 import { paceState } from '#/lib/money-insights'
@@ -107,7 +107,14 @@ export function HomeScreen({ overview, demo = false }: { overview: MoneyOverview
           <h1>{month.label}</h1>
           {partner ? <p className="w-title__meta">with {partner.name}</p> : null}
         </div>
-        <ProfileButton demo={demo} />
+        <div className="w-title__end">
+          {!demo && (
+            <Link to="/app/chat" className="w-ask" aria-label="Ask Wollie">
+              <IconChat aria-hidden="true" />
+            </Link>
+          )}
+          <ProfileButton demo={demo} />
+        </div>
       </header>
 
       {/* 1. How much did we spend? */}

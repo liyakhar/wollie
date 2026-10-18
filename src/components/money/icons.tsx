@@ -6,6 +6,8 @@ import {
   Bank,
   CaretLeft,
   CaretRight,
+  ChatCircleText,
+  PaperPlaneRight,
   ChartBar,
   ChartPieSlice,
   Check,
@@ -55,6 +57,8 @@ export const IconChevronLeft = make(CaretLeft)
 export const IconChevronRight = make(CaretRight)
 export const IconClose = make(X)
 export const IconSearch = make(MagnifyingGlass)
+export const IconChat = make(ChatCircleText)
+export const IconSend = make(PaperPlaneRight)
 
 /** Tab bar icons. */
 export const IconHome = make(House)

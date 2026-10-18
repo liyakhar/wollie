@@ -5,6 +5,7 @@ import {
   ChartPie,
   House,
   Landmark,
+  MessageCircle,
   Settings,
   PiggyBank,
   Users,
@@ -81,6 +82,14 @@ export default function AppNav({
             >
               <Landmark aria-hidden="true" />
               <span>Accounts</span>
+            </Link>
+            <Link
+              to="/app/chat"
+              className="app-nav__tab"
+              activeProps={{ className: "app-nav__tab is-active" }}
+            >
+              <MessageCircle aria-hidden="true" />
+              <span>Ask Wollie</span>
             </Link>
           </nav>
         ) : null}

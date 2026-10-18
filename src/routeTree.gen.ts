@@ -52,6 +52,7 @@ import { Route as AppInsightsRouteImport } from './routes/app/insights'
 import { Route as AppHouseholdRouteImport } from './routes/app/household'
 import { Route as AppGoalsRouteImport } from './routes/app/goals'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
+import { Route as AppChatRouteImport } from './routes/app/chat'
 import { Route as AppBudgetsRouteImport } from './routes/app/budgets'
 import { Route as AppBillingRouteImport } from './routes/app/billing'
 import { Route as AppAccountsRouteImport } from './routes/app/accounts'
@@ -277,6 +278,11 @@ const AppExploreRoute = AppExploreRouteImport.update({
   path: '/explore',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppChatRoute = AppChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppBudgetsRoute = AppBudgetsRouteImport.update({
   id: '/budgets',
   path: '/budgets',
@@ -346,6 +352,7 @@ export interface FileRoutesByFullPath {
   '/app/accounts': typeof AppAccountsRoute
   '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
+  '/app/chat': typeof AppChatRoute
   '/app/explore': typeof AppExploreRoute
   '/app/goals': typeof AppGoalsRoute
   '/app/household': typeof AppHouseholdRoute
@@ -391,6 +398,7 @@ export interface FileRoutesByTo {
   '/app/accounts': typeof AppAccountsRoute
   '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
+  '/app/chat': typeof AppChatRoute
   '/app/explore': typeof AppExploreRoute
   '/app/goals': typeof AppGoalsRoute
   '/app/household': typeof AppHouseholdRoute
@@ -445,6 +453,7 @@ export interface FileRoutesById {
   '/app/accounts': typeof AppAccountsRoute
   '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
+  '/app/chat': typeof AppChatRoute
   '/app/explore': typeof AppExploreRoute
   '/app/goals': typeof AppGoalsRoute
   '/app/household': typeof AppHouseholdRoute
@@ -501,6 +510,7 @@ export interface FileRouteTypes {
     | '/app/accounts'
     | '/app/billing'
     | '/app/budgets'
+    | '/app/chat'
     | '/app/explore'
     | '/app/goals'
     | '/app/household'
@@ -546,6 +556,7 @@ export interface FileRouteTypes {
     | '/app/accounts'
     | '/app/billing'
     | '/app/budgets'
+    | '/app/chat'
     | '/app/explore'
     | '/app/goals'
     | '/app/household'
@@ -599,6 +610,7 @@ export interface FileRouteTypes {
     | '/app/accounts'
     | '/app/billing'
     | '/app/budgets'
+    | '/app/chat'
     | '/app/explore'
     | '/app/goals'
     | '/app/household'
@@ -963,6 +975,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppExploreRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/chat': {
+      id: '/app/chat'
+      path: '/chat'
+      fullPath: '/app/chat'
+      preLoaderRoute: typeof AppChatRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/budgets': {
       id: '/app/budgets'
       path: '/budgets'
@@ -1045,6 +1064,7 @@ interface AppRouteRouteChildren {
   AppAccountsRoute: typeof AppAccountsRoute
   AppBillingRoute: typeof AppBillingRoute
   AppBudgetsRoute: typeof AppBudgetsRoute
+  AppChatRoute: typeof AppChatRoute
   AppExploreRoute: typeof AppExploreRoute
   AppGoalsRoute: typeof AppGoalsRoute
   AppHouseholdRoute: typeof AppHouseholdRoute
@@ -1060,6 +1080,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAccountsRoute: AppAccountsRoute,
   AppBillingRoute: AppBillingRoute,
   AppBudgetsRoute: AppBudgetsRoute,
+  AppChatRoute: AppChatRoute,
   AppExploreRoute: AppExploreRoute,
   AppGoalsRoute: AppGoalsRoute,
   AppHouseholdRoute: AppHouseholdRoute,
