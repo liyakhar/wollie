@@ -59,33 +59,32 @@ export const Route = createFileRoute('/login/')({
   validateSearch: (search: Record<string, unknown>): LoginSearch => ({
     redirect: safeAppRedirect(search.redirect),
     signup: search.signup === '1' || search.signup === true ? '1' : undefined,
+    art: [1, 2, 3, 4].includes(Number(search.art)) ? (Number(search.art) as 1 | 2 | 3 | 4) : undefined,
   }),
   component: LoginPage,
 })
 
 type AuthMode = 'signin' | 'signup' | 'forgot' | 'forgot-sent'
 
-function AuthVisual() {
+function AuthVisual({ art }: { art: 1 | 2 | 3 | 4 }) {
   return (
-    <aside className="auth-visual" aria-label="A shared money plan for couples">
-      <div className="auth-visual__inner">
-        <p className="auth-visual__kicker">Wollie</p>
-        <p className="auth-visual__statement">
-          A calm plan for your <em>money.</em>
-        </p>
-        <img
-          className="auth-visual__art"
-          src="/auth-art.svg"
-          alt=""
-          width="900"
-          height="900"
-        />
-      </div>
+    <aside className="auth-art" aria-label="A shared money plan for couples">
+      <img
+        className="auth-art__img"
+        src={`/brand/auth-art-${art}.webp`}
+        alt=""
+        width="1024"
+        height="1024"
+      />
+      <p className="auth-art__line">
+        A calm plan for your <em>money.</em>
+      </p>
     </aside>
   )
 }
 
 function AuthFrame({ children }: { children: React.ReactNode }) {
+  const { art = 1 } = useSearch({ from: '/login/' })
   return (
     <main id="main" className="auth-page auth-page--split">
       <section className="auth-page__panel">
@@ -94,7 +93,7 @@ function AuthFrame({ children }: { children: React.ReactNode }) {
         </Link>
         <div className="auth-page__content">{children}</div>
       </section>
-      <AuthVisual />
+      <AuthVisual art={art} />
     </main>
   )
 }
