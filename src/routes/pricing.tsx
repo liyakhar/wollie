@@ -23,10 +23,7 @@ function PricingPage() {
   return (
     <SitePage>
       <div className="ds-container site-wrap site-wrap--center">
-        <SiteHead
-          eyebrow="Pricing"
-          title={<>Start free. <em>Upgrade</em> later.</>}
-        />
+        <SiteHead title="Start free. Upgrade later." />
 
         <PricingPlans billing={billing} />
       </div>

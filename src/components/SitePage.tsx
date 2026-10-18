@@ -81,10 +81,10 @@ export function SitePage({ children }: { children?: ReactNode }) {
 }
 
 /** Title block used at the top of every inner page. */
-export function SiteHead({ eyebrow, title, lede, meta }: { eyebrow: string; title: ReactNode; lede?: string; meta?: string }) {
+export function SiteHead({ eyebrow, title, lede, meta }: { eyebrow?: string; title: ReactNode; lede?: string; meta?: string }) {
   return (
     <header className="site-head">
-      <p className="landing-kicker">{eyebrow}</p>
+      {eyebrow ? <p className="landing-kicker">{eyebrow}</p> : null}
       <h1 className="site-title">{title}</h1>
       {lede ? <p className="site-lede">{lede}</p> : null}
       {meta ? <p className="site-meta">{meta}</p> : null}

@@ -121,11 +121,6 @@ export function PricingPlans({ billing }: { billing: BillingAccess | null }) {
         </section>
       </div>
 
-      <p className="site-pricing-note">
-        {earlyAccess
-          ? 'Everything is free during early access. We will tell you before that changes.'
-          : 'Prices include no hidden fees. Cancel in two clicks from your billing page.'}
-      </p>
     </div>
   )
 }

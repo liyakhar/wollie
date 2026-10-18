@@ -814,3 +814,6 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .site-wrap--center .site-pricing { display: flex; flex-direction: column; align-items: center; }
 .site-wrap--center .site-plans { width: 100%; margin-inline: auto; }
 .site-wrap--center .site-pricing-note { text-align: center; margin-inline: auto; }
+.site-wrap--center .site-head:has(.site-title:only-child){margin-bottom:clamp(2rem,3.5vw,3rem)}
+.site-plan__tag, .site-plan__tag--soft { margin-left: .5rem; padding: 0; background: none; border-radius: 0; font: 400 .75rem Inter, system-ui, sans-serif; letter-spacing: 0; text-transform: none; color: rgb(17 17 17 / .45); }
+.site-plan__tag::before { content: "· "; }
