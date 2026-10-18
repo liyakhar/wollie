@@ -136,8 +136,9 @@ export function ChatScreen() {
           )}
         </ol>
       )}
-      <div ref={end} />
+      <div ref={end} className="w-chat__end" />
 
+      <div className="w-chat__dock">
       <form className="w-chat__composer" onSubmit={submit}>
         <label className="sr-only" htmlFor="chat-input">Your question</label>
         <textarea
@@ -160,6 +161,7 @@ export function ChatScreen() {
         </button>
         <p className="w-chat__note">Not financial advice. Wollie can’t move money or pay.</p>
       </form>
+      </div>
     </main>
   )
 }
