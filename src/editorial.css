@@ -517,7 +517,7 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .site-links { display: flex; flex-wrap: wrap; gap: .5rem 2rem; margin-top: clamp(3rem, 6vw, 5rem); padding-top: 2rem; border-top: 1px solid rgb(17 17 17 / .14); font-size: .95rem; }
 .site-links a { color: #111; text-decoration: none; font-weight: 500; }
 .site-links a:hover { text-decoration: underline; text-underline-offset: .2em; }
-.site-plans { display: grid; gap: 1.25rem; max-width: 46rem; }
+.site-plans { display: grid; gap: 1.25rem; max-width: 52rem; }
 @media (min-width: 40rem) { .site-plans { grid-template-columns: 1fr 1fr; } }
 .site-plan { border: 1px solid rgb(17 17 17 / .1); border-radius: 24px; padding: 2rem; background: #fff; }
 .site-plan__name { font: 500 .75rem/1 Inter, system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: rgb(17 17 17 / .6); margin: 0; }
@@ -783,3 +783,14 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 
 /* Chips sit around the headline block, placed by share of its height */
 .landing-hero__copy { position: relative; display: grid; justify-items: center; width: 100%; }
+
+.site-toggle { display: inline-flex; padding: .25rem; border: 1px solid rgb(17 17 17 / .12); border-radius: 999px; background: #fff; margin-bottom: 1.5rem; }
+.site-toggle button { border: 0; background: transparent; border-radius: 999px; padding: .55rem 1.1rem; font: 500 .9rem Inter, system-ui, sans-serif; color: rgb(17 17 17 / .65); cursor: pointer; display: inline-flex; gap: .5rem; align-items: center; }
+.site-toggle button[aria-pressed="true"] { background: #111; color: #fff; }
+.site-toggle__save { font-size: .75rem; padding: .1rem .45rem; border-radius: 999px; background: #d4ec5c; color: #111; }
+.site-plan { display: flex; flex-direction: column; }
+.site-plan--featured { border-color: #111; box-shadow: 0 0 0 1px #111; }
+.site-plan__tag { margin-left: .6rem; padding: .25rem .55rem; border-radius: 999px; background: #d4ec5c; color: #111; letter-spacing: .04em; text-transform: none; font-size: .72rem; }
+.site-plan__cta { margin-top: auto; padding-top: 2rem; }
+.site-plan__error { margin: .75rem 0 0; font-size: .9rem; color: #b3261e; }
+.site-pricing .site-pricing-note { margin: 1.75rem 0 0; font-size: .95rem; color: rgb(17 17 17 / .6); max-width: 46rem; }

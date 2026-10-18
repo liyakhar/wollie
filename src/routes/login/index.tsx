@@ -71,7 +71,7 @@ function AuthVisual() {
       <div className="auth-visual__inner">
         <p className="auth-visual__kicker">Wollie</p>
         <p className="auth-visual__statement">
-          Know what you can <em>spend.</em>
+          A calm plan for your <em>money.</em>
         </p>
         <img
           className="auth-visual__art"

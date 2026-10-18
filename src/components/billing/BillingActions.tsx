@@ -39,6 +39,10 @@ export function BillingActions({ billing }: { billing: BillingAccess | null }) {
     )
   }
 
+  if (billing.paidPlansEnabled && billing.isHouseholdOwner !== false) {
+    return <Link to="/pricing" className="ds-btn ds-btn--primary ds-btn--lg">See plans</Link>
+  }
+
   return (
     <Link to="/app" className="ds-btn ds-btn--primary ds-btn--lg">Open Wollie</Link>
   )
