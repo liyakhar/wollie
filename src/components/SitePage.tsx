@@ -44,9 +44,10 @@ export function FooterLinks() {
       </nav>
       <nav className="site-foot__col" aria-label="Guides">
         <h2>Guides</h2>
-        {guides.map((guide) => (
+        {guides.slice(0, 5).map((guide) => (
           <Link key={guide.slug} to="/guides/$slug" params={{ slug: guide.slug }}>{guide.label}</Link>
         ))}
+        <Link to="/guides">All {guides.length} guides</Link>
       </nav>
       <nav className="site-foot__col" aria-label="Company">
         <h2>Company</h2>

@@ -516,12 +516,12 @@ function LandingPage() {
           <div className="ds-container">
             <div className="landing-show__grid">
               <div className="landing-show__col landing-show__col--left">
-                <article className="landing-note" data-reveal>
+                <article className="landing-note" data-reveal style={{ "--i": 0 } as CSSProperties}>
                   <p className="landing-note__num">01 · Spending</p>
                   <h3 className="landing-note__title">See where it goes.</h3>
                   <p className="ds-muted">Every payment sorted by category, and a clear look at this month against the last.</p>
                 </article>
-                <article className="landing-note" data-reveal>
+                <article className="landing-note" data-reveal style={{ "--i": 2 } as CSSProperties}>
                   <p className="landing-note__num">03 · Savings</p>
                   <h3 className="landing-note__title">Save for what matters.</h3>
                   <p className="ds-muted">A home, a trip, your kids&rsquo; education, retirement. Pick an amount for each month. Wollie ticks it off when it lands.</p>
@@ -533,12 +533,12 @@ function LandingPage() {
               </div>
 
               <div className="landing-show__col landing-show__col--right">
-                <article className="landing-note" data-reveal>
+                <article className="landing-note" data-reveal style={{ "--i": 1 } as CSSProperties}>
                   <p className="landing-note__num">02 · Budgets</p>
                   <h3 className="landing-note__title">Stay within your means.</h3>
                   <p className="ds-muted">Set a limit for each category. Wollie warns you before you overspend.</p>
                 </article>
-                <article className="landing-note" data-reveal>
+                <article className="landing-note" data-reveal style={{ "--i": 3 } as CSSProperties}>
                   <p className="landing-note__num">04 · Together</p>
                   <h3 className="landing-note__title">Different banks, one view.</h3>
                   <p className="ds-muted">Each of you connects your own bank. Wollie puts them together, so you see your household's spending, budgets and goals in one place. Your logins stay private.</p>

@@ -4,8 +4,11 @@ export type GuideSection = {
   list?: string[]
 }
 
+export type GuideTopic = 'Couples and money' | 'Saving' | 'Budgeting methods' | 'Banks and safety'
+
 export type Guide = {
   slug: string
+  topic: GuideTopic
   /** Short name used in the footer and on cards. */
   label: string
   /** Page title and h1 text. */
@@ -20,9 +23,12 @@ export type Guide = {
   updated: string
 }
 
-export const guides: Guide[] = [
+import { moreGuides } from './guides-more'
+
+const coreGuides: Guide[] = [
   {
     slug: 'budget-app-for-couples',
+    topic: 'Couples and money',
     label: 'Budget app for couples',
     title: 'A budget app for couples that keeps your banks separate',
     accent: 'keeps your banks separate',
@@ -72,6 +78,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'budget-app-for-multiple-banks',
+    topic: 'Banks and safety',
     label: 'Budget app for multiple banks',
     title: 'See all your banks in one budget app',
     accent: 'all your banks',
@@ -117,6 +124,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'how-to-budget-as-a-couple',
+    topic: 'Couples and money',
     label: 'How to budget as a couple',
     title: 'How to budget as a couple, step by step',
     accent: 'as a couple',
@@ -178,6 +186,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'saving-for-a-house-as-a-couple',
+    topic: 'Saving',
     label: 'Saving for a house together',
     title: 'Saving for a house as a couple',
     accent: 'a house',
@@ -227,6 +236,7 @@ export const guides: Guide[] = [
   },
   {
     slug: '50-30-20-rule',
+    topic: 'Budgeting methods',
     label: 'The 50/30/20 rule',
     title: 'The 50/30/20 budget rule, explained',
     accent: '50/30/20',
@@ -278,6 +288,10 @@ export const guides: Guide[] = [
     updated: '2026-10-18',
   },
 ]
+
+export const guides: Guide[] = [...coreGuides, ...moreGuides]
+
+export const guideTopics: GuideTopic[] = ['Couples and money', 'Saving', 'Budgeting methods', 'Banks and safety']
 
 export function getGuide(slug: string): Guide | undefined {
   return guides.find((guide) => guide.slug === slug)

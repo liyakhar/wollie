@@ -834,8 +834,8 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .site-wrap--center .site-plan__cta { padding-top: 2.5rem; }
 
 /* Film: no fake browser, one wide ink panel */
-html .film-frame { width: min(100%, 80rem); padding: 0; border: 0; border-radius: 4px; background: none; box-shadow: none; }
-html .film-frame .landing-film { border-radius: 4px; box-shadow: none; background: #111; }
+html .film-frame { width: min(100%, 80rem); padding: 0; border: 0; border-radius: 12px; background: none; box-shadow: none; }
+html .film-frame .landing-film { border-radius: 12px; box-shadow: none; background: #111; }
 html .film-frame .landing-film__play { background: linear-gradient(rgb(17 17 17 / .9), rgb(17 17 17 / .94)); backdrop-filter: blur(14px); color: #fbfbf9; gap: 1.5rem; }
 html .film-frame .landing-film__play:hover { background: linear-gradient(rgb(17 17 17 / .86), rgb(17 17 17 / .92)); }
 html .film-frame .landing-film__kicker, html .film-frame .landing-film__label { color: rgb(251 251 249 / .6); }
@@ -855,3 +855,43 @@ html .film-frame .landing-film__icon { box-shadow: 0 0 0 10px rgb(228 255 77 / .
   .landing-faq__item p, .landing-faq__item[open] p { max-width: 38rem; }
 }
 html .film-frame .landing-film__icon { color: #111; }
+
+/* The four notes appear one after another: 01, 02, 03, 04 */
+@keyframes note-in { from { opacity: 0; transform: translateY(1.25rem); } to { opacity: 1; transform: none; } }
+.landing--motion .landing-note[data-reveal]:not(.is-in) { opacity: 0; transform: translateY(1.25rem); transition: none; }
+.landing--motion .landing-note[data-reveal].is-in { animation: note-in .9s var(--ease-out, cubic-bezier(.2,.7,.2,1)) both; animation-delay: calc(var(--i, 0) * 450ms); }
+@media (prefers-reduced-motion: reduce) { .landing--motion .landing-note[data-reveal].is-in { animation: none; } }
+
+/* How it works: calm, straight, hairlines only (same voice as FAQ and banks) */
+html .landing-how::before { display: none; }
+html .landing-how .landing-kicker, html .landing-how .landing-h2 { text-align: left; justify-content: flex-start; margin-inline: 0; }
+html .landing-how .landing-h2--xl { max-width: 18ch; }
+html .landing-how .landing-how__steps { gap: clamp(2rem, 4vw, 4rem); align-items: stretch; }
+html .landing-how .landing-how__steps li, html .landing-how .landing-how__steps li + li, html .landing-how .landing-how__steps li:hover, html .landing-how .landing-how__steps li:nth-child(n) { background: transparent; color: #111; border: 0; border-top: 1px solid rgb(17 17 17 / .14); border-radius: 0; padding: 1.75rem 0 0; margin-top: 0; transform: none; box-shadow: none; }
+html .landing-how .landing-how__steps li p { color: rgb(17 17 17 / .62); max-width: 24rem; }
+html .landing-how .landing-how__steps span, html .landing-how .landing-how__steps li:nth-child(2) span { font-style: normal; font-size: 1rem; color: #111; margin-bottom: 4rem; display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; border: 1px solid rgb(17 17 17 / .25); font-family: Inter, system-ui, sans-serif; font-weight: 500; transition: background-color .3s, border-color .3s; }
+html .landing-how .landing-how__steps li:hover span { background: #e4ff4d; border-color: #111; transform: none; }
+html .landing-how .landing-how__steps h3 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: clamp(1.7rem, 2.4vw, 2.2rem); letter-spacing: -.02em; margin-bottom: .75rem; }
+
+/* Guide page: title on the left (stays in view), reading column on the right */
+@media (min-width: 64rem) {
+  .guide-page { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: clamp(3rem, 7vw, 8rem); align-items: start; }
+  .guide-page > .site-head { grid-column: 1; grid-row: 1 / span 20; position: sticky; top: 7rem; margin-bottom: 0; max-width: none; }
+  .guide-page > :not(.site-head) { grid-column: 2; max-width: 44rem; }
+  .guide-page .site-head h1 { font-size: clamp(2.8rem, 4.4vw, 4.2rem); }
+}
+
+/* Guides index: topics on the left, rows on the right */
+.guide-topic { padding-block: 2.5rem; border-top: 1px solid rgb(17 17 17 / .14); }
+.guide-topic__name { font: 400 clamp(1.8rem, 3vw, 2.4rem)/1.1 "Instrument Serif", Georgia, serif; letter-spacing: -.02em; margin: 0 0 1.5rem; }
+.guide-topic__list { list-style: none; margin: 0; padding: 0; }
+.guide-row { display: grid; grid-template-columns: 1fr auto; gap: .35rem 1.5rem; align-items: center; padding: 1.25rem 0; border-top: 1px solid rgb(17 17 17 / .08); color: #111; text-decoration: none; transition: opacity .25s; }
+.guide-topic__list li:first-child .guide-row { border-top: 0; padding-top: 0; }
+.guide-row:hover { opacity: .6; }
+.guide-row__title { font-weight: 500; font-size: 1.125rem; line-height: 1.35; }
+.guide-row__text { grid-column: 1; color: rgb(17 17 17 / .6); font-size: .95rem; line-height: 1.5; max-width: 40rem; }
+.guide-row svg { grid-column: 2; grid-row: 1 / span 2; }
+@media (min-width: 64rem) {
+  .guide-topic { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: clamp(3rem, 7vw, 8rem); }
+  .guide-topic__name { margin: 0; position: sticky; top: 7rem; align-self: start; }
+}

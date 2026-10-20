@@ -45,9 +45,10 @@ export const Route = createFileRoute('/guides/$slug')({
 function GuidePage() {
   const guide = Route.useLoaderData()
   const [before, after] = guide.title.split(guide.accent)
-  const others = guides.filter((item) => item.slug !== guide.slug).slice(0, 3)
+  const rest = guides.filter((item) => item.slug !== guide.slug)
+  const others = [...rest.filter((item) => item.topic === guide.topic), ...rest.filter((item) => item.topic !== guide.topic)].slice(0, 5)
   return (
-    <div className="ds-container site-wrap">
+    <div className="ds-container site-wrap guide-page">
       <SiteHead
         eyebrow="Guide"
         title={<>{before}<em>{guide.accent}</em>{after}</>}
@@ -78,7 +79,7 @@ function GuidePage() {
         <SiteCta>Start free</SiteCta>
       </div>
       <nav className="guide-more" aria-label="More guides">
-        <h2>More guides</h2>
+        <h2>Keep reading</h2>
         <ul>
           {others.map((item) => (
             <li key={item.slug}><Link to="/guides/$slug" params={{ slug: item.slug }}>{item.label}</Link></li>
