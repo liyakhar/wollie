@@ -246,10 +246,6 @@ function FilmPlayer() {
   };
   return (
     <div className="film-frame">
-      <div className="film-frame__bar" aria-hidden="true">
-        <span /><span /><span />
-        <em>getwollie.com</em>
-      </div>
       <figure className="landing-film">
         <video
           ref={video}

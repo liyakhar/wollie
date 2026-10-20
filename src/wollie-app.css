@@ -242,7 +242,7 @@ a.w-card:active, .w-goal__button:active { transform: scale(.985); }
 .landing-hero--center .landing-hero__actions { justify-content: center; }
 .landing-hero--center .landing-hero__proof { justify-content: center; }
 
-.film-frame { width: min(100%, 64rem); margin: var(--ds-space-8, 3rem) auto 0; padding: .6rem; border-radius: 34px; background: linear-gradient(145deg, #e9f5a8 0%, #f6f6ef 38%, #dfe4d6 100%); border: 1px solid rgb(17 17 17 / .12); box-shadow: 0 50px 90px -40px rgb(17 17 17 / .4), 0 2px 6px rgb(17 17 17 / .06), inset 0 1px 0 rgb(255 255 255 / .8); }
+.film-frame { width: min(100%, 80rem); margin: var(--ds-space-8, 3rem) auto 0; padding: .6rem; border-radius: 34px; background: linear-gradient(145deg, #e9f5a8 0%, #f6f6ef 38%, #dfe4d6 100%); border: 1px solid rgb(17 17 17 / .12); box-shadow: 0 50px 90px -40px rgb(17 17 17 / .4), 0 2px 6px rgb(17 17 17 / .06), inset 0 1px 0 rgb(255 255 255 / .8); }
 .film-frame__bar { display: flex; align-items: center; gap: .4rem; padding: .35rem .9rem .6rem; }
 .film-frame__bar span { width: .65rem; height: .65rem; border-radius: 50%; background: rgb(17 17 17 / .16); }
 .film-frame__bar em { margin: 0 auto; transform: translateX(-1rem); font: 500 .8125rem var(--m-font); font-style: normal; color: rgb(17 17 17 / .5); padding: .2rem 1.4rem; border-radius: 999px; background: rgb(255 255 255 / .6); }

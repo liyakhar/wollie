@@ -832,3 +832,26 @@ button, .btn, input, select, textarea, [class*="card"], [class*="chip"] { border
 .site-wrap--center .site-plan { padding: clamp(2rem, 3vw, 2.75rem); }
 .site-wrap--center .site-plan__list { margin-top: 2rem; gap: .9rem; }
 .site-wrap--center .site-plan__cta { padding-top: 2.5rem; }
+
+/* Film: no fake browser, one wide ink panel */
+html .film-frame { width: min(100%, 80rem); padding: 0; border: 0; border-radius: 4px; background: none; box-shadow: none; }
+html .film-frame .landing-film { border-radius: 4px; box-shadow: none; background: #111; }
+html .film-frame .landing-film__play { background: linear-gradient(rgb(17 17 17 / .9), rgb(17 17 17 / .94)); backdrop-filter: blur(14px); color: #fbfbf9; gap: 1.5rem; }
+html .film-frame .landing-film__play:hover { background: linear-gradient(rgb(17 17 17 / .86), rgb(17 17 17 / .92)); }
+html .film-frame .landing-film__kicker, html .film-frame .landing-film__label { color: rgb(251 251 249 / .6); }
+html .film-frame .landing-film__title { color: #fbfbf9; font-size: clamp(2rem, 7cqw, 4.6rem); max-width: 16ch; }
+html .film-frame .landing-film__title em { color: #e4ff4d; }
+html .film-frame .landing-film__icon { box-shadow: 0 0 0 10px rgb(228 255 77 / .18); background: #e4ff4d; }
+
+/* Banks and FAQ: wide, two columns, words left, content right */
+@media (min-width: 60rem) {
+  .landing-band .landing-banks, .landing .landing-faq { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(3rem, 7vw, 8rem); align-items: start; justify-items: start; text-align: left; }
+  .landing-band .landing-banks__intro, .landing .landing-faq__intro { justify-items: start; position: sticky; top: 7rem; margin-bottom: 0; }
+  .landing-band .landing-kicker, .landing-faq__intro .landing-kicker { justify-content: flex-start; }
+  .landing-band .ds-muted { margin-inline: 0; }
+  .landing-band .landing-finder { width: 100%; }
+  .landing-faq__list { width: 100%; }
+  .landing .landing-faq__item summary { font-size: 1.3rem; padding-block: 1.75rem; }
+  .landing-faq__item p, .landing-faq__item[open] p { max-width: 38rem; }
+}
+html .film-frame .landing-film__icon { color: #111; }
