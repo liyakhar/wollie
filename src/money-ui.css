@@ -1795,9 +1795,7 @@ html:has(.m-intro) body {
 .m-split {
   display: grid;
   gap: 0.75rem;
-  padding: 1rem;
-  border-radius: 1.25rem;
-  background: var(--m-fill);
+  padding: 1rem 0 0;
 }
 
 .m-split__names {
@@ -1818,6 +1816,40 @@ html:has(.m-intro) body {
   background: linear-gradient(to right, var(--m-lime) var(--split), rgb(11 11 12 / 0.12) var(--split));
   appearance: none;
   cursor: pointer;
+}
+
+.m-split + .m-button {
+  margin-top: 1rem;
+}
+
+.w-section-hint {
+  margin: 0;
+  padding-top: 0.75rem;
+}
+
+.m-split__bar {
+  display: flex;
+  align-items: center;
+  min-height: 1.75rem;
+}
+
+.m-split__fill {
+  display: block;
+  width: 100%;
+  height: 0.5rem;
+  border-radius: var(--m-pill);
+  background: linear-gradient(to right, var(--m-lime) var(--split), rgb(11 11 12 / 0.12) var(--split));
+  transition: background-position 0.3s ease;
+}
+
+.m-split__money {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.m-split__money strong {
+  font-weight: 600;
 }
 
 .m-split__range::-webkit-slider-thumb {

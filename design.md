@@ -197,3 +197,13 @@ Tennis palette, chosen by the owner. Source: the "Court" blocks in `src/money-ui
 - Primary buttons: black with a lime label. The selected tab and switch option: black lens, lime label.
 - Icons: Hugeicons "stroke rounded", 1.6 px stroke, via `src/components/money/icons.tsx`.
 - Layout: every number and heading aligned left.
+
+### Corner rounding (2026-10-21)
+
+One scale for every screen. Tokens live at the end of `src/editorial-mobile.css`.
+
+- Pill (`--r-pill`): chips, switches, progress bars, the tab bar, small marks.
+- 14px (`--r-control`): anything you tap or type in: buttons, fields, search, choice tiles, icon tiles, avatars.
+- 20px (`--r-card`): cards and boxes: summary cards, goal cards, alerts, empty states, steps, plan cards.
+- 24px (`--r-sheet`): the top corners of pop-up sheets.
+- No square corners anywhere.

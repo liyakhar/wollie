@@ -43,7 +43,6 @@ export function BillingActions({ billing }: { billing: BillingAccess | null }) {
     return <Link to="/pricing" className="ds-btn ds-btn--primary ds-btn--lg">See plans</Link>
   }
 
-  return (
-    <Link to="/app" className="ds-btn ds-btn--primary ds-btn--lg">Open Wollie</Link>
-  )
+  // Already inside the app: nothing to open.
+  return null
 }

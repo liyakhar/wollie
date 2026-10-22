@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import { IconBank, IconChevronLeft } from "#/components/money/icons";
+import { Sheet } from "#/components/money/Sheet";
 import { formatMoney } from "#/lib/finance-demo";
 import { buildPageMeta } from "#/lib/seo";
 import {
@@ -134,10 +135,7 @@ function HouseholdPage() {
                     {member.name}
                     {member.id === data.currentMemberId ? " (you)" : ""}
                   </span>
-                  <span className="m-row__meta">
-                    Pays {member.householdShareBasisPoints / 100}% of shared
-                    costs
-                  </span>
+                  <span className="m-row__meta">{member.email}</span>
                 </span>
                 {isOwner && member.role === "MEMBER" && (
                   <button
@@ -257,6 +255,9 @@ function HouseholdPage() {
           partner={partner}
           editable={isOwner}
           busy={busy}
+          currency={data.workspace.currency}
+          incomeSplit={data.incomeSplit}
+          lastMonthBills={data.lastMonthBills}
           onSave={(ownerPercent) =>
             refreshWith(
               () =>
@@ -283,8 +284,12 @@ function HouseholdPage() {
       {hasPartner && data.accounts.length > 0 && (
         <section className="m-section">
           <div className="m-section__head">
-            <h2>Whose account is it?</h2>
+            <h2>Bank accounts</h2>
           </div>
+          <p className="m-hint w-section-hint">
+            Pick who each account belongs to. Wollie uses this to show who
+            paid for what.
+          </p>
           <ul className="m-list m-list--roomy">
             {data.accounts.map((account) => (
               <AccountOwnershipRow
@@ -329,59 +334,160 @@ function HouseholdSplitCard({
   partner,
   editable,
   busy,
+  currency,
+  incomeSplit,
+  lastMonthBills,
   onSave,
 }: {
   owner: Member;
   partner: Member;
   editable: boolean;
   busy: boolean;
+  currency: string;
+  incomeSplit: SplitData;
+  lastMonthBills: number;
   onSave: (ownerPercent: number) => Promise<unknown>;
 }) {
   const saved = owner.householdShareBasisPoints / 100;
+  const byIncome = incomeSplit.shares
+    ? (incomeSplit.shares.find(
+        (share: { memberId: string; shareBasisPoints: number }) =>
+          share.memberId === owner.id,
+      )?.shareBasisPoints ?? 0) / 100
+    : null;
+  const modeOf = (percent: number): SplitMode =>
+    percent === byIncome ? "income" : percent === 50 ? "half" : "custom";
+  const [open, setOpen] = useState(false);
   const [ownerPercent, setOwnerPercent] = useState(saved);
+  const [mode, setMode] = useState<SplitMode>(modeOf(saved));
+  const whole = (value: number) => formatMoney(Math.round(value), currency);
+  const savedMode = modeOf(saved);
+  const people = [
+    { member: owner, percent: saved },
+    { member: partner, percent: 100 - saved },
+  ];
+  const choose = (next: SplitMode) => {
+    setMode(next);
+    if (next === "half") setOwnerPercent(50);
+    if (next === "income" && byIncome !== null) setOwnerPercent(byIncome);
+  };
+  const options: Array<{ value: SplitMode; label: string; disabled?: boolean }> = [
+    { value: "half", label: "Half each" },
+    { value: "income", label: "By income", disabled: byIncome === null },
+    { value: "custom", label: "Custom" },
+  ];
+  const modeLabel = { half: "half each", income: "by income", custom: "your own way" }[savedMode];
+
   return (
     <section className="m-section">
       <div className="m-section__head">
         <h2>Shared costs</h2>
       </div>
-      <div className="m-split">
-        <div className="m-split__names">
-          <span>
-            {owner.name} <strong>{ownerPercent}%</strong>
-          </span>
-          <span>
-            <strong>{100 - ownerPercent}%</strong> {partner.name}
-          </span>
-        </div>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          step="5"
-          value={ownerPercent}
-          disabled={!editable || busy}
-          aria-label={`${owner.name}'s share of shared costs`}
-          onChange={(event) => setOwnerPercent(Number(event.currentTarget.value))}
-          className="m-split__range"
-          style={{ ["--split" as string]: `${ownerPercent}%` }}
-        />
-        <p className="m-row__meta">
-          How you split joint costs like rent. Wollie uses it in the
-          household report.
-        </p>
-      </div>
-      {editable && ownerPercent !== saved && (
-        <button
-          type="button"
-          disabled={busy}
-          className="m-button m-button--primary m-button--wide"
-          onClick={() => void onSave(ownerPercent)}
-        >
-          Save split
-        </button>
+      <button
+        type="button"
+        className="w-split-how"
+        disabled={!editable}
+        onClick={() => {
+          setOwnerPercent(saved);
+          setMode(savedMode);
+          setOpen(true);
+        }}
+      >
+        <span>
+          Split <strong>{modeLabel}</strong>
+        </span>
+        {editable && <span className="w-split-how__change">Change</span>}
+      </button>
+      <ul className="m-list">
+        {people.map(({ member, percent }) => {
+          const income = incomeSplit.monthlyIncome[member.id] ?? 0;
+          return (
+            <li key={member.id} className="m-row">
+              <span className="m-avatar m-avatar--small" aria-hidden="true">
+                {initialOf(member.name)}
+              </span>
+              <span className="m-row__main">
+                <span className="m-row__title">{firstName(member.name)}</span>
+                {income > 0 && (
+                  <span className="m-row__meta">Earns about {whole(income)} a month</span>
+                )}
+              </span>
+              <span className="w-split-pct">{percent}%</span>
+            </li>
+          );
+        })}
+      </ul>
+      {lastMonthBills > 0 && (
+        <p className="m-hint">Last month’s rent and bills: {whole(lastMonthBills)}</p>
       )}
+
+      <Sheet open={open} title="Split shared costs" onClose={() => setOpen(false)}>
+        <div className="m-form">
+          <span className="m-chips" role="radiogroup" aria-label="How to split shared costs">
+            {options.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                role="radio"
+                aria-checked={mode === option.value}
+                className={`m-chip${mode === option.value ? " is-on" : ""}`}
+                disabled={busy || option.disabled}
+                onClick={() => choose(option.value)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </span>
+          <div className="m-split__names">
+            <span>
+              {firstName(owner.name)} <strong>{ownerPercent}%</strong>
+            </span>
+            <span>
+              <strong>{100 - ownerPercent}%</strong> {firstName(partner.name)}
+            </span>
+          </div>
+          <div className="m-split__bar">
+            {mode === "custom" ? (
+              <input
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                value={ownerPercent}
+                disabled={busy}
+                aria-label={`${firstName(owner.name)}'s share of shared costs`}
+                onChange={(event) => setOwnerPercent(Number(event.currentTarget.value))}
+                className="m-split__range"
+                style={{ ["--split" as string]: `${ownerPercent}%` }}
+              />
+            ) : (
+              <span className="m-split__fill" style={{ ["--split" as string]: `${ownerPercent}%` }} />
+            )}
+          </div>
+          <p className="m-hint">
+            {byIncome === null
+              ? "By income works once Wollie has seen a month of pay from both banks."
+              : "By income means each of you pays the same part of what you earn."}
+          </p>
+          <button
+            type="button"
+            disabled={busy}
+            className="m-button m-button--primary m-button--wide"
+            onClick={() => void onSave(ownerPercent).then(() => setOpen(false))}
+          >
+            Save
+          </button>
+        </div>
+      </Sheet>
     </section>
   );
+}
+
+type SplitMode = "half" | "income" | "custom";
+type SplitData = ReturnType<typeof Route.useLoaderData>["incomeSplit"];
+
+function firstName(name: string) {
+  return name.trim().split(/\s+/)[0] || name;
 }
 
 function AccountOwnershipRow({
@@ -401,11 +507,14 @@ function AccountOwnershipRow({
 }) {
   const me = members.find((member) => member.id === currentMemberId) ?? members[0];
   const other = members.find((member) => member.id !== me.id);
+  // No owner set yet counts as yours; otherwise use your recorded share.
   const myShare =
-    (account.ownership.find(
-      (share: { memberId: string; shareBasisPoints: number }) =>
-        share.memberId === me.id,
-    )?.shareBasisPoints ?? 10_000) / 100;
+    account.ownership.length === 0
+      ? 100
+      : (account.ownership.find(
+          (share: { memberId: string; shareBasisPoints: number }) =>
+            share.memberId === me.id,
+        )?.shareBasisPoints ?? 0) / 100;
   const set = (mine: number) => {
     if (!other || mine === myShare) return;
     void onSave([

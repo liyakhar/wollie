@@ -414,7 +414,7 @@ body { background-color: #fbfbf9; }
 .m-group, .m-screen .m-group { border: 0 !important; border-radius: 0 !important; background: transparent !important; padding: 0 !important; }
 .m-group ul { border: 0 !important; }
 /* Segmented control: soft grey track, neon thumb */
-.m-switch { background: #f1f1ed !important; border-radius: 999px !important; box-shadow: none !important; padding: 3px; }
+.m-switch { background: transparent !important; border-radius: 999px !important; box-shadow: none !important; padding: 0; }
 .m-switch::before { background: #cdea3a !important; border-radius: 999px !important; box-shadow: none !important; }
 .m-switch button { border-radius: 999px !important; color: rgb(17 17 17 / .55) !important; background: transparent !important; }
 .m-switch button[aria-selected="true"] { color: #111 !important; background: transparent !important; }
@@ -446,3 +446,69 @@ body { background-color: #fbfbf9; }
   :root .app-shell .app-nav__tab.is-active, :root .app-shell .app-nav__account-link.is-active { background: #cdea3a !important; color: #111 !important; }
   :root .app-shell .app-nav__tab.is-active svg { color: #111 !important; }
 }
+
+/* Who paid: a small initial on the payment icon (2026-10-21). */
+.w-payer-wrap { position: relative; display: inline-flex; flex: none; align-self: flex-start; }
+.w-payer {
+  position: absolute; right: -5px; bottom: -5px;
+  display: flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; box-sizing: border-box;
+  border: 2px solid #fbfbf9; border-radius: 50%;
+  background: #111; color: #fbfbf9;
+  font: 600 9px/1 Inter, system-ui, sans-serif; letter-spacing: 0; text-align: center;
+  font-variant-numeric: lining-nums;
+}
+.w-payer span { display: block; transform: translateY(0.5px); }
+/* A shared account: both people's initials, overlapping. */
+.w-payer-pair { position: absolute; right: -9px; bottom: -5px; display: flex; }
+.w-payer-pair .w-payer { position: static; }
+.w-payer-pair .w-payer + .w-payer { margin-left: -6px; background: #e4ff4d; color: #111; }
+
+/* Corner rounding: one scale for the whole app (2026-10-21).
+   Pill for chips, switches, bars and marks. 14px for anything you tap or type in.
+   20px for cards and boxes. 24px for the top of pop-up sheets. */
+:root { --r-pill: 999px; --r-control: 14px; --r-card: 20px; --r-sheet: 24px; }
+.m-chip, .m-switch, .m-switch::before, .m-switch button, .m-bar, .m-bar > span, .w-meter, .w-meter > span, .m-glass-chip { border-radius: var(--r-pill) !important; }
+.m-button, .m-button--ghost, .m-field input, .m-field select, .m-field textarea, .m-search, .m-choice,
+.m-row__icon, .w-cat-row__icon, .m-avatar, .m-identity__avatar, .m-icon-button, .m-title-row > a, .m-title-row > button,
+.m-alert__action, .m-step__num { border-radius: var(--r-control) !important; }
+.m-balance, .m-summary--card, .m-identity, .m-alertcard, .m-alert, .m-error, .m-empty, .m-step, .m-plan__card, .m-share-hero,
+.w-goal__button, .w-chat__change, .m-connect__art, .lock-screen__mark { border-radius: var(--r-card) !important; }
+.m-sheet__panel { border-radius: var(--r-sheet) var(--r-sheet) 0 0 !important; }
+.m-error { border-left-width: 1px; }
+
+/* Screen review fixes (2026-10-21). */
+/* A disabled main button keeps a readable label. */
+.m-button--primary:disabled, .m-button--primary[disabled] { background: #e4e4df !important; border-color: #e4e4df !important; color: rgb(17 17 17 / .45) !important; opacity: 1 !important; }
+/* Intro: same button rounding as the app, pill dots. */
+.m-intro .m-button, .m-intro button.m-button { border-radius: var(--r-control) !important; }
+.m-intro__dots span, .m-intro__track span { border-radius: var(--r-pill) !important; }
+/* Profile: the initial sits in the middle of its tile. */
+.m-identity__avatar { display: grid !important; place-items: center !important; padding: 0 !important; text-align: center; line-height: 1; }
+/* Reset password: text and button share the page margin; the button looks like one. */
+main.app-page.auth-page { display: grid; gap: 1.5rem; align-content: start; padding: 2.5rem 1.5rem !important; }
+main.app-page.auth-page > a.btn { display: flex; align-items: center; justify-content: center; min-height: 3.25rem; padding: 0 1.25rem; border-radius: var(--r-control) !important; background: #111 !important; color: #fbfbf9 !important; text-decoration: none; }
+main.app-page.auth-page > a.btn .btn__label { color: inherit; text-decoration: none !important; border: 0 !important; background: none !important; }
+/* Header sign-in button on public pages: rounded like other buttons. */
+.site-header .btn, .public-header .btn, header a[href^="/login"] { border-radius: var(--r-control) !important; }
+@media (max-width: 63.99rem) {
+  /* Data page and other older pages: nothing spills past the screen edge. */
+  .wollie-workspace-page .grid > *, .wollie-workspace-page section, .wollie-workspace-page [data-slot="card"], .wollie-workspace-page [data-slot="card-content"] { min-width: 0; }
+  .wollie-workspace-page [data-slot="card-content"] .flex:has(> button + button), .wollie-workspace-page [data-slot="card-content"] .flex:has(> a + a) { flex-wrap: wrap; }
+  .wollie-workspace-page [data-slot="button"], .wollie-workspace-page button { max-width: 100%; white-space: normal; height: auto; }
+}
+/* Sign in: room between the logo and the page title. */
+:root .auth-page--split .auth-page__content { padding-top: 2.25rem !important; }
+:root main.app-page.auth-page > a.btn { text-decoration: none !important; }
+/* Plan page: no empty row at the bottom of the card when there is no button. */
+.wollie-workspace-page [data-slot="card-content"] > div:has(> .shrink-0:empty) { display: none !important; }
+/* Switches: the option you are not on gets a thin outline, so it reads as a button. */
+.m-switch button[aria-selected="false"] { outline: 1px solid rgb(17 17 17 / .16); outline-offset: -4px; }
+/* Pop-up sheets: more room between parts, and between choice tiles. */
+.m-sheet .m-form { gap: 1.5rem; }
+.m-sheet .m-choices { gap: .625rem; }
+.m-sheet .w-pay-head { gap: .5rem; }
+/* Category tiles: an even grid of three, icon above a short label. */
+.m-choices:not(.m-choices--icons) { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem !important; }
+.m-choices:not(.m-choices--icons) .m-choice { flex-direction: column; justify-content: center; gap: .3rem; min-height: 4rem; padding: .55rem .25rem !important; font-size: .8125rem; line-height: 1.15; text-align: center; overflow-wrap: anywhere; }
+.m-choices:not(.m-choices--icons) .m-choice svg { width: 1.15rem; height: 1.15rem; }

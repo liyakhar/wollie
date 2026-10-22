@@ -12,9 +12,9 @@ type Entry = ChatMessage & {
 }
 
 const STARTERS = [
-  'How much did we spend on food this month?',
-  'Put €500 every month into savings',
-  'Set a €300 budget for dining',
+  'Food spending this month',
+  'Save €500 a month',
+  'Set a €300 dining budget',
 ]
 
 let nextId = 1
@@ -28,6 +28,7 @@ export function ChatScreen() {
   const input = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
+    if (entries.length === 0 && !busy) return
     end.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [entries, busy])
 
@@ -110,7 +111,7 @@ export function ChatScreen() {
 
       {entries.length === 0 ? (
         <section className="w-chat__intro">
-          <p>Ask about your spending, budgets and savings. Wollie can also set things up for you. You confirm every change first.</p>
+          <p>Ask anything about your money.</p>
           <ul className="w-chat__starters">
             {STARTERS.map((starter) => (
               <li key={starter}>

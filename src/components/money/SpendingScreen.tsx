@@ -23,7 +23,7 @@ export function SpendingScreen({ overview, data, readOnly = false }: { overview:
   const transactions = useMemo(() => {
     const all = data.transactions.map((transaction) => ({ ...transaction, date: normalizeDate(transaction.date) || transaction.date }))
     if (who === 'all') return all
-    return all.filter((transaction) => transaction.accountId && overview.accountOwners[transaction.accountId] === who)
+    return all.filter((transaction) => (overview.accountOwners[transaction.accountId ?? ''] ?? overview.accountOwners[transaction.account]) === who)
   }, [data.transactions, overview.accountOwners, who])
 
   // Months that have data, newest first (at most 6).
@@ -87,7 +87,7 @@ export function SpendingScreen({ overview, data, readOnly = false }: { overview:
       )}
 
       {tab === 'payments' ? (
-        <ActivityScreen data={{ ...data, transactions }} readOnly={readOnly} embedded />
+        <ActivityScreen data={{ ...data, transactions }} people={overview} readOnly={readOnly} embedded />
       ) : (
         <>
           <div className="m-month w-month">

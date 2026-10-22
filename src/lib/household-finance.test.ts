@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   buildMemberFinanceView,
   combineBasisPointShares,
+  incomeSplit,
   validateBasisPointShares,
 } from './household-finance'
 
@@ -91,5 +92,69 @@ describe('household finance ownership', () => {
     expect(combineBasisPointShares(5_000, 5_000)).toBe(10_000)
     expect(combineBasisPointShares(undefined, 3_000)).toBe(3_000)
     expect(() => combineBasisPointShares(8_000, 3_000)).toThrow('between 0% and 100%')
+  })
+})
+
+describe('income split', () => {
+  const accounts = [
+    { id: 'a', ownership: [{ memberId: 'liya', shareBasisPoints: 10_000 }] },
+    { id: 'b', ownership: [{ memberId: 'sam', shareBasisPoints: 10_000 }] },
+    { id: 'joint', ownership: [{ memberId: 'liya', shareBasisPoints: 5_000 }, { memberId: 'sam', shareBasisPoints: 5_000 }] },
+  ]
+  const pay = (accountId: string, date: string, amount: number, category = 'Income') => ({ accountId, date, amount, category })
+  const today = new Date(2026, 9, 21)
+
+  it('splits by average income over the last three full months', () => {
+    const result = incomeSplit({
+      memberIds: ['liya', 'sam'],
+      accounts,
+      transactions: [
+        ...['2026-07-25', '2026-08-25', '2026-09-25'].map((date) => pay('a', date, 3_100)),
+        ...['2026-07-28', '2026-08-28', '2026-09-28'].map((date) => pay('b', date, 1_900)),
+      ],
+    }, today)
+    expect(result.monthlyIncome).toEqual({ liya: 3_100, sam: 1_900 })
+    expect(result.shares).toEqual([
+      { memberId: 'liya', shareBasisPoints: 6_200 },
+      { memberId: 'sam', shareBasisPoints: 3_800 },
+    ])
+  })
+
+  it('ignores this month, older months, refunds and transfers', () => {
+    const result = incomeSplit({
+      memberIds: ['liya', 'sam'],
+      accounts,
+      transactions: [
+        pay('a', '2026-09-25', 3_000),
+        pay('b', '2026-09-28', 1_000),
+        pay('b', '2026-10-02', 9_000),
+        pay('b', '2026-06-28', 9_000),
+        pay('b', '2026-09-10', 500, 'Transfer'),
+        pay('b', '2026-09-11', -200),
+      ],
+    }, today)
+    expect(result.shares).toEqual([
+      { memberId: 'liya', shareBasisPoints: 7_500 },
+      { memberId: 'sam', shareBasisPoints: 2_500 },
+    ])
+  })
+
+  it('shares income on joint accounts by ownership', () => {
+    const result = incomeSplit({ memberIds: ['liya', 'sam'], accounts, transactions: [pay('joint', '2026-09-01', 3_000)] }, today)
+    expect(result.monthlyIncome).toEqual({ liya: 500, sam: 500 })
+    expect(result.shares?.map((share) => share.shareBasisPoints)).toEqual([5_000, 5_000])
+  })
+
+  it('gives no split when no income was seen', () => {
+    expect(incomeSplit({ memberIds: ['liya', 'sam'], accounts, transactions: [] }, today).shares).toBeNull()
+  })
+
+  it('always adds up to 100%', () => {
+    const result = incomeSplit({
+      memberIds: ['liya', 'sam'],
+      accounts,
+      transactions: [pay('a', '2026-09-01', 1), pay('b', '2026-09-01', 2)],
+    }, today)
+    expect(result.shares!.reduce((sum, share) => sum + share.shareBasisPoints, 0)).toBe(10_000)
   })
 })

@@ -5,6 +5,8 @@ import { completeOnboarding, getMyProfile } from '#/server/profiles'
 import { buildPageMeta } from '#/lib/seo'
 import { WOLLIE_PLANS } from '#/lib/billing-plans'
 import { useIsNativeApp } from '#/lib/native-app'
+import { SETUP_GOALS, takeSetupAnswers } from '#/lib/setup-answers'
+import { saveGoal, setPayday } from '#/server/money'
 
 const welcomeMeta = buildPageMeta({
   path: '/welcome',
@@ -52,7 +54,8 @@ function WelcomePage() {
     setLoading(next)
     try {
       await completeOnboarding({ data: { username, field, headline: profile.headline ?? '' } })
-      void router.navigate({ href: redirectTo })
+      const partner = await applySetupAnswers()
+      void router.navigate({ href: partner ? '/app/household' : redirectTo })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Try again.')
       setLoading(null)
@@ -105,4 +108,20 @@ function WelcomePage() {
     )
   }
 
+}
+
+/** Uses the first-open answers once: payday, starter goals, and whether to open the partner invite. */
+async function applySetupAnswers() {
+  const answers = takeSetupAnswers()
+  if (!answers) return false
+  try {
+    if (answers.payday !== undefined) await setPayday({ data: { day: answers.payday } })
+    for (const choice of answers.goals) {
+      const goal = SETUP_GOALS[choice]
+      if (goal) await saveGoal({ data: { name: goal.name, icon: goal.icon, monthly: goal.monthly } })
+    }
+  } catch {
+    // Setup is a head start only; the person can set these up later.
+  }
+  return answers.partner === true
 }

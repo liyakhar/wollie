@@ -4,7 +4,6 @@ import { IconBank, IconChevronLeft } from "#/components/money/icons";
 import { formatMoney } from "#/lib/finance-demo";
 import { buildPageMeta } from "#/lib/seo";
 import { getFinanceAccounts } from "#/server/finance";
-import { exportFinanceCsv } from "#/server/account-data";
 import {
   completeEnableBankingConnection,
   disconnectEnableBanking,
@@ -92,7 +91,7 @@ export const Route = createFileRoute("/app/accounts")({
 });
 
 function AccountsPage() {
-  const { accounts, synci, enableBanking, household } = Route.useLoaderData();
+  const { accounts, synci, enableBanking } = Route.useLoaderData();
   const search = Route.useSearch();
   const router = useRouter();
   const callbackStarted = useRef(false);
@@ -103,9 +102,6 @@ function AccountsPage() {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [loadingBanks, setLoadingBanks] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [exportingAccountId, setExportingAccountId] = useState<string | null>(
-    null,
-  );
   const [message, setMessage] = useState("");
   const [error, setError] = useState(
     search.error_description || search.error || "",
@@ -272,27 +268,6 @@ function AccountsPage() {
       .finally(() => setLoading(false));
   }
 
-  async function exportAccount(accountId: string, accountName: string) {
-    setExportingAccountId(accountId);
-    setError("");
-    setMessage("");
-    try {
-      const data = await exportFinanceCsv({
-        data: { scope: "account", accountId },
-      });
-      downloadBlob({
-        content: data.content,
-        filename: data.filename.replace(accountId, slugify(accountName)),
-        type: data.mimeType,
-      });
-      setMessage(`${accountName} export downloaded.`);
-    } catch (reason) {
-      setError(errorMessage(reason, "Could not export this account."));
-    } finally {
-      setExportingAccountId(null);
-    }
-  }
-
   const bankConnected = useSynci ? synci.connected : enableBanking.connected;
   const needsReconnect = useSynci ? synci.needsReconnect : enableBanking.needsReconnect;
   const lastSynced = useSynci ? synci.lastSynced : enableBanking.lastSynced;
@@ -319,7 +294,7 @@ function AccountsPage() {
 
       {!useSynci && enableBanking.environment?.toLowerCase() === "sandbox" && (
         <p className="m-hint" role="status">
-          Test mode: these balances are sample data, not a real bank.
+          Sample data, not a real bank.
         </p>
       )}
 
@@ -360,25 +335,14 @@ function AccountsPage() {
                 <span className="m-row__main">
                   <span className="m-row__title">{account.name}</span>
                   <span className="m-row__meta">
-                    {account.institution} ·{" "}
-                    {connectionLabel(account.connectionStatus)}
+                    {account.institution}
+                    {account.connectionStatus !== "CONNECTED"
+                      ? ` · ${connectionLabel(account.connectionStatus)}`
+                      : ""}
                   </span>
-                  {household.members.length > 1 && (
-                    <span className="m-row__meta">
-                      {ownershipLabel(account.ownership, household.members)}
-                    </span>
-                  )}
                 </span>
                 <span className="m-row__amount">
                   {formatMoney(account.balance, account.currency)}
-                  <button
-                    type="button"
-                    className="m-text-button"
-                    disabled={exportingAccountId === account.id}
-                    onClick={() => void exportAccount(account.id, account.name)}
-                  >
-                    {exportingAccountId === account.id ? "Exporting…" : "Export"}
-                  </button>
                 </span>
               </li>
             ))}
@@ -502,43 +466,3 @@ function connectionLabel(status?: string) {
   return "Sample account";
 }
 
-function ownershipLabel(
-  ownership: Array<{ memberId: string; shareBasisPoints: number }> | undefined,
-  members: Array<{ id: string; name: string }>,
-) {
-  if (!ownership?.length) return "Ownership not assigned";
-  return ownership
-    .filter((share) => share.shareBasisPoints > 0)
-    .map((share) => {
-      const member = members.find((item) => item.id === share.memberId);
-      return `${member?.name || "Member"} ${share.shareBasisPoints / 100}%`;
-    })
-    .join(" · ");
-}
-
-function downloadBlob({
-  content,
-  filename,
-  type,
-}: {
-  content: string;
-  filename: string;
-  type: string;
-}) {
-  const url = URL.createObjectURL(new Blob([content], { type }));
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
-
-function slugify(value: string) {
-  return (
-    value
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "") || "account"
-  );
-}

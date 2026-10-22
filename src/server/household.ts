@@ -6,7 +6,10 @@ import {
   hashInvitationToken,
   normalizeInvitationEmail,
 } from '#/lib/household-invitations'
-import { validateBasisPointShares } from '#/lib/household-finance'
+import { incomeSplit, validateBasisPointShares } from '#/lib/household-finance'
+import { isFixed } from '#/lib/money-insights'
+import { parseDate } from '#/lib/money-cycle'
+import { loadMoneySnapshot } from '#/server/finance'
 import { getDb } from '#/server/db-access.server'
 import { getSessionUser } from '#/server/session.server'
 import {
@@ -40,9 +43,34 @@ export const getHouseholdOverview = createServerFn({ method: 'GET' }).handler(as
       },
     },
   })
+  const now = new Date()
+  const [snapshot, income] = await Promise.all([
+    loadMoneySnapshot(context.workspaceId),
+    prisma.financeTransaction.findMany({
+      where: {
+        workspaceId: context.workspaceId,
+        amountMinor: { gt: 0 },
+        postedAt: { gte: new Date(now.getFullYear(), now.getMonth() - 4, 1) },
+        category: { name: 'Income' },
+      },
+      select: { accountId: true, amountMinor: true, postedAt: true },
+    }),
+  ])
+  const split = incomeSplit({
+    memberIds: workspace.members.map((member) => member.id),
+    accounts: workspace.accounts.map((account) => ({ id: account.id, ownership: account.ownershipShares })),
+    transactions: income.map((transaction) => ({
+      accountId: transaction.accountId,
+      amount: transaction.amountMinor / 100,
+      category: 'Income',
+      date: transaction.postedAt.toISOString(),
+    })),
+  })
 
   return {
     workspace: { id: workspace.id, name: workspace.name, currency: workspace.currency },
+    incomeSplit: split,
+    lastMonthBills: lastMonthBills(snapshot.transactions),
     currentMemberId: context.memberId,
     currentRole: context.role,
     members: workspace.members.map((member) => ({
@@ -78,6 +106,20 @@ export const getHouseholdOverview = createServerFn({ method: 'GET' }).handler(as
       : [],
   }
 })
+
+/** Rent and repeating bills paid last calendar month, all accounts together. */
+function lastMonthBills(transactions: Awaited<ReturnType<typeof loadMoneySnapshot>>['transactions']) {
+  const now = new Date()
+  const start = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+  const end = new Date(now.getFullYear(), now.getMonth(), 1)
+  const total = transactions
+    .filter((transaction) => {
+      const date = parseDate(transaction.date, now)
+      return isFixed(transaction) && date !== null && date >= start && date < end
+    })
+    .reduce((sum, transaction) => sum + Math.abs(transaction.amount), 0)
+  return Math.round(total * 100) / 100
+}
 
 export const createHouseholdInvitation = createServerFn({ method: 'POST' })
   .validator((data: { email: string }) => ({ email: normalizeInvitationEmail(String(data?.email || '')) }))

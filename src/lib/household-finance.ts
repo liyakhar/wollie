@@ -114,3 +114,59 @@ export function buildMemberFinanceView(
 export function scaleAmount(value: number, shareBasisPoints: number) {
   return Math.round(value * 100 * shareBasisPoints / BASIS_POINTS_TOTAL) / 100
 }
+
+export type IncomeSplit = {
+  /** Average monthly income per member over the months looked at. */
+  monthlyIncome: Record<string, number>
+  /** Fair shares by income in whole percents, or null when no income was seen. */
+  shares: Array<{ memberId: string; shareBasisPoints: number }> | null
+  months: number
+}
+
+/**
+ * Split shared costs by what each person earns. Income is money in that is
+ * sorted as Income, over the last full calendar months, given to each person
+ * by how much of the account they own.
+ */
+export function incomeSplit(
+  input: {
+    memberIds: string[]
+    accounts: Array<{ id: string; ownership: OwnershipShare[] }>
+    transactions: Array<Pick<FinanceTransaction, 'amount' | 'category' | 'date'> & { accountId?: string }>
+  },
+  referenceDate = new Date(),
+  months = 3,
+): IncomeSplit {
+  const end = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), 1)
+  const start = new Date(end.getFullYear(), end.getMonth() - months, 1)
+  const ownership = new Map(input.accounts.map((account) => [account.id, account.ownership]))
+  const totals = Object.fromEntries(input.memberIds.map((id) => [id, 0]))
+
+  for (const transaction of input.transactions) {
+    if (transaction.amount <= 0 || transaction.category.toLocaleLowerCase() !== 'income') continue
+    const date = new Date(`${transaction.date.slice(0, 10)}T12:00:00`)
+    if (!(date >= start && date < end)) continue
+    for (const share of ownership.get(transaction.accountId ?? '') ?? []) {
+      if (share.memberId in totals) {
+        totals[share.memberId] += transaction.amount * share.shareBasisPoints / BASIS_POINTS_TOTAL
+      }
+    }
+  }
+
+  const monthlyIncome = Object.fromEntries(
+    Object.entries(totals).map(([id, total]) => [id, Math.round(total / months * 100) / 100]),
+  )
+  const sum = Object.values(totals).reduce((a, b) => a + b, 0)
+  if (sum <= 0 || input.memberIds.length === 0) return { monthlyIncome, shares: null, months }
+
+  // Whole percents; the last person takes what rounding leaves so it adds up.
+  let left = BASIS_POINTS_TOTAL
+  const shares = input.memberIds.map((memberId, index) => {
+    const share = index === input.memberIds.length - 1
+      ? left
+      : Math.round(totals[memberId] / sum * 100) * 100
+    left -= share
+    return { memberId, shareBasisPoints: share }
+  })
+  return { monthlyIncome, shares, months }
+}

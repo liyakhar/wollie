@@ -14,10 +14,25 @@ import { normalizeDate } from '#/lib/money-cycle'
 import { Bar, SplitMoney } from './HomeScreen'
 import { categoryIcon, categoryLabel } from './icons'
 import { Sheet } from './Sheet'
+import type { HouseholdMember } from '#/lib/money-overview'
 
 export type ActivityData = {
   categoryOptions: string[]
   transactions: FinanceTransaction[]
+}
+
+/** Household members and who owns each account, to show who paid. */
+export type ActivityPeople = {
+  members: HouseholdMember[]
+  accountOwners: Record<string, string>
+}
+
+function payerOf(transaction: FinanceTransaction, people?: ActivityPeople) {
+  if (!people || people.members.length < 2) return null
+  const owner = people.accountOwners[transaction.accountId ?? ''] ?? people.accountOwners[transaction.account]
+  if (owner === 'joint') return { name: 'Joint', initials: people.members.map((item) => item.initial), joint: true }
+  const member = people.members.find((item) => item.id === owner)
+  return member ? { name: member.name, initials: [member.initial], joint: false } : null
 }
 
 function readableMerchant(value: string) {
@@ -55,7 +70,7 @@ function monthLabel(key: string) {
   return new Date(y, m - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
 }
 
-export function ActivityScreen({ data, readOnly = false, embedded = false }: { data: ActivityData; readOnly?: boolean; embedded?: boolean }) {
+export function ActivityScreen({ data, people, readOnly = false, embedded = false }: { data: ActivityData; people?: ActivityPeople; readOnly?: boolean; embedded?: boolean }) {
   const router = useRouter()
   // Bank data uses ISO dates, sample data uses "Jul 12". Work in ISO.
   const transactions = useMemo(
@@ -190,9 +205,19 @@ export function ActivityScreen({ data, readOnly = false, embedded = false }: { d
                 <ul className="m-list">
                   {items.map((transaction) => {
                     const Icon = categoryIcon(transaction.category)
+                    const payer = payerOf(transaction, people)
                     const row = (
                       <>
-                        <Icon className="m-row__icon" aria-hidden="true" />
+                        <span className="w-payer-wrap">
+                          <Icon className="m-row__icon" aria-hidden="true" />
+                          {payer && (
+                            <span className={payer.joint ? 'w-payer-pair' : undefined} aria-hidden="true">
+                              {payer.initials.map((initial, index) => (
+                                <span key={index} className="w-payer"><span>{initial}</span></span>
+                              ))}
+                            </span>
+                          )}
+                        </span>
                         <span className="m-row__main">
                           <span className="m-row__title">{readableMerchant(transaction.merchant)}</span>
                           <span className="m-row__meta">
@@ -200,6 +225,7 @@ export function ActivityScreen({ data, readOnly = false, embedded = false }: { d
                               ? <span className="m-accent">Choose a category</span>
                               : categoryLabel(transaction.category)}
                             {transaction.status === 'pending' ? ' · Pending' : ''}
+                            {payer ? ` · ${payer.name}` : ''}
                           </span>
                         </span>
                         <span className={`m-row__amount${transaction.amount > 0 ? ' m-positive' : ''}`}>
@@ -269,9 +295,12 @@ export function ActivityScreen({ data, readOnly = false, embedded = false }: { d
       <Sheet open={active !== null} title={active ? readableMerchant(active.merchant) : ''} onClose={() => setActive(null)}>
         {active && (
           <div className="m-form">
-            <p className="m-hint">
-              {money(active.amount)} · {parseDate(active.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })} · {active.account}
-            </p>
+            <div className="w-pay-head">
+              <p className="w-pay-head__amount">{money(active.amount)}</p>
+              <p className="m-hint">
+                {parseDate(active.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })} · {active.account}
+              </p>
+            </div>
             <div className="m-choices" role="radiogroup" aria-label="Category">
               {categories.map((name) => {
                 const Icon = categoryIcon(name)

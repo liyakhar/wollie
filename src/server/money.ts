@@ -49,6 +49,7 @@ export const buildMoneyOverview = createServerOnlyFn(async (workspaceId: string,
     prisma.budgetWorkspace.findUnique({
       where: { id: workspaceId },
       select: {
+        name: true,
         paydayDay: true,
         categories: { select: { name: true } },
         categoryBudgets: { include: { category: { select: { name: true } } } },
@@ -100,11 +101,25 @@ export const buildMoneyOverview = createServerOnlyFn(async (workspaceId: string,
     const name = you ? 'You' : (member.user.name || member.user.email.split('@')[0])
     return { id: member.id, name, initial: (member.user.name || member.user.email).trim().charAt(0).toUpperCase(), you }
   })
+  // Who each account belongs to: one member's id, or 'joint' when shared.
   const accountOwners: Record<string, string> = {}
   for (const member of workspace?.members ?? []) {
     for (const share of member.accountOwnerships) {
-      if (!accountOwners[share.accountId] || share.shareBasisPoints >= 5_000) accountOwners[share.accountId] = member.id
+      if (share.shareBasisPoints === 0) continue
+      accountOwners[share.accountId] = accountOwners[share.accountId] ? 'joint' : member.id
     }
+  }
+  // The dev sample shows built-in example accounts that have no owners saved.
+  // Give them owners so the sample couple shows who paid.
+  const sampleMembers = workspace?.members ?? []
+  if (workspace?.name?.startsWith('Sample household') && sampleMembers.length > 1) {
+    const owners = [sampleMembers[0].id, 'joint', sampleMembers[1].id]
+    snapshot.accounts.forEach((account, index) => {
+      if (accountOwners[account.id]) return
+      const owner = owners[index % owners.length]
+      accountOwners[account.id] = owner
+      accountOwners[account.name] = owner
+    })
   }
 
   const plan = buildCyclePlan({

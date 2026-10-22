@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Printer } from "lucide-react";
-import { Button } from "#/components/ui/button";
+import { IconChevronLeft } from "#/components/money/icons";
 import { formatMoney } from "#/lib/finance-demo";
 import { buildPageMeta } from "#/lib/seo";
 import { exportFinanceBackup } from "#/server/account-data";
@@ -22,243 +21,106 @@ function HouseholdReportPage() {
   const data = Route.useLoaderData();
   const workspace = data.finance.workspace;
   const currency =
-    workspace.currency || workspace.accounts[0]?.currency || "USD";
-  const totalBalanceMinor = workspace.accounts.reduce(
-    (sum, account) => sum + account.balanceMinor,
-    0,
-  );
-  const totalOutflowMinor = workspace.transactions
-    .filter((transaction) => transaction.amountMinor < 0)
-    .reduce((sum, transaction) => sum + Math.abs(transaction.amountMinor), 0);
-  const totalIncomeMinor = workspace.transactions
+    workspace.currency || workspace.accounts[0]?.currency || "EUR";
+  const money = (minor: number, code = currency) =>
+    formatMoney(Math.round(minor / 100), code);
+  const balance = workspace.accounts.reduce((sum, account) => sum + account.balanceMinor, 0);
+  const moneyIn = workspace.transactions
     .filter((transaction) => transaction.amountMinor > 0)
     .reduce((sum, transaction) => sum + transaction.amountMinor, 0);
-  const latestMonth = workspace.budgetMonths[0];
+  const moneyOut = workspace.transactions
+    .filter((transaction) => transaction.amountMinor < 0)
+    .reduce((sum, transaction) => sum + Math.abs(transaction.amountMinor), 0);
+  const date = (value: string | Date) =>
+    new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+  const memberName = (memberId: string) =>
+    workspace.members.find((member) => member.id === memberId)?.user.name || "Someone";
 
   return (
-    <main className="wollie-workspace-page mx-auto grid max-w-5xl gap-8 bg-white px-4 py-6 text-zinc-950 sm:px-8 print:max-w-none print:px-0 print:py-0">
-      <style>{printStyles}</style>
-      <header className="flex flex-col gap-4 border-b border-zinc-200 pb-6 sm:flex-row sm:items-end sm:justify-between print:hidden">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Household report
-          </h1>
-          <p className="mt-1 text-sm text-zinc-500">
-            Print this page or save it as a PDF.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild variant="outline">
-            <Link to="/app/household">
-              <ArrowLeft aria-hidden="true" /> Household
-            </Link>
-          </Button>
-          <Button
-            type="button"
-            className="wollie-primary-action"
-            onClick={() => window.print()}
-          >
-            <Printer aria-hidden="true" /> Print / Save PDF
-          </Button>
-        </div>
+    <main id="main" className="m-screen w-report">
+      <header className="m-title-row m-title-row--back w-report__noprint">
+        <Link
+          to="/app/household"
+          className="m-icon-button m-icon-button--glass"
+          aria-label="Back to Household"
+        >
+          <IconChevronLeft aria-hidden="true" />
+        </Link>
       </header>
+      <h1 className="m-page-title">Household report</h1>
+      <p className="m-hint">Made on {new Date(data.exportedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
 
-      <section className="report-page grid gap-8">
-        <div className="flex items-start justify-between gap-6 border-b border-zinc-300 pb-6">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-[0.16em] text-zinc-500">
-              Wollie household report
-            </p>
-            <h2 className="mt-3 text-4xl font-semibold tracking-[-0.04em]">
-              {workspace.name}
-            </h2>
-            <p className="mt-2 text-sm text-zinc-500">
-              Exported {new Date(data.exportedAt).toLocaleString()}
-            </p>
-          </div>
-          <div className="text-right text-sm text-zinc-500">
-            <p>
-              {workspace.members.length} member
-              {workspace.members.length === 1 ? "" : "s"}
-            </p>
-            <p>
-              {workspace.accounts.length} account
-              {workspace.accounts.length === 1 ? "" : "s"}
-            </p>
-            <p>
-              {workspace.transactions.length} transaction
-              {workspace.transactions.length === 1 ? "" : "s"}
-            </p>
-          </div>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-3">
-          <Metric
-            label="Current balance"
-            value={formatMoney(totalBalanceMinor / 100, currency)}
-          />
-          <Metric
-            label="Money in"
-            value={formatMoney(totalIncomeMinor / 100, currency)}
-          />
-          <Metric
-            label="Money out"
-            value={formatMoney(totalOutflowMinor / 100, currency)}
-          />
-        </div>
-
-        <ReportSection title="Members">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Shared cost split</th>
-              </tr>
-            </thead>
-            <tbody>
-              {workspace.members.map((member) => (
-                <tr key={member.id}>
-                  <td>{member.user.name}</td>
-                  <td>{member.user.email}</td>
-                  <td>{member.role}</td>
-                  <td>{member.householdShareBasisPoints / 100}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </ReportSection>
-
-        <ReportSection title="Accounts and ownership">
-          <table>
-            <thead>
-              <tr>
-                <th>Account</th>
-                <th>Institution</th>
-                <th>Balance</th>
-                <th>Last synced</th>
-                <th>Ownership</th>
-              </tr>
-            </thead>
-            <tbody>
-              {workspace.accounts.map((account) => (
-                <tr key={account.id}>
-                  <td>{account.name}</td>
-                  <td>{account.institution || "-"}</td>
-                  <td>
-                    {formatMoney(account.balanceMinor / 100, account.currency)}
-                  </td>
-                  <td>
-                    {account.lastSyncedAt
-                      ? new Date(account.lastSyncedAt).toLocaleString()
-                      : "Never"}
-                  </td>
-                  <td>
-                    {account.ownershipShares
-                      .map(
-                        (share) =>
-                          `${share.member.user.name}: ${share.shareBasisPoints / 100}%`,
-                      )
-                      .join(" · ")}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </ReportSection>
-
-        {latestMonth && (
-          <ReportSection title={`Budget plan - ${latestMonth.month}`}>
-            <table>
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Allocated</th>
-                </tr>
-              </thead>
-              <tbody>
-                {latestMonth.allocations.map((allocation) => (
-                  <tr key={allocation.category.name}>
-                    <td>{allocation.category.name}</td>
-                    <td>
-                      {formatMoney(allocation.allocatedMinor / 100, currency)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </ReportSection>
-        )}
-
-        <ReportSection title="Planned recurring expenses">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Cadence</th>
-                <th>Next date</th>
-                <th>Category</th>
-              </tr>
-            </thead>
-            <tbody>
-              {workspace.recurringPayments.map((payment) => (
-                <tr key={payment.id}>
-                  <td>{payment.name}</td>
-                  <td>
-                    {formatMoney(payment.amountMinor / 100, payment.currency)}
-                  </td>
-                  <td>{payment.cadence}</td>
-                  <td>{new Date(payment.nextDate).toLocaleDateString()}</td>
-                  <td>{payment.category?.name || "-"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </ReportSection>
+      <section className="w-report__totals" aria-label="Totals">
+        <div><span className="w-label">Balance</span><strong>{money(balance)}</strong></div>
+        <div><span className="w-label">Money in</span><strong>{money(moneyIn)}</strong></div>
+        <div><span className="w-label">Money out</span><strong>{money(moneyOut)}</strong></div>
       </section>
+
+      <ReportList title="People">
+        {workspace.members.map((member) => (
+          <Row
+            key={member.id}
+            title={member.user.name}
+            meta={`Pays ${member.householdShareBasisPoints / 100}% of shared costs`}
+            value=""
+          />
+        ))}
+      </ReportList>
+
+      <ReportList title="Bank accounts">
+        {workspace.accounts.map((account) => {
+          const owners = account.ownershipShares.filter((share) => share.shareBasisPoints > 0);
+          const owner = owners.length > 1 ? "Joint" : owners[0] ? memberName(owners[0].memberId) : "";
+          return (
+            <Row
+              key={account.id}
+              title={account.name}
+              meta={[account.institution, owner].filter(Boolean).join(" · ")}
+              value={money(account.balanceMinor, account.currency)}
+            />
+          );
+        })}
+      </ReportList>
+
+      {workspace.recurringPayments.length > 0 && (
+        <ReportList title="Bills">
+          {workspace.recurringPayments.map((payment) => (
+            <Row
+              key={payment.id}
+              title={payment.name}
+              meta={`${payment.cadence === "YEARLY" ? "Yearly" : "Monthly"} · next ${date(payment.nextDate)}`}
+              value={money(payment.amountMinor, payment.currency)}
+            />
+          ))}
+        </ReportList>
+      )}
+
+      <button type="button" className="m-button m-button--wide w-report__noprint" onClick={() => window.print()}>
+        Save as PDF
+      </button>
     </main>
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function ReportList({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-zinc-200 p-4 print:rounded-none">
-      <p className="text-xs font-medium uppercase tracking-[0.14em] text-zinc-500">
-        {label}
-      </p>
-      <p className="mt-2 text-2xl font-semibold tracking-[-0.03em]">{value}</p>
-    </div>
-  );
-}
-
-function ReportSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="grid gap-3">
-      <h3 className="text-lg font-semibold tracking-[-0.02em]">{title}</h3>
-      <div className="overflow-hidden rounded-lg border border-zinc-200 print:rounded-none">
-        {children}
+    <section className="m-section">
+      <div className="m-section__head m-section__head--static">
+        <h2>{title}</h2>
       </div>
+      <ul className="m-list">{children}</ul>
     </section>
   );
 }
 
-const printStyles = `
-  table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-  th, td { border-bottom: 1px solid rgb(228 228 231); padding: 0.75rem; text-align: left; vertical-align: top; }
-  th { background: rgb(250 250 250); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgb(113 113 122); }
-  tr:last-child td { border-bottom: 0; }
-  @media print {
-    @page { margin: 18mm; }
-    body { background: white !important; }
-    .report-page { break-inside: auto; }
-    section { break-inside: avoid; }
-  }
-`;
+function Row({ title, meta, value }: { title: string; meta: string; value: string }) {
+  return (
+    <li className="m-row">
+      <span className="m-row__main">
+        <span className="m-row__title">{title}</span>
+        {meta && <span className="m-row__meta">{meta}</span>}
+      </span>
+      <span className="m-row__amount">{value}</span>
+    </li>
+  );
+}
