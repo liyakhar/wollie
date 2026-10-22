@@ -9,6 +9,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
 
 const cloudflarePages = process.env.NITRO_PRESET === 'cloudflare_pages'
+const nativeApp = process.env.WOLLIE_NATIVE === '1'
 const cloudflareProjectName = process.env.CLOUDFLARE_PAGES_PROJECT || 'wollie-local-build'
 const cloudflareHyperdriveId = process.env.CLOUDFLARE_HYPERDRIVE_ID?.trim()
 
@@ -107,7 +108,9 @@ const config = defineConfig({
       },
     }),
     tailwindcss(),
-    tanstackStart(),
+    // WOLLIE_NATIVE=1 builds the iPhone app: one page shell plus all screens as
+    // local files, calling the server at VITE_NATIVE_API_ORIGIN.
+    tanstackStart(nativeApp ? { spa: { enabled: true, prerender: { outputPath: '/index.html' } } } : {}),
     viteReact(),
   ],
   ssr: {

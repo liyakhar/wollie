@@ -50,8 +50,9 @@ function createAuth() {
       ? [
           'http://localhost:*',
           'http://127.0.0.1:*',
+          'capacitor://localhost',
         ]
-      : [process.env.BETTER_AUTH_URL, process.env.SITE_URL, 'https://getwollie.com', 'https://www.getwollie.com']
+      : [process.env.BETTER_AUTH_URL, process.env.SITE_URL, 'https://getwollie.com', 'https://www.getwollie.com', 'capacitor://localhost']
           .filter((origin): origin is string => Boolean(origin))
           .map((origin) => origin.replace(/\/$/, ''))
   const canSendAccountEmail = isTransactionalEmailConfigured()
