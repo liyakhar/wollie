@@ -14,6 +14,13 @@ export function devLoginNeedsCode() {
   return process.env.NODE_ENV !== 'development'
 }
 
+/** Whether the sign-in page shows dev sign in. Asked from the server, because
+ * the page can also be drawn in the browser or inside the iPhone app. */
+export const getDevLoginStatus = createServerFn({ method: 'GET' }).handler(async () => ({
+  isDev: devLoginEnabled(),
+  devNeedsCode: devLoginNeedsCode(),
+}))
+
 // Global lockout: 8 wrong codes in 10 minutes pauses dev sign in for 10 minutes.
 const failures: number[] = []
 const WINDOW_MS = 10 * 60 * 1000

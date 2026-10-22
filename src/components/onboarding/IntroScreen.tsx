@@ -60,6 +60,14 @@ const GOALS = ['A home', 'Travel', 'Safety net', 'A car']
 /** Remembers that the intro was seen, so signed-out visits go straight to sign in. */
 export function markIntroSeen() {
   document.cookie = 'wollie_intro=1; path=/; max-age=31536000; samesite=lax'
+  // The iPhone app keeps its screens on the phone, so the server never sees
+  // that cookie; remember it on the phone too.
+  try { localStorage.setItem('wollie_intro', '1') } catch { /* private mode */ }
+}
+
+/** True when this phone has already seen the intro. */
+export function introSeenOnDevice() {
+  try { return localStorage.getItem('wollie_intro') === '1' } catch { return false }
 }
 
 export function IntroScreen({ redirect }: { redirect: string }) {

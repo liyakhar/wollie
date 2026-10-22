@@ -11,7 +11,7 @@ import { buildPageMeta } from '#/lib/seo'
 import { PRIVACY_VERSION, TERMS_VERSION } from '#/lib/legal-versions'
 import { site } from '#/lib/site'
 import { getTransactionalEmailReadiness } from '#/server/email-readiness'
-import { devLoginEnabled, devLoginNeedsCode, getDevLoginPassword } from '#/server/dev-login'
+import { getDevLoginPassword, getDevLoginStatus } from '#/server/dev-login'
 
 const loginMeta = buildPageMeta({
   path: '/login',
@@ -52,8 +52,7 @@ export const Route = createFileRoute('/login/')({
     links: loginMeta.links,
   }),
   loader: async () => ({
-    isDev: devLoginEnabled(),
-    devNeedsCode: devLoginNeedsCode(),
+    ...(await getDevLoginStatus()),
     emailReadiness: await getTransactionalEmailReadiness(),
   }),
   validateSearch: (search: Record<string, unknown>): LoginSearch => ({

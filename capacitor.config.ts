@@ -19,11 +19,10 @@ const config: CapacitorConfig = {
         },
       }
     : {}),
-  plugins: {
-    // Server calls go through the phone's own networking, so sign-in cookies
-    // are kept for the Wollie server and no browser cross-site rules apply.
-    CapacitorHttp: { enabled: true },
-  },
+  // With the screens inside the app, server calls go through the phone's own
+  // networking, so sign-in cookies are kept for the Wollie server and no
+  // browser cross-site rules apply.
+  plugins: { CapacitorHttp: { enabled: !serverUrl } },
   ios: {
     backgroundColor: '#fbfbf9',
     contentInset: 'never',

@@ -82,12 +82,15 @@ export function ProfileScreen({
         </ul>
       </section>
 
-      <section className="m-group" aria-label="Plan">
-        <h2>Plan</h2>
-        <ul>
-          {!native && <Row to="/app/billing" label="Your plan" value={planName} />}
-        </ul>
-      </section>
+      {/* The iPhone app shows no plans (Apple only allows In-App Purchase), so no empty heading either. */}
+      {!native && (
+        <section className="m-group" aria-label="Plan">
+          <h2>Plan</h2>
+          <ul>
+            <Row to="/app/billing" label="Your plan" value={planName} />
+          </ul>
+        </section>
+      )}
 
       {canLock && (
         <section className="m-group" aria-label="Security">
